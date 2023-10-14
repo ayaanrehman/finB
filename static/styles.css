@@ -1,0 +1,575 @@
+html {
+    height: 100%;
+ }
+*{
+    box-sizing: border-box;
+ }
+
+ .overlay-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 1);
+    z-index: 99999;
+}
+
+body {
+    font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+    background: linear-gradient(
+    to bottom,
+    rgb(49, 48, 48),
+    rgb(0, 28, 47),
+    rgb(0, 0, 0),
+    rgb(0, 28, 47)
+
+);
+/* background-image: url("../images/seal.png");
+background-size: contain;
+background-repeat:repeat-y;
+background-position: center; */
+
+}
+
+header {
+    width: 100%;
+    /* margin-left: 0.0em; */
+}
+
+footer {
+    width: 100%;
+}
+
+.logo {
+    z-index: 3;
+    cursor: pointer;
+}
+
+h2 {
+color: white;
+display: block;
+position: absolute;
+right: 1em;
+top: 0.5em;
+z-index: 3;
+}
+
+.overlay-header {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 6.8em;
+filter: opacity(50%);
+background-color: #000000; /* Adjust the transparency as needed */
+z-index: -1;
+}
+
+
+
+.header-line {
+margin-top: 10px;
+border: 1px solid rgba(255, 255, 255, 0.607);
+}
+
+
+.container {
+display: flex;
+align-items: normal;
+
+
+
+}
+
+.buttons {
+display: flex;
+flex-direction: column;
+width: max-content;
+margin-left: 1em;
+padding-top: 2%;
+}
+
+
+::-webkit-scrollbar {
+width: 10px;
+display: none;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #ffffff; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: linear-gradient(
+to bottom,
+rgba(0, 0, 0, 0.76),
+rgb(88, 1, 1),
+rgba(0, 0, 0, 0.76)
+
+);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: linear-gradient(
+to bottom,
+rgb(128, 0, 0),
+rgba(255, 0, 0, 0.699),
+rgb(128, 0, 0)
+);
+}
+
+#scroll-to-bottom {
+position: absolute;
+cursor: pointer;
+background-color: #3636368c;
+border-radius: 0%;
+color: white;
+border: white;
+filter: brightness(100%);
+width: auto;
+height: auto;
+font-size: large;
+right: 15%;
+/* display: none; */
+}
+
+#scroll-to-bottom:hover {
+filter: brightness(200%);
+}
+
+#scroll-to-bottom:active {
+filter: brightness(70%);
+}
+
+
+.clear-button {
+cursor: pointer;
+width: 1.5rem;
+background-color: #24030300;
+color: white;
+border: white;
+filter: brightness(100%);
+position: relative;
+height: 4rem;
+right: 1rem;
+color: #9e9e9e;
+font-size: large;
+font-weight: bold;
+text-shadow: 0 0 1px #979797;
+/* display: none; */
+}
+
+.clear-button:hover {
+filter: brightness(200%);
+color: white;
+}
+
+.clear-button:active {
+filter: brightness(70%);
+color: #333;
+}
+
+.message.placeholder {
+color: rgba(255, 255, 255, 0.61);
+text-align: left;
+white-space: normal;
+}
+
+.message.placeholder b {
+display: block; /* Make the "Welcome" text a block-level element */
+margin-bottom: 10px; /* Add spacing below it */
+}
+
+.message.placeholder i {
+display: block; /* Make each list item a block-level element */
+margin-left: 20px; /* Add an indent to the list items */
+}
+
+
+
+
+.content-container {
+display: block;
+width: 100%;
+position: relative;
+padding-left: 30px;
+
+}
+
+#hmil {
+width: 10em;
+height: 75vh;  
+}
+
+.sidbr {
+width: 10em;
+transition: width 0.5s ease;
+height: 75vh;
+position: relative;
+border-radius: 0% 3% 3% 0%;
+z-index: 9999;
+background-color: #006BB6;
+/* background: linear-gradient(
+to bottom,
+rgba(0, 0, 0, 0.76),
+#001C2F,
+rgba(0, 0, 0, 0.76)
+
+); */
+}
+
+.button {
+margin-top: 10px;
+margin-bottom: 10px;
+margin-right: 15px;
+padding: 10px;
+border: none;
+background-color: #009DDE;
+cursor: pointer;
+border-radius: 10px;
+width: auto;
+border: 0px solid #6e6e6e69;
+color: rgb(255, 255, 255);
+font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+font-size: larger;
+font-weight: normal;
+text-align: center;
+}
+
+.button:hover{
+background-color: #ff9900;
+}
+
+.inputs {
+flex: 2;
+display: flex;
+flex-direction: column;
+align-items: left;
+justify-content: left;
+}
+
+.input-box {
+width: 100%;
+margin: 5px;
+/* margin-left: 30%; */
+margin-bottom: 20px;
+align-self: center;
+padding: 10px;
+/* border: 5px solid #6e6e6e69; */
+border-radius: 10em;
+border: 0.5px solid white;
+background-color: rgb(32, 44, 51);
+
+/* background: linear-gradient(
+    to bottom right,
+    rgba(0, 0, 0, 0.76),
+    rgb(8, 50, 134),
+    rgba(0, 0, 0, 0.76)
+
+); */
+color: rgb(255, 255, 255);
+font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+font-size: larger;
+font-weight: normal;
+overflow-wrap: normal;
+}
+
+
+.input-box::placeholder {
+    color: rgb(255, 255, 255); 
+}
+
+label {
+color: white;
+justify-content: center;
+align-items: center;
+text-align:justify;
+margin-bottom: 10px;
+}
+
+.input-container {
+display: flex;
+flex-direction: row;
+justify-content:center;
+text-align: center;
+overflow-wrap: normal;
+position: relative;
+width: 100%;
+margin-top: 3em;
+}
+
+.qtn {
+    position: relative;
+    left: 0%;
+    width: 50%;
+}
+
+.submit {
+
+cursor: pointer;
+border: none;
+align-self: center;
+width: 2em;
+height: 2em;
+z-index: 10;
+background-image: url("../images/send2.png");
+background-size: cover; /* Adjust how the image is displayed */
+background-repeat: no-repeat; /* Prevent image from repeating */
+background-position: center; /* Center the image */
+background-color: #33333300;
+position: absolute;
+right: 0.5em;
+top: 1.2em;
+}
+
+
+
+#question-container {
+position: relative;
+}
+
+#sdpt {
+color: white;
+margin-left: 10%;
+display: block;
+}
+
+
+.suggestion button {
+    background-color: rgb(3, 131, 206);
+    color: white;
+    border-radius: 1em;
+    border: none;
+    width: max-content;
+    height: 2em;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.suggestion {
+    /* display: flex; */
+    display: none;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    
+}
+
+.response {
+height: 20%;
+overflow-y: auto;
+border: 1px solid #ffffff8e;
+background-color: rgb(32, 44, 51);
+width: 50%;
+margin-top: 2em;
+margin-left: 25em;
+color: rgb(255, 255, 255);
+font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+font-size: larger;
+font-weight: normal;
+max-height: 50%;
+padding: 10px; /* Add some padding to the chat history */
+display: flex;
+white-space: pre-wrap;
+overflow-wrap: normal;
+}
+
+.ref {
+height: auto;
+overflow-y: auto;
+border: 1px solid #ffffff8e;
+background-color: rgb(32, 44, 51);
+width: 20%;
+margin-top: 2.5em;
+left: 0;
+color: rgb(255, 255, 255);
+font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+font-size: larger;
+font-weight: normal;
+/* max-height: 50%; */
+padding: 10px; /* Add some padding to the chat history */
+display: flex;
+white-space: pre-wrap;
+overflow-wrap: normal;
+position: absolute;
+}
+
+.chat {
+top: 0%;
+position: absolute;
+width: 100%;
+height: 100%;
+}
+
+.chat-item {
+padding: 5px;
+margin: 5px;
+border-radius: 5px;
+max-width: 70%;
+
+
+}
+
+.right-align {
+background-color: #f0f0f0; /* Background color for questions */
+text-align: right;
+float: right;
+
+
+}
+
+.left-align {
+background-color: #e0e0e0; /* Background color for responses */
+text-align: left;
+float: left;
+}
+
+
+
+/* Style for the question messages (aligned to the right) */
+.message.question {
+background-color: #3498db; /* Set the background color for question messages */
+color: #fff; /* Set the text color for question messages */
+padding: 5px 10px; /* Add padding to question messages */
+border-radius: 10px; /* Add rounded corners to question messages */
+margin: 5px 0; /* Add some margin between messages */
+float: right; /* Align question messages to the right */
+clear: both; /* Clear the float to avoid overlapping */
+width: max-content;
+max-width: 45%;
+margin-left: auto;
+
+}
+
+/* Style for the response messages (aligned to the left) */
+.message.response {
+background-color: #333; /* Set the background color for response messages */
+color: #e0e0e0; /* Set the text color for response messages */
+padding: 5px 10px; /* Add padding to response messages */
+border-radius: 10px; /* Add rounded corners to response messages */
+margin: 5px 0; /* Add some margin between messages */
+float: left; /* Align response messages to the left */
+clear: both; /* Clear the float to avoid overlapping */
+width: max-content;
+max-width: 45%;
+
+}
+
+#hr-answer {
+display: none;
+}
+
+#finance-answer {
+display: none;
+}
+
+#sfmc-answer {
+display: none;
+}
+
+
+/* CSS for the loading animation container */
+#loading-container {
+display: none; /* Hide the container by default */
+width: auto;
+height: auto;
+background-color: rgba(255, 255, 255, 0); /* Semi-transparent background */
+z-index: 9999; /* Make sure it's on top of everything */
+position: relative;
+right: 80%;
+top: 4.12rem;
+}
+
+/* CSS for the loading spinner */
+/* .loading-spinner {
+border: 5px solid rgba(255, 255, 255, 0.3);
+border-top: 5px solid #410101;
+border-radius: 100%;
+width: 2rem;
+height: 2rem;
+animation: spin 2s linear infinite;
+} */
+
+/* Keyframes for the spinning animation */
+/* @keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+} */
+
+.dot-flashing {
+position: relative;
+width: 10px;
+height: 10px;
+border-radius: 5px;
+background-color: #810a0a;
+color: #810a0a;
+animation: dot-flashing 1s infinite linear alternate;
+animation-delay: 0.5s;
+}
+.dot-flashing::before, .dot-flashing::after {
+content: "";
+display: inline-block;
+position: absolute;
+top: 0;
+}
+.dot-flashing::before {
+left: -15px;
+width: 10px;
+height: 10px;
+border-radius: 5px;
+background-color: #810a0a;
+color: #810a0a;
+animation: dot-flashing 1s infinite alternate;
+animation-delay: 0s;
+}
+.dot-flashing::after {
+left: 15px;
+width: 10px;
+height: 10px;
+border-radius: 5px;
+background-color: #810a0a;
+color: #810a0a;
+animation: dot-flashing 1s infinite alternate;
+animation-delay: 1s;
+}
+
+@keyframes dot-flashing {
+0% {
+background-color: #810a0a;
+}
+50%, 100% {
+background-color: rgba(152, 128, 255, 0.2);
+}
+}
+
+.ld {
+position: relative;
+}
+/* 
+#sbb {
+background-image: url("../images/3hvl.png");
+background-color: #33333300;
+background-size: cover; 
+background-repeat: no-repeat; 
+background-position: center; 
+border: none;
+width: 10%;
+height: 15px;
+cursor: pointer;
+top: 50%;
+right: 4%;
+position: absolute;
+}
+
+#sbb:hover {
+filter: brightness(200%);
+}
+
+#sbb:active {
+filter: brightness(80%);
+}
+   */
