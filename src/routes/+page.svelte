@@ -33,7 +33,7 @@
 
         });
     }
-    hidevideo();
+    // hidevideo();
     });
 </script>
 
