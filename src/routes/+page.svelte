@@ -67,14 +67,14 @@
 <style>
 
 .fullscreen-video {
-    object-fit: contain !important;
+    object-fit: cover !important;
     width: 100%;
     height: 100%;
     transition: background-color 1s ease; /* Transition for fading */
 }
 
 .overlay-video {
-    position: absolute !important;
+    position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     width: 100%;
