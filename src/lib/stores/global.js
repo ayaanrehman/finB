@@ -1,3 +1,3 @@
 import {writable, readable} from "svelte/store";
 
-export const isFirstLoad = writable(true);
+export const isFirstLoad = writable(false);
