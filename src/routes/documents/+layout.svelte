@@ -1,26 +1,21 @@
-<!-- <script>
-import PageTransition from "$lib/components/PageTransition.svelte";
-export let data;
+<script>
+	import SearchBox from "$lib/components/SearchBox.svelte";
 </script>
-<div class="doc-container">
-    <ul class="sub-nav">
-        <li><a href="/documents/one">One</a></li>
-        <li><a href="/documents/two">Two</a></li>
-    </ul>
-    <PageTransition pathname={data.pathname}>
-        <div class="pdf-container">
-            <slot />
-        </div>
-    </PageTransition>
+
+<div class="doc-page-container">
+    <div style="border-right: 0.5px solid grey;">
+        <slot /> 
+    </div>
+    <div>
+        
+        <SearchBox />
+    </div>
 </div>
 <style>
-    .doc-container{
-        display:grid;
-        grid-template-columns: 240px 1fr;
-        gap:10px;
+    div.doc-page-container{
+        display: grid;
+        grid-template-columns: 50% 50%;
+        height: 100%;
+        /*min-height: 85vh;*/
     }
-    .sub-nav{
-        background:rgba(0,0,0,.1);
-    }
-</style> -->
-<slot />
+</style>

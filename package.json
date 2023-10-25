@@ -23,6 +23,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"sass": "^1.69.4",
 		"svelte-preprocess": "^5.0.4"
 	}
 }

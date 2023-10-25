@@ -4,7 +4,7 @@
     let {document} = data;
 </script>
 <!-- <h1>{document.title}</h1> -->
-<object data="{document.link}" type="application/pdf" width="100%" height="100%" title="{document.title}"></object>
+<object data="{document.link}#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf" width="100%" height="100%" title="{document.title}"></object>
 <style>
     object{
         width: 95%;

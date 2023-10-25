@@ -11,3 +11,8 @@
     <slot />
 </div>
 {/key}
+<style>
+  div{
+    height: 100%;
+  }
+</style>

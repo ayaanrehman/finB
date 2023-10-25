@@ -11,6 +11,10 @@
     let question = '';
 	let ref = ' ';
 
+	let titledoc = 'one.pdf';
+	titledoc = titledoc.split('.');
+	titledoc = titledoc[0];
+
 	function pieerror() {
 		let piebtn = document.querySelector('.pie');
 		piebtn.addEventListener('click', function () {
@@ -36,7 +40,7 @@
             showLoadingContainer = false;  
             response = data.response;
 			ref = data.ref;
-            showContainerarrow = true;
+			showContainerarrow = true;
             setTimeout(() => {
 				showresponse = true; 
                 setTimeout(() => {
@@ -125,6 +129,7 @@
 		<input id="question" bind:value={question} class="input-box" type="text" placeholder="Talk to your documents..." />
         {#if !showLoadingContainer}
 		<button id="submit" class="submit" data-type="qsubmit" />
+		<a href="/documents/{titledoc}">Open Document</a>
         {:else}
 		<div id="loading-container">
 			<div class="dot-flashing" />
@@ -147,6 +152,7 @@
 				<b>Reference</b>
 				<br />
 				<p>{ref}</p>
+				
 			</div>
 		</div>
 	{/if}
