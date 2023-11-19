@@ -41,16 +41,6 @@
     });
 </script>
 
-<svelte:head>
-
-{#if browser}
-<script>
-    
-    
-    
-</script>
-{/if}
-</svelte:head>
 {#if $isFirstLoad}
 <div class="overlay-video">
         {#if !showVidTwo}

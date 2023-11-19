@@ -4,13 +4,17 @@ import PageTransition from "$lib/components/PageTransition.svelte";
 import Sidebar from "../lib/components/Sidebar.svelte";
 
 export let data;
-console.log(data.pathname);
+// console.log(data);
+
+
+
+// console.log(data.bucketFiles);
 </script>
 
 <Header />
 
 <div class="container">
-   <Sidebar pageUrl={data.pathname}/>
+   <Sidebar pageUrl={data.pathname} bucketFiles={data.bucketFiles} bucketFilesUnStructured={data.bucketFilesUnStructured}/>
     <main>
         <PageTransition pathname={data.pathname}>
             <slot />

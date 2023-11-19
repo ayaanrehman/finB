@@ -15,11 +15,7 @@ rel="stylesheet" type="text/css"/>
     />
     </a> 
     <h2>
-      AI Powered Symantec
-      <br />
-      Search
-
-      <i style="font-size: medium">for Financial Data</i>
+    FinBlade
     </h2>
     <hr class="header-line" />
    
