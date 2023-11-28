@@ -2,6 +2,13 @@
 <script>
     export let data;
     let {document, structured, url} = data;
+
+    function addNumber(num1, num2){
+        return num1 + num2;
+    }
+
+    // let finalNum = addNumber(4, 2);
+
 </script>
 
 <!-- <h1>{document.title}</h1> -->

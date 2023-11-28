@@ -20,7 +20,7 @@
   
 
 	function pgchg() {
-        console.log("Working.............")
+        // console.log("Working.............")
         
         page = !page
         pagemin=!pagemin
@@ -34,7 +34,7 @@
         document.getElementById('pgctnr').classList.remove('active');
         }   
 
-        console.log("Worked.............")
+        // console.log("Worked.............")
     };
 
 </script>

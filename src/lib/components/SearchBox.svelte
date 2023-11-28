@@ -33,7 +33,7 @@
 	onMount(async () => {
 		socket.on('base64d', function (data) {
 			base64img = `data:image/png;base64,${data.base64_data}`;
-			console.log("This is Plotted Image: ", base64img)
+			console.log('This is Plotted Image: ', base64img);
 		});
 	});
 

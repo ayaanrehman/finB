@@ -5,7 +5,7 @@ export function srn() {
     socket.emit('sfp', { filename });
     console.log(filename)
     console.log('Structure Retreiver & Source File Path are Set to None')
-}
+} 
 
 export function sr(filename) {
     socket.emit('sr', { filename });

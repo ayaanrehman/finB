@@ -1,6 +1,6 @@
 <script>
-	import documents from '$lib/data/documents.json';
-	import output from 'C:/Users/Ayan-PC/Downloads/chat_assistant_10/chat_assistant_10/output.json';
+	// import documents from '$lib/data/documents.json';
+	// import output from 'C:/Users/Ayan-PC/Downloads/chat_assistant_10/chat_assistant_10/output.json';
 	import { onMount } from 'svelte';
 	import { selectSearch } from '$lib/stores/global.js';
 	import { searchBoxx } from '$lib/stores/global.js';
@@ -8,12 +8,15 @@
 	import { srn } from '$lib/data/helpers';
 	import { sfp } from '$lib/data/helpers';
 	import { temp } from '$lib/data/helpers';
-	import Layout from '../../routes/+layout.svelte';
-	import FileUploadStructured from './FileUploadStructured.svelte';
-	import FileUploadUnStructured from './FileUploadUnStructured.svelte';
+	// import Layout fr/om '../../routes/+layout.svelte';
+	import FileUpload from './FileUpload.svelte';
+	import { createFolder } from '../data/AddFolder';
+	import { listFolder } from '../data/listFolders';
+	import { lisFolder } from '$lib/stores/global.js';
+	import { signOut } from '$lib/database/utility.js';
 
-	export let data;
-	export let data2;
+	// export let data;
+	// export let data2;
 
 	export let pageUrl;
 
@@ -21,11 +24,23 @@
 
 	export let bucketFilesUnStructured;
 
-	let isPageUrl = false;
 
-	let socket;
+	async function signOutUser(){
+		let res = await signOut();
+		if(!res.error){
+			//reditect
+		}
+	}
+
+	// let isPageUrl = false;
+
+	// let socket;
+
+	let folderType = 'structured';
+	
 
 	let upload = false;
+	let uploadFolder = false;
 	let showDocuments = true;
 	let showDocuments2 = true;
 	let li2 = false;
@@ -38,22 +53,55 @@
 		upload = !upload;
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	let newFolderName = '';
+	let dataType = 'structured';
+
+	let foldersz = [];
+
+	onMount(async () => {
+		foldersz = await listFolder();
+	});
+
+	
+
+	const handleCreateFolder = () => {
+		createFolder(dataType, newFolderName);
+		// Reset input field or perform any other necessary actions
+		setTimeout(() => {
+			newFolderName = '';
+		}, 100);
+	};
+
+	function uploadFldr() {
+		uploadFolder = !uploadFolder;
+		toggleShowDocuments();
+		toggleShowDocuments2();
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	onMount(() => {
 		const navID = document.getElementById('symbtn');
 		if (navID) {
 			navID.style.borderBottom = '0.5px solid rgba(255, 255, 255, 0.4)';
 			navID.style.color = 'rgba(255, 255, 255)';
 		}
-	});
 
-	onMount(() => {
 		const toggleButton = document.getElementById('openSidebar');
 		const object = document.getElementById('nav');
+		let isBright = true;
+		let isMarginIncreased = false;
 
 		toggleButton.addEventListener('click', () => {
+			isBright = !isBright;
+			isMarginIncreased = !isMarginIncreased;
 			let currentDisplay = window.getComputedStyle(object).getPropertyValue('display');
 			// if (currentDisplay === 'none') {
 			object.classList.toggle('show-sidebar');
+
+			toggleButton.style.filter = isBright ? 'brightness(100%)' : 'brightness(50%)';
+			toggleButton.style.marginTop = isMarginIncreased ? '0.5em' : '1em';
 
 			// } else {
 			//     object.style.display = 'none';
@@ -87,6 +135,10 @@
 		li2 = true;
 		li = false;
 
+		folderType = 'unstructured';
+		dataType = 'unstructured';
+		$lisFolder = 'unstructured';
+
 		$selectSearch = false;
 		$searchBoxx = true;
 
@@ -108,6 +160,10 @@
 	function toggleDataLake2() {
 		li2 = false;
 		li = true;
+
+		folderType = 'structured';
+		dataType = 'structured';
+		$lisFolder = 'structured';
 
 		$selectSearch = true;
 		$searchBoxx = false;
@@ -194,7 +250,7 @@
 	//////////////////////	Data Lake search filter for Finance AI	End	//////////////////////////////////
 </script>
 
-<button id="openSidebar">==<br />==</button>
+<button id="openSidebar" style="margin-top: 1em;"><img src="/images/3hvl.png" alt="" /></button>
 
 <nav id="nav">
 	<ul class="ulstat">
@@ -230,16 +286,31 @@
 							>{#if showDocuments}&#11206;{:else}&#11208;{/if}</span
 						> Data Lake (Unstructured)</a
 					>
-					<button on:click={() => {
-						uploading(),
-						toggleShowDocuments();
-					}}
-						class="addbtn"><img src="src/public/add_files.png" alt="Add Files"></button>
+					<button
+						on:click={() => {
+							uploading(), toggleShowDocuments();
+						}}
+						class="addbtn"><img src="/images/add_files.png" alt="Add Files" /></button
+					>
+
+					<button class="addbtn" on:click={uploadFldr}
+						><img src="/images/add_folders.png" alt="Add Folders" /></button
+					>
+					{#if uploadFolder}
+						<br />
+						<input
+							style="margin-left: 20px;"
+							bind:value={newFolderName}
+							placeholder="New Folder Name"
+						/>
+						<button class="addfldr" on:click={handleCreateFolder}>Add Folder</button>
+						<p id="messagefoldr" />
+					{/if}
 					{#if upload}
-					<div>
-						<FileUploadUnStructured />
+						<div>
+							<FileUpload {folderType} />
 						</div>
-						{/if}
+					{/if}
 					<br />
 					<input
 						class="docsearch"
@@ -268,8 +339,13 @@
 										<span>&#128462;</span><span style="pointer-events: none;">{document.name}</span
 										></a
 									>
+									
+								
 								</li>
 							{/each}
+							<!-- {#each foldersz as folder (folder.id)}
+							<div>{folder.name}</div>
+							{/each} -->
 						</ul>
 					{/if}
 				{/if}
@@ -290,15 +366,29 @@
 							>{#if showDocuments2}&#11206;{:else}&#11208;{/if}</span
 						> Data Lake (Structured)</a
 					>
-					<button on:click={() => {
-						uploading(),
-						toggleShowDocuments2();
-					}} class="addbtn"><img src="src/public/add_files.png" alt="Add Files"></button>
+					<button
+						on:click={() => {
+							uploading(), toggleShowDocuments2();
+						}}
+						class="addbtn"><img src="/images/add_files.png" alt="Add Files" /></button
+					>
+					<button class="addbtn" on:click={uploadFldr}
+						><img src="/images/add_folders.png" alt="Add Folders" /></button
+					>
+					{#if uploadFolder}
+						<br />
+						<input
+							style="margin-left: 20px;"
+							bind:value={newFolderName}
+							placeholder="New Folder Name"
+						/>
+						<button class="addfldr" on:click={handleCreateFolder}>Add Folder</button>
+					{/if}
 					{#if upload}
-					<div>
-						<FileUploadStructured />
+						<div>
+							<FileUpload {folderType} />
 						</div>
-						{/if}
+					{/if}
 					<br />
 					<input
 						class="docsearch2"
@@ -318,7 +408,8 @@
 										<li
 											class="fintab"
 											data-doc-name={document.name}
-											class:active={pageUrl == '/documents/' + encodeURIComponent(document.name) + '/'}
+											class:active={pageUrl ==
+												'/documents/' + encodeURIComponent(document.name) + '/'}
 											on:click={(e) => {
 												submitStructure(e), temp(0.0);
 												$searchBoxx = true;
@@ -331,6 +422,9 @@
 										</li></a
 									>
 								{/each}
+								<!-- {#each foldersz as folder (folder.id)}
+								<div>{folder.name}</div>
+								{/each} -->
 							</ul>
 						{:else}
 							<p>No tables available.</p>
@@ -342,15 +436,17 @@
 
 		<div style="display:flex;flex-direction:column;margin-top:auto">
 			<div class="statbtn">
-				<li style="border-top: 0.5px solid rgba(255, 255, 255, 0.4); padding-top: 5%">
+			
+
+				<!-- <li style="border-top: 0.5px solid rgba(255, 255, 255, 0.4); padding-top: 5%">
 					<a href="/ ">Home</a>
 				</li>
 				<li><a href="/ ">API Access</a></li>
 				<li><a href="/">Support</a></li>
-				<li style="border-bottom: 0.5px solid rgba(255, 255, 255, 0.4); padding-bottom: 5%">
+				<li style="padding-bottom: 5%">
 					<a href="/">About Us</a>
-					<!-- <button on:click={opendb()} >fsfwerew</button> -->
-				</li>
+					
+				</li> -->
 			</div>
 			<br />
 			<br />
@@ -358,11 +454,24 @@
 				<p style="font-size: small; color: rgba(255, 255, 255, 0.7)">Powered By</p>
 				<img src="/images/ics2.png" alt="ICS Logo" style="max-width: 5em; height: auto;" />
 			</div>
+			<li />
 		</div>
 	</ul>
 </nav>
 
 <style lang="scss">
+
+
+	.addfldr {
+		padding: 10px;
+		margin: 10px;
+		margin-left: 15px;
+		background-color: #4caf50;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+	}
 
 	.addbtn {
 		background-color: #89898900;
@@ -417,10 +526,6 @@
 		color: #898989;
 		cursor: pointer;
 		display: none;
-	}
-
-	#openSidebar:hover {
-		color: white;
 	}
 
 	::placeholder {

@@ -7,11 +7,12 @@ rel="stylesheet" type="text/css"/>
     <div class="overlay-header"></div>
     <a href="/">
       <img
-      src="/images/dha.png"
+      src="/images/finblade.png"
       alt="Company Logo"
       class="logo"
-      width="200px"
+      width="95px"
       height="auto"
+      style="padding: 0.5em 0em 0em 1em ;"
     />
     </a> 
     <h2>
