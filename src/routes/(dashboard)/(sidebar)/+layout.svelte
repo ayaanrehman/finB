@@ -8,13 +8,15 @@
     import PreSideBar from "$lib/components/preSideBar.svelte";
     
     export let data;
+
+    
     
     let containerStyle = '';
     
-    $: containerStyle = $searchBox ? 'grid-template-columns: 3em 25em 1fr;' : 'grid-template-columns: 3em 1fr;';
+    $: containerStyle = $searchBox ? 'grid-template-columns: 4em 25em 1fr;' : 'grid-template-columns: 4em 1fr;';
     
     
-    // console.log(data);
+    console.log('layout daata is', data);
     
     
     
@@ -26,15 +28,8 @@
     <div class="container" style={containerStyle}>
         <PreSideBar />
         <!-- {#if $searchBox} -->
-       <Sidebar pageUrl={data.pathname} bucketFiles={data.bucketFiles} bucketFilesUnStructured={data.bucketFilesUnStructured}/>
-       <!-- {/if} -->
-        <main>
-            <!-- {#if $searchBox} -->
-            <!-- <PageTransition pathname={data.pathname}> -->
-                <slot />
-            <!-- </PageTransition> -->
-            <!-- {/if} -->
-            </main>
+        <slot />
+      
             
             
         

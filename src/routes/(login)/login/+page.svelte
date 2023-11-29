@@ -1,7 +1,7 @@
 <script>
-    import { logIn } from "$lib/database/utility";
+  import { logIn } from "$lib/database/utility";
 	import { onMount } from "svelte";
-    import { navigate } from "svelte-routing";
+  import { goto } from '$app/navigation';
     
     export let data;
 
@@ -17,27 +17,22 @@
     // }
     onMount( () => {
       if(form?.success){
-        console.log('done');
-       window.location.href = '/';
+        goto('/');
       }
     })
 
    
 </script>
 
-<!-- <h1>{user.email}</h1> -->
-<!-- {#if error}
-    <p>{error}</p>
-{/if} -->
 <main>
-  <img src="/images/finblade.png" />
+  <img src="/images/finblade.png" alt="finblade"/>
   <form method="POST">
     <input type="email" name="email" bind:value={email} placeholder="Enter your email"/>
     <input type="password" name="password" bind:value={password} placeholder="Enter your password"/>
-    <button type="submit">Submit</button>
+    <button type="submit" style="color: white; background-color: maroon; border-radius: 10px; border-color: rgba(255,255,255,0.5);">Submit</button>
   </form>
-  <p>{#if form?.success}Logged In{/if}</p>
-  <p>{#if form?.error}Please try again{/if}</p>
+  <p style="color: white;">{#if form?.success}Authentication Successful{/if}</p>
+  <p style="color: white;">{#if form?.error}Please try again{/if}</p>
 </main>
 
 

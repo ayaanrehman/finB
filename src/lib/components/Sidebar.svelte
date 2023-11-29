@@ -13,24 +13,22 @@
 	import { createFolder } from '../data/AddFolder';
 	import { listFolder } from '../data/listFolders';
 	import { lisFolder } from '$lib/stores/global.js';
-	import { signOut } from '$lib/database/utility.js';
+	
 
 	// export let data;
 	// export let data2;
 
 	export let pageUrl;
-
 	export let bucketFiles;
-
 	export let bucketFilesUnStructured;
+	export let userId;
+	export let searchType;
 
 
-	async function signOutUser(){
-		let res = await signOut();
-		if(!res.error){
-			//reditect
-		}
-	}
+	console.log('search type is', searchType);
+
+
+	
 
 	// let isPageUrl = false;
 
@@ -255,7 +253,7 @@
 <nav id="nav">
 	<ul class="ulstat">
 		<div class="navcontainer">
-			<button
+			<!-- <button
 				class="navbutton"
 				id="symbtn"
 				on:click={() => {
@@ -271,7 +269,7 @@
 					temp(0.4);
 					toggleDataLake();
 				}}>Symantec Search</button
-			>
+			> -->
 			<br />
 		</div>
 		{#if li2}
@@ -284,7 +282,7 @@
 					>
 						<span style="font-size: normal; color: #545b64;"
 							>{#if showDocuments}&#11206;{:else}&#11208;{/if}</span
-						> Data Lake (Unstructured)</a
+						> Data Lake</a
 					>
 					<button
 						on:click={() => {
@@ -308,7 +306,7 @@
 					{/if}
 					{#if upload}
 						<div>
-							<FileUpload {folderType} />
+							<FileUpload {folderType} {userId} />
 						</div>
 					{/if}
 					<br />
@@ -326,10 +324,10 @@
 							{#each docs2 as document, i}
 								<li class="listTitle">
 									<a
-										href="/documents/{document.name}"
+										href="/documents/symantec-search/{document.name}"
 										data-doc-name={document.name}
 										class="titledoc"
-										class:active={pageUrl == '/documents/' + encodeURIComponent(document.name) + '/'}
+										class:active={pageUrl == '/documents/symantec-search/' + encodeURIComponent(document.name) + '/'}
 										on:click={(e) => {
 											submitFileName(e), temp(0.4);
 											$searchBoxx = true;
@@ -364,7 +362,7 @@
 					>
 						<span style="font-size: normal; color: #545b64;"
 							>{#if showDocuments2}&#11206;{:else}&#11208;{/if}</span
-						> Data Lake (Structured)</a
+						> Data Lake</a
 					>
 					<button
 						on:click={() => {
@@ -386,7 +384,7 @@
 					{/if}
 					{#if upload}
 						<div>
-							<FileUpload {folderType} />
+							<FileUpload {folderType}  {userId}/>
 						</div>
 					{/if}
 					<br />
@@ -404,12 +402,13 @@
 						{#if docs.length > 0}
 							<ul>
 								{#each docs as document, i}
-									<a href="/documents/{document.name}">
+									<a href="/documents/symantec-search/{document.name}">
+										<!-- svelte-ignore a11y-click-events-have-key-events -->
 										<li
 											class="fintab"
 											data-doc-name={document.name}
 											class:active={pageUrl ==
-												'/documents/' + encodeURIComponent(document.name) + '/'}
+												'/documents/symantec-search/' + encodeURIComponent(document.name) + '/'}
 											on:click={(e) => {
 												submitStructure(e), temp(0.0);
 												$searchBoxx = true;

@@ -12,6 +12,5 @@ export const searchBox = writable(true);
 
 export const lisFolder = writable('structured');
 
-
-
+export const userIdStore = writable(null);
 

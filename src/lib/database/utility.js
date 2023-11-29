@@ -1,16 +1,5 @@
-import { SupabaseClient } from "@supabase/supabase-js";
-import { onMount } from "svelte";
-
-import { createClient } from '@supabase/supabase-js'
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from "$env/static/public"
-
-
-
-
-// Create a single supabase client for interacting with your database
-// const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY)
-const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
-
+import { supabase } from "$lib/supabase.js";
+import {userIdStore} from "$lib/stores/global.js"
 
 export const logIn = async (email, password) => {
     console.log('email is', email);
@@ -21,37 +10,42 @@ export const logIn = async (email, password) => {
         email,
         password,
     });
-
-    // res = await res.JSON();/
-
-    // console.log(res);
-// 
     if (res.data) {
         return res.data;
     }
     if(res.error){
         return res.error
     }
-
-    // return data.error
-    // if(error){
-    //     return error;
-    // }
-    // if(user){
-    //     console.log('user is ', user);
-    //     return user;
-    // }
 }
 
 export const getUserSession = async() => {
     const res = await supabase.auth.getSession();
-
+    // console.log('res is', res);
+    let userId = res?.data?.session?.user?.id;
+        // $userIdStore = userId;
+        // console.log('useridugyuyugu store is',userId)
+    
+    // console.log('userid store is',$userIdStore)
+    // console.log(`useridddddddd is: ${$userIdStore}`)
     // if(res.data){
         return res;
     // }
     // if(res.error){
         // return res;
     // }
+}
+
+export const getUser = async () => {
+    const user = await getUserSession();
+
+  if(user?.data?.session?.user?.id){
+    console.log('user is', user?.data?.session?.user?.id);
+    console.log('user 2 is', user.data.session.user.id);
+    console.log('user 3 is', user);
+    let userId = user?.data?.session?.user?.id;
+   
+    return userId;
+  }
 }
 
 export const getFilesFromBucket = async (folderName, bucketName) => {
@@ -84,20 +78,11 @@ export const getFilesFromBucket = async (folderName, bucketName) => {
     }
 }
 
-
 export const getSignedUrl = async (folderName, fullname, bucketName) => {
     console.log('calling');
     let url = await supabase.storage.from(bucketName).createSignedUrl(`${folderName}/${fullname}`, 3600);
     console.log('url', url);
     return url.data.signedUrl;
-}
-
-export const getUser = async () => {
-    const user = await getUserSession();
-
-  if(user?.data?.session?.user?.id){
-    return user.data.session.user.id
-  }
 }
 
 export const signOut = async () => {

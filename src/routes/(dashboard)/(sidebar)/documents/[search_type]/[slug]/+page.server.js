@@ -13,6 +13,8 @@ export const load = async({params}) => {
 
     let userId = await getUser();
 
+    console.log('main user is', userId);
+
     let res = await getFilesFromBucket('structured', userId);
     // console.log(url);
     // let document = res.filter(document => document.name.replaceAll('_', '').replaceAll(' ', '') == params.slug.replaceAll('_', ''));
