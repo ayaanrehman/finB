@@ -60,6 +60,7 @@
 			response = data.response;
 			paresp = true;
 			ref = data.ref;
+			console.log('This is Response: ', response);
 		});
 	});
 
@@ -87,6 +88,7 @@
 		generatingResponse = false;
 		paresp = false;
 		visual = false;
+		
 		// base64img = null;
 
 		// question = '';
@@ -111,6 +113,7 @@
 	// 		}, 100);
 	// 	});
 	// });
+	
 
 	// Handle Enter key press for each input field
 	onMount(async () => {
@@ -126,7 +129,7 @@
 	});
 </script>
 
-{#if $selectSearch}
+<!-- {#if $selectSearch}
 	<div class="input-container">
 		<div class="qtn">
 			<input
@@ -138,9 +141,10 @@
 			<button style="cursor: unset;" class="submit" />
 		</div>
 	</div>
-{/if}
+{/if} -->
 
-{#if $searchBoxx}
+<!-- {#if $searchBoxx} -->
+	<div class="search-box-container">
 	<div class="input-container" id="question-container">
 		{#if showContainerarrow2}
 			<div class="containerarrow2">
@@ -234,6 +238,7 @@
 			</div>
 		{/if}
 	</div>
+</div>
 
 	{#if visualfull}
 		<div class="visualsfull">
@@ -284,9 +289,13 @@
  -->
 		</div>
 	{/if}
-{/if}
+<!-- {/if} -->
 
 <style>
+	.search-box-container {
+		width: 100%;
+	}
+
 	.selectSearch {
 		color: white;
 		margin-top: 15%;

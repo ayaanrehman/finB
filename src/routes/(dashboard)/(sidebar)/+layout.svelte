@@ -11,9 +11,9 @@
 
     
     
-    let containerStyle = '';
     
-    $: containerStyle = $searchBox ? 'grid-template-columns: 4em 25em 1fr;' : 'grid-template-columns: 4em 1fr;';
+    
+    
     
     
     console.log('layout daata is', data);
@@ -25,10 +25,13 @@
     
     <Header />
     
-    <div class="container" style={containerStyle}>
+    <div class="container">
         <PreSideBar />
         <!-- {#if $searchBox} -->
-        <slot />
+        <!-- <PageTransition> -->
+            <slot />
+
+        <!-- </PageTransition> -->
       
             
             
@@ -36,6 +39,7 @@
     </div>
     <style lang="scss">
         .container {
+            grid-template-columns:  60px 300px 1fr;
             display: grid;
             color: #fff;
             position: relative;

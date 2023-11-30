@@ -13,7 +13,7 @@
 	import { createFolder } from '../data/AddFolder';
 	import { listFolder } from '../data/listFolders';
 	import { lisFolder } from '$lib/stores/global.js';
-	
+	import SearchList from './SearchList.svelte';
 
 	// export let data;
 	// export let data2;
@@ -24,18 +24,11 @@
 	export let userId;
 	export let searchType;
 
-
-	console.log('search type is', searchType);
-
-
-	
-
 	// let isPageUrl = false;
 
 	// let socket;
 
 	let folderType = 'structured';
-	
 
 	let upload = false;
 	let uploadFolder = false;
@@ -61,8 +54,6 @@
 	onMount(async () => {
 		foldersz = await listFolder();
 	});
-
-	
 
 	const handleCreateFolder = () => {
 		createFolder(dataType, newFolderName);
@@ -109,15 +100,15 @@
 
 	// let fileName;
 
-	function submitStructure(e) {
-		let filename = e.target.dataset.docName;
-		sr(filename);
-	}
+	// function submitStructure(e) {
+	// 	let filename = e.target.dataset.docName;
+	// 	sr(filename);
+	// }
 
-	function submitFileName(e) {
-		let filename = e.target.dataset.docName;
-		sfp(filename);
-	}
+	// function submitFileName(e) {
+	// 	let filename = e.target.dataset.docName;
+	// 	sfp(filename);
+	// }
 
 	function toggleShowDocuments() {
 		showDocuments = !showDocuments;
@@ -129,57 +120,57 @@
 		hideDocSearch2();
 	}
 
-	function toggleDataLake() {
-		li2 = true;
-		li = false;
+	// function toggleDataLake() {
+	// 	li2 = true;
+	// 	li = false;
 
-		folderType = 'unstructured';
-		dataType = 'unstructured';
-		$lisFolder = 'unstructured';
+	// 	folderType = 'unstructured';
+	// 	dataType = 'unstructured';
+	// 	$lisFolder = 'unstructured';
 
-		$selectSearch = false;
-		$searchBoxx = true;
+	// 	$selectSearch = false;
+	// 	$searchBoxx = true;
 
-		searchInput = '';
-		searchInput2 = '';
+	// 	searchInput = '';
+	// 	searchInput2 = '';
 
-		const navID = document.getElementById('symbtn');
-		if (navID) {
-			navID.style.borderBottom = 'none';
-			navID.style.color = 'rgba(255, 255, 255, 0.7)';
-		}
-		const navID2 = document.getElementById('finbtn');
-		if (navID2) {
-			navID2.style.borderBottom = '0.5px solid rgba(255, 255, 255, 0.4)';
-			navID2.style.color = 'rgba(255, 255, 255)';
-		}
-	}
+	// 	const navID = document.getElementById('symbtn');
+	// 	if (navID) {
+	// 		navID.style.borderBottom = 'none';
+	// 		navID.style.color = 'rgba(255, 255, 255, 0.7)';
+	// 	}
+	// 	const navID2 = document.getElementById('finbtn');
+	// 	if (navID2) {
+	// 		navID2.style.borderBottom = '0.5px solid rgba(255, 255, 255, 0.4)';
+	// 		navID2.style.color = 'rgba(255, 255, 255)';
+	// 	}
+	// }
 
-	function toggleDataLake2() {
-		li2 = false;
-		li = true;
+	// function toggleDataLake2() {
+	// 	li2 = false;
+	// 	li = true;
 
-		folderType = 'structured';
-		dataType = 'structured';
-		$lisFolder = 'structured';
+	// 	folderType = 'structured';
+	// 	dataType = 'structured';
+	// 	$lisFolder = 'structured';
 
-		$selectSearch = true;
-		$searchBoxx = false;
+	// 	$selectSearch = true;
+	// 	$searchBoxx = false;
 
-		searchInput = '';
-		searchInput2 = '';
+	// 	searchInput = '';
+	// 	searchInput2 = '';
 
-		const navID = document.getElementById('finbtn');
-		if (navID) {
-			navID.style.borderBottom = 'none';
-			navID.style.color = 'rgba(255, 255, 255, 0.7)';
-		}
-		const navID2 = document.getElementById('symbtn');
-		if (navID2) {
-			navID2.style.borderBottom = '0.5px solid rgba(255, 255, 255, 0.4)';
-			navID2.style.color = 'rgba(255, 255, 255)';
-		}
-	}
+	// 	const navID = document.getElementById('finbtn');
+	// 	if (navID) {
+	// 		navID.style.borderBottom = 'none';
+	// 		navID.style.color = 'rgba(255, 255, 255, 0.7)';
+	// 	}
+	// 	const navID2 = document.getElementById('symbtn');
+	// 	if (navID2) {
+	// 		navID2.style.borderBottom = '0.5px solid rgba(255, 255, 255, 0.4)';
+	// 		navID2.style.color = 'rgba(255, 255, 255)';
+	// 	}
+	// }
 
 	//////////////////////	Data Lake search filter for Symantec Search	Start	//////////////////////////////////
 
@@ -202,10 +193,10 @@
 		}
 	}
 
-	let docs = bucketFiles;
+	let financeAiDocs = bucketFiles;
 
 	function filterDocuments() {
-		docs = bucketFiles.filter((document) =>
+		financeAiDocs = bucketFiles.filter((document) =>
 			document.name.toLowerCase().includes(searchInput2.toLowerCase())
 		);
 	}
@@ -235,10 +226,10 @@
 		}
 	}
 
-	let docs2 = bucketFilesUnStructured;
+	let symantecDocs = bucketFilesUnStructured;
 
 	function filterDocuments2() {
-		docs2 = bucketFilesUnStructured.filter((document) =>
+		symantecDocs = bucketFilesUnStructured.filter((document) =>
 			document.name.toLowerCase().includes(searchInput.toLowerCase())
 		);
 	}
@@ -246,209 +237,73 @@
 	$: searchInput, filterDocuments2();
 
 	//////////////////////	Data Lake search filter for Finance AI	End	//////////////////////////////////
+	let docopen = true;
+	
+	function docopenz() {
+		docopen = !docopen;
+	}
 </script>
 
 <button id="openSidebar" style="margin-top: 1em;"><img src="/images/3hvl.png" alt="" /></button>
 
 <nav id="nav">
 	<ul class="ulstat">
-		<div class="navcontainer">
-			<!-- <button
-				class="navbutton"
-				id="symbtn"
-				on:click={() => {
-					toggleDataLake2();
-					temp(0.1);
-				}}>Finance AI</button
-			>
-			<button
-				class="navbutton"
-				id="finbtn"
-				on:click={() => {
-					srn();
-					temp(0.4);
-					toggleDataLake();
-				}}>Symantec Search</button
-			> -->
-			<br />
-		</div>
-		{#if li2}
-			<li>
-				<div>
-					<a
-						on:click={toggleShowDocuments}
-						class:active={showDocuments}
-						style="cursor: pointer; color: rgba(255, 255, 255, 0.8); font-size: smaller; font-weight: bold;"
+		<li>
+			<div>
+				<div class="datacntn">
+					<h4
+						class="dtlk"
+						on:click={docopenz}
 					>
-						<span style="font-size: normal; color: #545b64;"
-							>{#if showDocuments}&#11206;{:else}&#11208;{/if}</span
-						> Data Lake</a
-					>
+						{#if docopen}<span>&#x25BC;</span>{:else}<span>&#x25BA;</span>{/if}<span>Data Lake</span
+						>
+					</h4>
 					<button
 						on:click={() => {
 							uploading(), toggleShowDocuments();
 						}}
 						class="addbtn"><img src="/images/add_files.png" alt="Add Files" /></button
 					>
-
-					<button class="addbtn" on:click={uploadFldr}
-						><img src="/images/add_folders.png" alt="Add Folders" /></button
-					>
-					{#if uploadFolder}
-						<br />
-						<input
-							style="margin-left: 20px;"
-							bind:value={newFolderName}
-							placeholder="New Folder Name"
-						/>
-						<button class="addfldr" on:click={handleCreateFolder}>Add Folder</button>
-						<p id="messagefoldr" />
-					{/if}
-					{#if upload}
-						<div>
-							<FileUpload {folderType} {userId} />
-						</div>
-					{/if}
-					<br />
-					<input
-						class="docsearch"
-						type="text"
-						bind:value={searchInput}
-						placeholder="&#128269; Search..."
-					/>
 				</div>
 
-				{#if docs2}
-					{#if showDocuments}
-						<ul class="scrollable-docs">
-							{#each docs2 as document, i}
-								<li class="listTitle">
-									<a
-										href="/documents/symantec-search/{document.name}"
-										data-doc-name={document.name}
-										class="titledoc"
-										class:active={pageUrl == '/documents/symantec-search/' + encodeURIComponent(document.name) + '/'}
-										on:click={(e) => {
-											submitFileName(e), temp(0.4);
-											$searchBoxx = true;
-											$selectSearch = false;
-										}}
-									>
-										<span>&#128462;</span><span style="pointer-events: none;">{document.name}</span
-										></a
-									>
-									
-								
-								</li>
-							{/each}
-							<!-- {#each foldersz as folder (folder.id)}
-							<div>{folder.name}</div>
-							{/each} -->
-						</ul>
-					{/if}
+				{#if upload}
+					<div>
+						<FileUpload {searchType} {userId} />
+					</div>
 				{/if}
-			</li>
+				<br />
+			</div>
+			<!-- {#if docs2} -->
+			<!-- {#if showDocuments} -->
+			<!-- {/if} -->
+			<!-- {/if} -->
+		</li>
+		<!-- {/if} -->
+
+		<!-----------------
+			------------------------------------------------------ Finance AI ------------------------------------------------------------------------->
+		<!-- {#if li} -->
+
+		<!-- <SearchList searchType={searchType} docs={financeAiDocs}/> -->
+
+		<!-- <li id="findb"> -->
+		{#if docopen}
+		{#if searchType == 'finance-ai'}
+			{#if financeAiDocs}
+				<SearchList {searchType} docs={financeAiDocs} />
+			{/if}
+		{:else if searchType == 'symantec-search'}
+			{#if symantecDocs}
+				<SearchList {pageUrl} {searchType} docs={symantecDocs} />
+			{/if}
+		{/if}
 		{/if}
 
-		<!----------------------------------------------------------------------- Finance AI ------------------------------------------------------------------------->
-		{#if li}
-			<li id="findb">
-				<div>
-					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<a
-						on:click={toggleShowDocuments2}
-						class:active={showDocuments2}
-						style="cursor: pointer; color: rgba(255, 255, 255, 0.8); font-size: smaller; font-weight: bold;"
-					>
-						<span style="font-size: normal; color: #545b64;"
-							>{#if showDocuments2}&#11206;{:else}&#11208;{/if}</span
-						> Data Lake</a
-					>
-					<button
-						on:click={() => {
-							uploading(), toggleShowDocuments2();
-						}}
-						class="addbtn"><img src="/images/add_files.png" alt="Add Files" /></button
-					>
-					<button class="addbtn" on:click={uploadFldr}
-						><img src="/images/add_folders.png" alt="Add Folders" /></button
-					>
-					{#if uploadFolder}
-						<br />
-						<input
-							style="margin-left: 20px;"
-							bind:value={newFolderName}
-							placeholder="New Folder Name"
-						/>
-						<button class="addfldr" on:click={handleCreateFolder}>Add Folder</button>
-					{/if}
-					{#if upload}
-						<div>
-							<FileUpload {folderType}  {userId}/>
-						</div>
-					{/if}
-					<br />
-					<input
-						class="docsearch2"
-						type="text"
-						bind:value={searchInput2}
-						placeholder="&#128269; Search..."
-					/>
-				</div>
-
-				{#if docs}
-					{#if showDocuments2}
-						<!-- {listTables} -->
-						{#if docs.length > 0}
-							<ul>
-								{#each docs as document, i}
-									<a href="/documents/symantec-search/{document.name}">
-										<!-- svelte-ignore a11y-click-events-have-key-events -->
-										<li
-											class="fintab"
-											data-doc-name={document.name}
-											class:active={pageUrl ==
-												'/documents/symantec-search/' + encodeURIComponent(document.name) + '/'}
-											on:click={(e) => {
-												submitStructure(e), temp(0.0);
-												$searchBoxx = true;
-												$selectSearch = false;
-											}}
-										>
-											<span>&#128462;</span><span style="pointer-events: none;"
-												>{document.name}</span
-											>
-										</li></a
-									>
-								{/each}
-								<!-- {#each foldersz as folder (folder.id)}
-								<div>{folder.name}</div>
-								{/each} -->
-							</ul>
-						{:else}
-							<p>No tables available.</p>
-						{/if}
-					{/if}
-				{/if}
-			</li>
-		{/if}
+		<!-- </li> -->
+		<!-- {/if} -->
 
 		<div style="display:flex;flex-direction:column;margin-top:auto">
-			<div class="statbtn">
 			
-
-				<!-- <li style="border-top: 0.5px solid rgba(255, 255, 255, 0.4); padding-top: 5%">
-					<a href="/ ">Home</a>
-				</li>
-				<li><a href="/ ">API Access</a></li>
-				<li><a href="/">Support</a></li>
-				<li style="padding-bottom: 5%">
-					<a href="/">About Us</a>
-					
-				</li> -->
-			</div>
-			<br />
-			<br />
 			<div style="display:flex;flex-direction:column;margin-top:auto;align-items:center">
 				<p style="font-size: small; color: rgba(255, 255, 255, 0.7)">Powered By</p>
 				<img src="/images/ics2.png" alt="ICS Logo" style="max-width: 5em; height: auto;" />
@@ -459,8 +314,22 @@
 </nav>
 
 <style lang="scss">
+	.dtlk {
+		display: flex;
+		flex-direction: row;
+		gap:0.3em;color:darkgray;
+		cursor: pointer;
+		margin: 0;
+	}
+	.datacntn {
+		display: flex;
+		flex-direction: row;
+		gap: 3em; 
+		justify-content: space-between;
+		align-items: center;
+		
 
-
+	}
 	.addfldr {
 		padding: 10px;
 		margin: 10px;
@@ -571,7 +440,7 @@
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-		gap: 10px;
+	
 	}
 	#nav ul li {
 		list-style: none;
@@ -580,7 +449,7 @@
 		color: #fff;
 		text-decoration: none;
 		font-size: 1.2rem;
-		line-height: 1.5em;
+		
 	}
 	/*#nav > ul > li{
             border-bottom:1px solid rgb(32, 44, 51);

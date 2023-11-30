@@ -12,12 +12,13 @@
 	}
 
 	let buttons = [
-		{ name: 'Finance AI', icon: '/images/support.png', link: '/documents/finance-ai' },
-		{ name: 'Symantec Search', icon: '/images/aboutus.png', link: '/documents/symantec-search' },
-		{ name: 'ChatGPT', icon: '/images/chatgpt.png', link: '/chatgpt-plus' },
-		{ name: 'Zapier', icon: '/images/zapier.png', link: '/chatgpt-plus' },
-		{ name: 'API Access', icon: '/images/apiaccess.png', link: '/chatgpt-plus' },
-		{ name: 'About US', icon: '/images/rag.png', link: '/' },
+		
+		{ name: 'Symantec Search', icon: '/images/sidebar/symantec-search.png', link: '/documents/symantec-search' },
+		{ name: 'Database Search', icon: '/images/sidebar/finance-ai.png', link: '/documents/finance-ai' },
+		{ name: 'Guard Rails', icon: '/images/sidebar/chatgpt-plus.png', link: '/chatgpt-plus' },
+		{ name: 'Zapier Integration', icon: '/images/sidebar/zapier.png', link: '/zapier' },
+		{ name: 'API Access', icon: '/images/sidebar/apiaccess.png', link: '/chatgpt-plus' },
+		{ name: 'Settings', icon: '/images/sidebar/settings.png', link: '/' },
 	
 		
 	];
@@ -55,8 +56,7 @@
 <style>
 	.logout-tag {
 		position: absolute;
-		left: 3.5em; /* Adjust as needed */
-		/* rest of your styles */
+		left: 3.5em;
 	}
 
 	.logout {
@@ -82,7 +82,7 @@
 		padding-top: 20px;
 		padding-left: 0.5em;
 		padding-right: 0.5em;
-    border-right: 1px solid rgb(56, 56, 56);
+  		border-right: 1px solid rgb(56, 56, 56);
 		/* height: 100vh; */
 	}
 
@@ -100,11 +100,11 @@
 		position: relative;
 	}
 
-	.button:nth-child(3) {
+	.button:nth-child(4) {
 		margin-bottom: 1em;
 	}
 
-	.button:nth-child(3)::after {
+	.button:nth-child(4)::after {
 		content: '';
     display: block;
     width: 50%;
@@ -119,10 +119,8 @@
 		width: 0.8em;
 		height: auto;
 		background-color: #cccccc00;
-		/* border-radius: 50%; */
 		margin-bottom: 5px;
-		/* Add a transition for smooth color change */
-		filter: invert(0.5);
+		filter: invert(0);
 		transition: background-color 0.3s ease;
 	}
 

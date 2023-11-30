@@ -20,54 +20,51 @@
   
 
 	function pgchg() {
-        // console.log("Working.............")
-        
-        page = !page
-        pagemin=!pagemin
+        let minBtn = document.querySelector('.minviewer');
 
-        isActive = !isActive;
-        if (isActive) {
-        // Change the class of the other div to 'otherDivActive'
-        document.getElementById('pgctnr').classList.add('active');
-        } else {
-        // Remove the 'otherDivActive' class
-        document.getElementById('pgctnr').classList.remove('active');
-        }   
+        let docPageContainer = document.querySelector('.doc-page-container');
 
-        // console.log("Worked.............")
+        docPageContainer.classList.toggle('minimize');
+
     };
+
+     onMount( () => {
+        // pgchg();        
+    });
 
 </script>
 
 <div id="pgctnr" class="doc-page-container">
-
-
-    {#if page}
+    <!-- {#if page} -->
         <div class="doc-container" style="border-right: 0.5px solid grey;">
-        
-            <a href='/'><button on:click={() => { srn(); root(); }} id="cv" class="closeviewer">X</button>
+             <a href='/'><button id="cv" class="closeviewer">X</button>
             </a>
             <button id="minviewer" class="minviewer" on:click={pgchg} class:active={isActive}>&#8211;</button>
-
-        
                 <slot /> 
-        
-            
         </div>
-    {/if}
-    <div>
-        <SearchBox />
-        
-        {#if pagemin}
+    <!-- {/if} -->
+        <!-- {#if pagemin}
         <a href='/'><button on:click={() => { srn(); root(); }} id="cv" class="closeviewer">X</button>
             </a>
         <button class="minviewer" on:click={pgchg} class:active={isActive}>&#8211;</button>
-        {/if}
+        {/if} -->
 
-    </div>
 </div>
 <style>
-
+    .doc-page-container{
+        transition: .1s all ease-out;
+        min-width: 40%;
+        max-width: 40%;
+    }
+    :global(.doc-page-container.minimize){
+        min-width: unset !important;
+        width: 0px !important;
+        overflow: visible;
+        z-index: 9999;
+    }
+    :global(.doc-page-container.minimize .closeviewer, .doc-page-container.minimize .minviewer){
+        right:-30px !important;
+    }
     .closeviewer {
        cursor: pointer;
        background-color: rgba(0, 0, 0, 0);
@@ -135,7 +132,7 @@
 
     .doc-page-container{
         display: grid;
-        grid-template-columns: 50% 50%;
+        grid-template-columns: 100%;
         height: calc(100vh - 98px);
         /*min-height: 85vh;*/
     }

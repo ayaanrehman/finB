@@ -15,9 +15,9 @@ rel="stylesheet" type="text/css"/>
       style="padding: 0.5em 0em 0em 1em ;"
     />
     </a> 
-    <h2>
+    <!-- <h2>
     FinBlade
-    </h2>
+    </h2> -->
     <hr class="header-line" />
    
   </header>

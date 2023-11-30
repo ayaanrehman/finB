@@ -4,9 +4,19 @@
 	import { supabase } from '$lib/supabase.js';
 	import {userIdStore} from "$lib/stores/global.js";
 
-	export let folderType;
 	export let userId;
+	export let searchType;
+
+
 	let selectedFile;
+	let folderType;
+
+	if(searchType == 'finance-ai'){
+		folderType = 'structured';
+	}else if(searchType == 'symantec-search'){
+		folderType = 'unstructured';
+	}
+
 
 	console.log('user id store is', userId);
 

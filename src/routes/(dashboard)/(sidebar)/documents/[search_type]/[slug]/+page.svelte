@@ -1,23 +1,38 @@
 <!-- <h1>First Doc</h1> -->
 <script>
+    import { onMount } from 'svelte';
+    
+    
     export let data;
-    let {document, structured, url} = data;
+    let {doc, structured, url} = data;
 
-    function addNumber(num1, num2){
-        return num1 + num2;
-    }
 
-    // let finalNum = addNumber(4, 2);
+     function close() {
+       let docPageContainer = document.querySelector('.doc-page-container');
+        if(docPageContainer){
+            docPageContainer.classList.remove('minimize');
+
+        }
+
+    };
+    
+    
+
+    onMount( () => {
+       
+     
+        close();        
+    });
 
 </script>
 
-<!-- <h1>{document.title}</h1> -->
+<!-- <h1>{doc.title}</h1> -->
 
-{#if document}
+{#if doc}
     {#if structured}
-        <iframe title="{document.name}" src="https://view.officeapps.live.com/op/embed.aspx?src={data.url}"></iframe>
+        <iframe title="{doc.name}" src="https://view.officeapps.live.com/op/embed.aspx?src={data.url}"></iframe>
     {:else}
-        <object data="{data.url}#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf" width="100%" height="100%" title="{document.name}"></object>
+        <object data="{data.url}#toolbar=0&navpanes=0&scrollbar=0" type="application/pdf" width="100%" height="100%" title="{doc.name}"></object>
     {/if}
 {:else}
     <p>No Document Found!</p>

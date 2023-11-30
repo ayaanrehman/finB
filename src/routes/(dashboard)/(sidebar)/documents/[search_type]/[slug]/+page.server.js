@@ -29,7 +29,7 @@ export const load = async({params}) => {
     let url = await getSignedUrl('structured', document[0].fullname, userId);
   
 
-        return {document: document[0], url: url, structured: true};
+        return {doc: document[0], url: url, structured: true};
     }
 
     let resTwo = await getFilesFromBucket('unstructured', userId);
@@ -41,8 +41,8 @@ export const load = async({params}) => {
 
     let urlTwo = await getSignedUrl('unstructured', documentTwo[0].fullname, userId);
     // console.log(urlTwo);
-        return {document: documentTwo[0], url: urlTwo, structured: false};
+        return {doc: documentTwo[0], url: urlTwo, structured: false};
     }
     
-    return{document:null, url: 'url'}
+    return{dodc:null, url: 'url'}
 }

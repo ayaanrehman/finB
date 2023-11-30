@@ -1,8 +1,13 @@
 <script>
     import Sidebar from "$lib/components/Sidebar.svelte";
     import SearchBox from "$lib/components/SearchBox.svelte";
+   
+    
 
     export let data;
+
+  
+
 </script>
 
 <Sidebar searchType={data.searchType} userId={data.userId} pageUrl={data.pathname} bucketFiles={data.bucketFiles} bucketFilesUnStructured={data.bucketFilesUnStructured}/>
@@ -10,8 +15,15 @@
  <main>
     <!-- <SearchBox /> -->
     <slot />
+    <SearchBox />
      <!-- {#if $searchBox} -->
      <!-- <PageTransition pathname={data.pathname}> -->
      <!-- </PageTransition> -->
      <!-- {/if} -->
-     </main>
+</main>
+<style>
+    main{
+        display: flex;
+        flex-direction: row;
+    }
+</style>
