@@ -38,7 +38,7 @@
             display: grid;
             color: #fff;
             position: relative;
-            height: calc(100vh - 86px);
+            height: calc(100vh - 75px);
             grid-template-columns: auto 1fr;
         }
     </style>

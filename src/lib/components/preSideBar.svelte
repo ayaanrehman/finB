@@ -1,45 +1,116 @@
 <script>
-	// import { chatpage } from '$lib/stores/global.js';
-	// import { searchBox } from '$lib/stores/global.js';
 	import { goto } from '$app/navigation';
 	import { signOut } from '$lib/database/utility.js';
+	import { onMount } from 'svelte';
+	import { buttonName } from '$lib/stores/global.js';
+	import { onDestroy } from 'svelte';
+	import { navigate } from 'svelte-routing';
+
+	let currentPath = '';
+
+	function updatePath(element) {
+		currentPath = window.location.pathname;
+	}
+
+	//clear the data of the page when goto is called
+	onDestroy(() => {
+		$buttonName = '';
+		currentPath = '';
+	});
+
+	//
+
+	onMount(() => {
+		if (buttons.length > 0) {
+			$buttonName =
+				currentPath === '/documents/symantec-search/'
+					? 'Symantec Search'
+					: currentPath === '/documents/finance-ai/'
+					? 'Database Search'
+					: currentPath === '/chatgpt-plus/'
+					? 'Guard Rails'
+					: currentPath === '/zapier/'
+					? 'Zapier Integration'
+					: currentPath === '/api-access/'
+					? 'API Access'
+					: currentPath === '/settings/'
+					? 'Settings'
+					: '';
+		}
+	});
+
+	onMount(() => {
+		updatePath(element);
+	});
 
 	async function signOutUser() {
 		let res = await signOut();
 		if (!res.error) {
-			goto('/login');
+			goto('/login/');
 		}
 	}
 
 	let buttons = [
-		
-		{ name: 'Symantec Search', icon: '/images/sidebar/symantec-search.png', link: '/documents/symantec-search' },
-		{ name: 'Database Search', icon: '/images/sidebar/finance-ai.png', link: '/documents/finance-ai' },
-		{ name: 'Guard Rails', icon: '/images/sidebar/chatgpt-plus.png', link: '/chatgpt-plus' },
-		{ name: 'Zapier Integration', icon: '/images/sidebar/zapier.png', link: '/zapier' },
-		{ name: 'API Access', icon: '/images/sidebar/apiaccess.png', link: '/chatgpt-plus' },
-		{ name: 'Settings', icon: '/images/sidebar/settings.png', link: '/' },
-	
-		
+		{
+			name: 'Symantec Search',
+			icon: '/images/sidebar/symantec-search.png',
+			link: '/documents/symantec-search/'
+		},
+		{
+			name: 'Database Search',
+			icon: '/images/sidebar/finance-ai.png',
+			link: '/documents/finance-ai/'
+		},
+		{ name: 'Guard Rails', icon: '/images/sidebar/chatgpt-plus.png', link: '/chatgpt-plus/' },
+		{ name: 'Zapier Integration', icon: '/images/sidebar/zapier.png', link: '/zapier/' },
+		{ name: 'API Access', icon: '/images/sidebar/apiaccess.png', link: '/api-access/' },
+		{ name: 'Settings', icon: '/images/sidebar/settings.png', link: '/settings/' }
 	];
 	let activeButton = null;
 	let activeLogout = false;
+	let activeUser = false;
 </script>
 
 <div class="sidebar">
-	{#each buttons as button}
+	{#each buttons as button, index (button.link)}
 		<div
 			class="button"
+			use:updatePath
+			class:active1={currentPath === button.link}
 			on:mouseover={() => (activeButton = button)}
 			on:mouseout={() => (activeButton = null)}
-			on:click={() => {
-				goto(button.link);
-			}}
 		>
-			<img class="icon" src={button.icon} alt={button.name} />
-			<div class="tag">{activeButton === button && button.name}</div>
+
+			<div
+				use:updatePath
+				class:active={currentPath === button.link}
+				on:click={() => {
+					$buttonName = button.name;
+					if (index === 0) {
+						window.location.href = button.link;
+            } else {
+                goto(button.link);
+            }
+					
+				}}
+			>
+				<img class="icon" src={button.icon} alt={button.name} />
+				<div class="tag">{activeButton === button && button.name}</div>
+			</div>
 		</div>
 	{/each}
+
+	<button
+		class="user"
+		on:mouseover={() => (activeUser = true)}
+		on:mouseout={() => (activeUser = false)}
+		on:click={() => {
+			goto('/accounts/');
+		}}
+	>
+		{#if activeUser} <span class="user-tag">Account Preferences</span>{/if}
+		<img style="width: 2em; height: auto;" src="/images/user.png" alt="user" />
+	</button>
 	<button
 		class="logout"
 		on:mouseover={() => (activeLogout = true)}
@@ -54,6 +125,10 @@
 </div>
 
 <style>
+	.active1 {
+		background-color: #3d3d3d !important;
+	}
+
 	.logout-tag {
 		position: absolute;
 		left: 3.5em;
@@ -63,6 +138,25 @@
 		/* justify-self: end; */
 		position: absolute;
 		bottom: 0;
+		background-color: #3d3d3d00;
+		color: #fff;
+		border: none;
+		border-radius: 5px;
+		margin-bottom: 20px;
+		margin-left: 0.5em;
+		cursor: pointer;
+		filter: invert(0.5);
+	}
+
+	.user-tag {
+		position: absolute;
+		left: 3.5em;
+	}
+
+	.user {
+		/* justify-self: end; */
+		position: absolute;
+		bottom: 4em;
 		background-color: #3d3d3d00;
 		color: #fff;
 		border: none;
@@ -82,7 +176,7 @@
 		padding-top: 20px;
 		padding-left: 0.5em;
 		padding-right: 0.5em;
-  		border-right: 1px solid rgb(56, 56, 56);
+		border-right: 0.5px solid rgb(56, 56, 56);
 		/* height: 100vh; */
 	}
 
@@ -94,7 +188,7 @@
 		background-color: #992d2d00;
 		width: 50px;
 		height: 50px;
-		padding: 10px;
+
 		margin: 5px;
 		transition: background-color 0.3s ease;
 		position: relative;
@@ -106,22 +200,26 @@
 
 	.button:nth-child(4)::after {
 		content: '';
-    display: block;
-    width: 50%;
-    height: 1px;
-    background-color: rgb(56, 56, 56);
-    margin: 0.5px auto;
-    position: absolute;
-    bottom: -0.5em; /* Adjust as needed */
+		display: block;
+		width: 50%;
+		height: 1px;
+		background-color: rgb(56, 56, 56);
+		margin: 0.5px auto;
+		position: absolute;
+		bottom: -0.5em; /* Adjust as needed */
 	}
 
 	.icon {
-		width: 0.8em;
+		width: 1em;
 		height: auto;
 		background-color: #cccccc00;
-		margin-bottom: 5px;
 		filter: invert(0);
 		transition: background-color 0.3s ease;
+	}
+
+	.active {
+		filter: sepia(100%) hue-rotate(180deg) saturate(500%);
+		/*background-color: #3d3d3d;  This background color should be applied to the whole button and not just the icon */
 	}
 
 	.tag {
@@ -132,13 +230,9 @@
 		border-radius: 5px;
 		font-size: 12px;
 		margin-left: 10em;
-		top: 0em;
+		top: -2em !important;
 		z-index: 2;
-	}
-
-	.tag {
 		position: relative;
-		/* rest of your styles */
 	}
 
 	.tag::before {

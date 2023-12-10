@@ -133,7 +133,7 @@
     .doc-page-container{
         display: grid;
         grid-template-columns: 100%;
-        height: calc(100vh - 98px);
+        height: calc(100vh - 75px);
         /*min-height: 85vh;*/
     }
 

@@ -1,53 +1,74 @@
 <script>
 	import { onMount } from 'svelte';
 	import io from 'socket.io-client';
-	import { readonly } from 'svelte/store';
 
 	let question = '';
 	let messages = [];
 	let socket;
 	let response = '';
 	let chatquestion = '';
+	let loadanim = false;
+	let chatHistory;
+	let stylevar = '';
 
-	// socket = io.connect('http://icsfinblade.com:8080/');
+	onMount(() => {
+		const inputBox = document.querySelector('.input-box1');
+		inputBox.focus();
+	});
 
-	// onMount(() => {
-	
-	// 	socket.on('chat_response', (data) => {
-	// 		messages = [...messages, { text: data, sender: 'server' }];
-	// 	});
-	// });
+	socket = io.connect('http://icsfinblade.com:8080/');
 
-    // const submitMessage = (event) => {
-    // event.preventDefault(); // Prevent form from being submitted normally
-    // if (question.trim() !== '') {
-    //   messages = [...messages, { text: question, sender: 'client' }];
-    //   socket.emit('chatgpt_question', chatquestion);
-    //   chatquestion = '';
-    // }
+	function formatDate(date) {
+		return date.toLocaleTimeString();
+	}
+
+	function scrollToBottom() {
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+	function scrollToTop() {
+        chatHistory.scrollTop = 0;
+    }
 
 
-	// function submitQuestion() {
-	// 	socket.emit('chatgpt_question', chatquestion);
-	// 	console.log('This is Question: ', chatquestion);
-	// }
+	function submitQuestion() {
+		if (chatquestion.trim() !== '') {
+			messages = [...messages, { text: chatquestion, sender: 'client', timestamp: new Date() }];
+			socket.emit('chatgpt_question', { question: chatquestion, stylevar: stylevar });
+			loadanim = true;
+			setTimeout(() => {
+				scrollToBottom();
+				chatquestion = '';
+				//focus on input box
+				const inputBox = document.querySelector('.input-box1');
+				inputBox.focus();
+			}, 100);
+		}
+		console.log(stylevar)
+	};
 
-	// onMount(async () => {
-	// 	socket.on('chat_response', function (data) {
-	// 		response = data.response;
-	// 		console.log('This is Response: ', response);
+
+	onMount(async () => {
+		socket.on('chat_response', function (data) {
+			response = data.response;
+			console.log('This is Response: ', response);
+			messages = [...messages, { text: response, sender: 'server', timestamp: new Date() }];
+			loadanim = false;
+			setTimeout(() => {
+				scrollToBottom();
+			}, 100);
+				
 			
-	// 	});
-	// })
-
+		});
+	});
 
 </script>
 
 <div class="chat1">
 	<h3 style="color: white;">Enterprise AI Chat with GuardRails</h3>
 	<div class="chat-gpt-container">
-		<div id="chat-history1" class="chat-history1" readonly="readyonly">
-			<div class="message placeholder">
+		<div id="chat-history1" class="chat-history1"  readonly="readyonly">
+			<div class="message placeholder" bind:this={chatHistory}>
 				{#if messages.length === 0}
 					<div class="chatting">
 						<b>Welcome! Start writing a question...</b>
@@ -58,32 +79,48 @@
 					</div>
 				{:else}
 					{#each messages as message (message.text)}
-						<div class={message.sender}>
-							{message.text}
+						<div class="message {message.sender}">
+							<p>{message.text}</p>
+							<span style="font-size: x-small;">{formatDate(message.timestamp)}</span>
 						</div>
 					{/each}
 				{/if}
-				<button id="scroll-to-bottom1">&#9660;</button>
 			</div>
-	
+			<button id="scroll-to-top1" on:click={scrollToTop}>&#9650;</button>
+			<button id="scroll-to-bottom1" on:click={scrollToBottom}>&#9660;</button>
+
 			<form on:submit={submitQuestion}>
 				<div class="input-container1">
-				  <div class="qtnn">
-					<input class="input-box1" type="text" bind:value={chatquestion} placeholder="Enter your question to ChatGPT Plus" />
-					<button class="submit2" type="submit" />
-				  </div>
-	
-				<button id="clear-chat-button" class="clear-button">X</button>
-				<div id="loading-container">
-					<div class="dot-flashing" />
+					<div class="qtnn">
+						<input
+							class="input-box1"
+							type="text"
+							bind:value={chatquestion}
+							placeholder="Enter your question to ChatGPT Plus"
+						/>
+						<button
+							class="submit2 {loadanim ? 'transparent' : ''}"
+							on:click|preventDefault={submitQuestion}
+							type="submit"
+						>
+							{#if loadanim}
+								<div id="loading-container2">
+									<div class="dot-flashing2" />
+								</div>
+							{/if}
+						</button>
+					</div>
+
+					<button id="clear-chat-button" class="clear-button">X</button>
 				</div>
-			</div>
-			
 			</form>
 		</div>
 		<div class="chat-helpers">
 			<div>
-				<button>Rephrase this statement in ICS Format</button>
+				<button on:click={() => {
+					stylevar='style1', submitQuestion();
+				}}
+				>Rephrase this statement in ICS Format</button>
 			</div>
 			<div>
 				<button>Translate this sentence</button>
@@ -94,16 +131,25 @@
 		</div>
 	</div>
 </div>
-<button on:click={(e) =>{
-	question = 'hhsagfhh.'
-}}>
-
-</button>
+<button
+	on:click={(e) => {
+		question = '';
+	}}
+/>
 
 <style lang="scss">
 	@import url('https://fonts.cdnfonts.com/css/leelawadee');
 
-	.chat-gpt-container{
+	.transparent {
+		background-image: none !important;
+		cursor: default;
+	}
+
+	.message {
+		margin: 0;
+	}
+
+	.chat-gpt-container {
 		width: 100%;
 		display: grid;
 		grid-template-columns: 1fr 220px;
@@ -111,14 +157,14 @@
 		border-radius: 0.5em;
 		height: 100%;
 	}
-	.chat-helpers{
+	.chat-helpers {
 		display: flex;
 		flex-direction: column;
-		gap:12px;
+		gap: 12px;
 		padding: 1em;
-		margin-top:12px;
+		margin-top: 12px;
 	}
-	.chat-helpers button{
+	.chat-helpers button {
 		width: 100%;
 		height: 60px;
 		background-color: #666;
@@ -146,17 +192,28 @@
 		position: absolute;
 		right: 1em;
 		bottom: 1em;
+		cursor: pointer;
 	}
+
+	#scroll-to-top1 {
+		position: absolute;
+		right: 1em;
+		bottom: 3em;
+		cursor: pointer;
+	}
+
+	
 
 	.message.placeholder b,
 	.message.placeholder p,
 	.message.placeholder i {
 		margin: 30px 0; /* Adjust as needed */
-		
 	}
 
 	.message.placeholder {
 		height: calc(100% - 80px);
+		overflow-y: auto;
+		padding: 1em;
 	}
 
 	.qtnn {
@@ -171,7 +228,6 @@
 		border: 1px solid #ffffffcc;
 		position: relative;
 		color: white;
-		
 	}
 
 	.chat1 {
@@ -182,28 +238,36 @@
 		justify-content: center;
 		background-color: rgba(26, 26, 26, 0);
 		width: 100%;
-		height: 100%;
+		height: 90vh;
+		max-height: 90vh;
 		padding: 1em;
 		color: white;
-		overflow: hidden;
-		position: relative;
 		font-family: 'Leelawadee', sans-serif !important;
 	}
 	.chat1 h3 {
 		margin: 0;
 		margin-bottom: 0.5em;
 	}
+
 	.chat1 .chat-history1 {
 		width: 100%;
-		height: 100%;
-		overflow-y: scroll;
+
+		padding: 1em;
+
+		border-radius: 0.5em;
+		background-color: rgba(26, 26, 26, 0);
+	}
+
+	.chat-history1 {
+		flex-grow: 1;
+		overflow-y: auto;
 		padding: 1em;
 		padding-bottom: 0;
 		margin-bottom: 1em;
 		border-radius: 0.5em;
 		background-color: rgba(26, 26, 26, 0);
-		position: relative;
 	}
+
 	.chat1 .chat-history1 .message {
 		margin-bottom: 1em;
 		padding: 0.5em;
@@ -225,9 +289,7 @@
 	.chat1 .chat-history1 .message.placeholder b {
 		font-weight: normal;
 	}
-	.chat1 .chat-history1 .message.placeholder br {
-		display: none;
-	}
+
 	.chat1 .chat-history1 .message.placeholder::before {
 		content: '';
 		position: absolute;
@@ -266,7 +328,7 @@
 
 	.submit2 {
 		cursor: pointer;
-		border: 1px solid #ffffff79;
+		border: none;
 		width: 2em;
 		height: 2em;
 		z-index: 10;
@@ -275,5 +337,78 @@
 		background-repeat: no-repeat;
 		background-position: center;
 		background-color: #33333300;
+		position: relative;
+	}
+
+	.chat1 .chat-history1 .message.client {
+		/* Styles for client messages */
+		background-color: #007bff;
+		color: white;
+		width: fit-content;
+		margin-left: auto;
+	}
+
+	.chat1 .chat-history1 .message.server {
+		/* Styles for server messages */
+		background-color: #6c757d;
+		color: white;
+		width: fit-content;
+	}
+
+	/* CSS for the loading animation container */
+	#loading-container2 {
+		height: auto;
+		background-color: rgba(255, 255, 255, 0);
+		z-index: 9999;
+	}
+
+	.dot-flashing2 {
+		position: relative;
+
+		width: 10px;
+		height: 10px;
+		border-radius: 5px;
+		background-color: #810a0a;
+		color: #810a0a;
+		animation: dot-flashing 1s infinite linear alternate;
+		animation-delay: 0.5s;
+		right: 2px !important;
+	}
+	.dot-flashing2::before,
+	.dot-flashing2::after {
+		content: '';
+		display: inline-block;
+		position: absolute;
+		top: 0;
+	}
+	.dot-flashing2::before {
+		left: -15px;
+		width: 10px;
+		height: 10px;
+		border-radius: 5px;
+		background-color: #810a0a;
+		color: #810a0a;
+		animation: dot-flashing 1s infinite alternate;
+		animation-delay: 0s;
+	}
+	.dot-flashing2::after {
+		left: 15px;
+		width: 10px;
+		height: 10px;
+		border-radius: 5px;
+		background-color: #810a0a;
+		color: #810a0a;
+		animation: dot-flashing 1s infinite alternate;
+		animation-delay: 1s;
+	}
+
+	@keyframes dot-flashing2 {
+		0% {
+			background-color: #810a0a;
+		}
+		50%,
+		100% {
+			background-color: rgba(152, 128, 255, 0.2);
+		}
 	}
 </style>

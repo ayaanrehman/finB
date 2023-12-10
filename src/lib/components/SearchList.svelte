@@ -60,6 +60,7 @@
 <input class="docsearch" type="text" bind:value={searchInput} placeholder="&#128269; Search..."/>
 <ul class="scrollable-docs">
     {#each finalDocs as document, i}
+	{#if !(searchType == 'finance-ai' && i == 0)}
         <li class="listTitle">
             <a
                 href="/documents/{searchType}/{document.name}/"
@@ -79,6 +80,7 @@
             
         
         </li>
+		{/if}
     {/each}
 
 </ul>
@@ -262,6 +264,7 @@
 	.listTitle {
 		white-space: nowrap;
 		
+		
 	}
 
 	.listTitle:hover {
@@ -275,6 +278,8 @@
 		font-weight: normal;
 		display: flex;
 		gap: 1em;
+		
+		
         
 	}
 

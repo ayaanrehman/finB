@@ -42,13 +42,13 @@
     object{
         width: 95%;
         min-height: 70vh;
-        height: calc(100vh - 98px);
+        height: calc(100vh - 75px);
     }
 
     iframe {
         width: 95%;
         min-height: 70vh;
-        height: calc(100vh - 98px);
+        height: calc(100vh - 75px);
     }
 </style>
 

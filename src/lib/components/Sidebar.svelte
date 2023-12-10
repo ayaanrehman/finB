@@ -1,7 +1,7 @@
 <script>
 	// import documents from '$lib/data/documents.json';
 	// import output from 'C:/Users/Ayan-PC/Downloads/chat_assistant_10/chat_assistant_10/output.json';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { selectSearch } from '$lib/stores/global.js';
 	import { searchBoxx } from '$lib/stores/global.js';
 	import { sr } from '$lib/data/helpers';
@@ -23,6 +23,70 @@
 	export let bucketFilesUnStructured;
 	export let userId;
 	export let searchType;
+
+	let isResizing = false;
+	let isOnEdge = false;
+	let keydownHandler;
+
+	function changeCursor(event) {
+	let nav = document.getElementById('nav');
+	let rect = nav.getBoundingClientRect();
+	if (rect.right - event.clientX < 10) {
+		nav.style.cursor = 'ew-resize';
+		isOnEdge = true;
+	} else {
+		nav.style.cursor = 'default';
+		isOnEdge = false;
+	}
+}
+
+
+onMount(() => {
+    if (typeof window !== 'undefined') {
+      keydownHandler = function handleKeydown(event) {
+        if (isResizing && event.key === 'Escape') {
+          stopResize(event);
+        }
+      };
+
+      window.addEventListener('keydown', keydownHandler);
+    }
+  });
+
+  onDestroy(() => {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('keydown', keydownHandler);
+    }
+  });
+
+    function startResize(event) {
+        if (isOnEdge) {
+   		 isResizing = true;
+		document.body.classList.add('no-select');
+		document.getElementById('nav').style.cursor = 'ew-resize';
+    }
+}
+
+    function doResize(event) {
+        if (isResizing) {
+			let newWidth = event.pageX;
+        let minWidth = 200; // Set your minimum width here
+        let maxWidth = 500; // Set your maximum width here
+
+        if (newWidth < minWidth) newWidth = minWidth;
+        else if (newWidth > maxWidth) newWidth = maxWidth;
+
+        document.getElementById('nav').style.width = `${newWidth}px`;
+		document.getElementById('nav').style.cursor = 'ew-resize';
+			
+        }
+    }
+
+    function stopResize(event) {
+        isResizing = false;
+		document.body.classList.remove('no-select');
+		document.getElementById('nav').style.cursor = 'default';
+    }
 
 	// let isPageUrl = false;
 
@@ -246,7 +310,7 @@
 
 <button id="openSidebar" style="margin-top: 1em;"><img src="/images/3hvl.png" alt="" /></button>
 
-<nav id="nav">
+<nav id="nav" on:mousemove={changeCursor} on:mousedown={startResize} on:mousemove={doResize} on:mouseup={stopResize} >
 	<ul class="ulstat">
 		<li>
 			<div>
@@ -314,6 +378,8 @@
 </nav>
 
 <style lang="scss">
+
+
 	.dtlk {
 		display: flex;
 		flex-direction: row;
@@ -431,6 +497,7 @@
 		backdrop-filter: blur(0.5);
 		padding: 20px 10px;
 		height: 100%;
+		width: 300px;
 	}
 
 	#nav ul {
