@@ -26,9 +26,9 @@
     <div class="container" style={containerStyle}>
         <PreSideBar />
         <main>
-            <!-- <PageTransition> -->
+            <PageTransition>
                 <slot />
-            <!-- </PageTransition> -->
+            </PageTransition>
         </main>
             
         

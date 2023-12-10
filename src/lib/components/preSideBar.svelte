@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import {page} from '$app/stores';
 	import { signOut } from '$lib/database/utility.js';
 	import { onMount } from 'svelte';
 	import { buttonName } from '$lib/stores/global.js';
@@ -11,9 +12,21 @@
 		}
 	}
 
-	const currentPath = window.location.pathname;
+	// export let pathName = '/' ;
 
-	console.log(currentPath)
+	// console.log(pathName);
+
+	let currentPath;
+
+	$:currentPath = $page?.url?.pathname;
+
+	console.log('current path is', $page?.url?.pathname);
+
+	// onMount(() => {
+	// 	pathName = window.location.pathname;
+	// });
+
+	// console.log(currentPath)
 
 	let buttons = [
 		{
@@ -38,8 +51,6 @@
 
 <div class="sidebar">
 	{#each buttons as button, index (button.link)}
-		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 		<div class="button" class:active={currentPath === button.link}>
 			<a
 				href="{button.link}">
