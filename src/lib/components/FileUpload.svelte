@@ -1,8 +1,5 @@
 <script>
-	import { getUser } from '$lib/database/utility.js';
-	import {get} from "svelte/store";
 	import { supabase } from '$lib/supabase.js';
-	import {userIdStore} from "$lib/stores/global.js";
 
 	export let userId;
 	export let searchType;
@@ -27,9 +24,6 @@
 	};
 
 	const uploadFile = async () => {
-		// const userId = await getUser();
-		// console.log('user id is', userId);
-		// let userID = $userIdStore;
 
 		let userID = userId;
 

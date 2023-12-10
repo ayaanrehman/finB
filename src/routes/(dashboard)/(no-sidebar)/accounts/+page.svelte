@@ -3,5 +3,7 @@
 
 	import Accounts from "$lib/components/Accounts.svelte";
 
+    export let data;
+
 </script>
-<Accounts></Accounts>
+<Accounts userDetails={data.userDetails}></Accounts>

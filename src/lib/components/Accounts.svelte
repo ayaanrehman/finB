@@ -1,16 +1,15 @@
 <script>
-import { onMount } from 'svelte';
+// import { onMount } from 'svelte';
 import { supabase } from "$lib/supabase.js";
-import { getUser} from '$lib/database/utility.js';
-import {userIdStore} from "$lib/stores/global.js";
-import {get} from "svelte/store"
-import { browser } from '$app/environment';
+
+
+export let userDetails;
 
 let newPassword = '';
 let newName = '';
-let userId = $userIdStore;
+let userName = userDetails.email;
 
-console.log('userId is this one', userId);
+console.log('user name is', userName);
 
 async function changePassword() {
     // Update user password using Supabase API
@@ -29,8 +28,8 @@ async function changeName() {
 <main>
     <h1>Account Settings</h1>
 
-    {#if userId}
-        <h2>Welcome, {userId.name}!</h2>
+    {#if userName}
+        <h2>Welcome, {userName}!</h2>
 
         <h3>Change Password</h3>
         <input type="password" bind:value={newPassword} placeholder="New Password" />

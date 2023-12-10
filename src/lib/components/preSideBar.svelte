@@ -3,45 +3,6 @@
 	import { signOut } from '$lib/database/utility.js';
 	import { onMount } from 'svelte';
 	import { buttonName } from '$lib/stores/global.js';
-	import { onDestroy } from 'svelte';
-	import { navigate } from 'svelte-routing';
-
-	let currentPath = '';
-
-	function updatePath(element) {
-		currentPath = window.location.pathname;
-	}
-
-	//clear the data of the page when goto is called
-	onDestroy(() => {
-		$buttonName = '';
-		currentPath = '';
-	});
-
-	//
-
-	onMount(() => {
-		if (buttons.length > 0) {
-			$buttonName =
-				currentPath === '/documents/symantec-search/'
-					? 'Symantec Search'
-					: currentPath === '/documents/finance-ai/'
-					? 'Database Search'
-					: currentPath === '/chatgpt-plus/'
-					? 'Guard Rails'
-					: currentPath === '/zapier/'
-					? 'Zapier Integration'
-					: currentPath === '/api-access/'
-					? 'API Access'
-					: currentPath === '/settings/'
-					? 'Settings'
-					: '';
-		}
-	});
-
-	onMount(() => {
-		updatePath(element);
-	});
 
 	async function signOutUser() {
 		let res = await signOut();
@@ -49,6 +10,10 @@
 			goto('/login/');
 		}
 	}
+
+	const currentPath = window.location.pathname;
+
+	console.log(currentPath)
 
 	let buttons = [
 		{
@@ -73,48 +38,24 @@
 
 <div class="sidebar">
 	{#each buttons as button, index (button.link)}
-		<div
-			class="button"
-			use:updatePath
-			class:active1={currentPath === button.link}
-			on:mouseover={() => (activeButton = button)}
-			on:mouseout={() => (activeButton = null)}
-		>
-
-			<div
-				use:updatePath
-				class:active={currentPath === button.link}
-				on:click={() => {
-					$buttonName = button.name;
-					if (index === 0) {
-						window.location.href = button.link;
-            } else {
-                goto(button.link);
-            }
-					
-				}}
-			>
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
+		<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+		<div class="button" class:active={currentPath === button.link}>
+			<a
+				href="{button.link}">
 				<img class="icon" src={button.icon} alt={button.name} />
 				<div class="tag">{activeButton === button && button.name}</div>
-			</div>
+			</a>
 		</div>
 	{/each}
 
-	<button
-		class="user"
-		on:mouseover={() => (activeUser = true)}
-		on:mouseout={() => (activeUser = false)}
-		on:click={() => {
-			goto('/accounts/');
-		}}
-	>
+	<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+	<a href="/accounts/"
+		class="user">
 		{#if activeUser} <span class="user-tag">Account Preferences</span>{/if}
 		<img style="width: 2em; height: auto;" src="/images/user.png" alt="user" />
-	</button>
-	<button
-		class="logout"
-		on:mouseover={() => (activeLogout = true)}
-		on:mouseout={() => (activeLogout = false)}
+	</a>
+	<button class="logout"
 		on:click={() => {
 			signOutUser();
 		}}
@@ -193,6 +134,9 @@
 		transition: background-color 0.3s ease;
 		position: relative;
 	}
+	.button.active a{
+		filter: sepia(100%) hue-rotate(180deg) saturate(500%);
+	}
 
 	.button:nth-child(4) {
 		margin-bottom: 1em;
@@ -218,7 +162,7 @@
 	}
 
 	.active {
-		filter: sepia(100%) hue-rotate(180deg) saturate(500%);
+		/* filter: sepia(100%) hue-rotate(180deg) saturate(500%); */
 		/*background-color: #3d3d3d;  This background color should be applied to the whole button and not just the icon */
 	}
 
@@ -246,11 +190,11 @@
 		border-color: transparent #000000 transparent transparent;
 	}
 
-	.button:hover {
-		background-color: #3d3d3d;
+	.button.active, .button:hover {
+		background-color: #3d3d3d !important;
 	}
 
-	.button:hover .tag {
+	.button.active, .button:hover .tag {
 		display: block;
 	}
 </style>
