@@ -4,6 +4,9 @@
 	import { searchBoxx } from '$lib/stores/global.js';
 	import { defaultBase64Img } from '$lib/constants/constants.js';
 	import Ratings from './Ratings.svelte';
+	// import { sfp } from '$lib/data/helpers';
+	// import { sr } from '$lib/data/helpers';
+	import { filenameStore } from '$lib/stores/global.js';
 
 	let showresponse = false;
 	let showContainerarrow = false;
@@ -18,12 +21,20 @@
 
 	let base64img = null;
 
+	// let filename;
+	// filenameStore.subscribe(value => { filename = value; }); // subscribe to the store
+
 	// base64img = defaultBase64Img;
 	// base64img = `data:image/png;base64,${defaultBase64Img}`;
 
 	let response = '';
 	let question = '';
 	let ref = '';
+
+	let docfilename = $filenameStore.filename;
+	let srchtp = $filenameStore.source;
+
+	let socket;
 	// let plotimg = '';
 
 	let titledoc = 'one.pdf';
@@ -53,13 +64,22 @@
 		showref = true;
 	}
 
-	onMount(async () => {
+	onMount(() => {
+		if (srchtp == 'finance-ai') {
+        // socket = io.connect('http://192.168.200.29:89/module1');
+		socket = io.connect('http://icsfinblade.com:8080/module1');
+    	} else if (srchtp == 'symantec-search') {
+        // socket = io.connect('http://192.168.200.29:89/module4');
+		socket = io.connect('http://icsfinblade.com:8080/module2');
+    }
+		
 		socket.on('receive_response', function (data) {
 			showLoadingContainer = false;
 			generatingResponse = false;
 			response = data.response;
 			paresp = true;
-			ref = data.ref;
+			// ref = data.ref;
+			ref = "Functionality not available yet."
 			console.log('This is Response: ', response);
 		});
 	});
@@ -70,8 +90,12 @@
 		// } else if (!question.trim()) {
 		// 	question = '';
 		// 	alert('Please avoid typing just blank spaces.');
+		
 		// } else {
-		socket.emit('submit_question', { question });
+		socket.emit('submit_question', { question, docfilename });
+		console.log('This is Question: ', question);
+		console.log('This is Filename: ', docfilename);
+		console.log('This is Source: ', srchtp);
 		showLoadingContainer = true;
 		showContainerarrow = true;
 		paresp = false;
@@ -116,17 +140,24 @@
 	
 
 	// Handle Enter key press for each input field
-	onMount(async () => {
-		document.body.addEventListener('keydown', function (event) {
-			if (event.key === 'Enter') {
-				clearsubmitQuestion();
+	onMount(() => {
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            clearsubmitQuestion();
 
-				setTimeout(() => {
-					submitQuestion();
-				}, 100);
-			}
-		});
-	});
+            setTimeout(() => {
+                submitQuestion();
+            }, 100);
+        }
+    }
+
+    document.body.addEventListener('keydown', handleKeyDown);
+
+    // Return a function that will be called when the component is unmounted
+    return () => {
+        document.body.removeEventListener('keydown', handleKeyDown);
+    };
+});
 </script>
 
 <!-- {#if $selectSearch}

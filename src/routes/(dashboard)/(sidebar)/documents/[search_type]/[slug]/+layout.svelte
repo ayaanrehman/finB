@@ -1,11 +1,15 @@
 <script>
 	import SearchBox from "$lib/components/SearchBox.svelte";
     import { onMount } from 'svelte';
-    import { srn } from '$lib/data/helpers';
+    // import { srn } from '$lib/data/helpers';
     import { selectSearch } from '$lib/stores/global.js';
 	import { searchBoxx } from '$lib/stores/global.js';
+    import { page  as pg }  from '$app/stores';
 
  
+    let currentPath;
+
+	$:currentPath = $pg?.url?.pathname;
 
     let page = true;
     let pagemin = false;
@@ -37,8 +41,11 @@
 <div id="pgctnr" class="doc-page-container">
     <!-- {#if page} -->
         <div class="doc-container" style="border-right: 0.5px solid grey;">
-             <a href='/'><button id="cv" class="closeviewer">X</button>
-            </a>
+            {#if $pg.url.pathname.includes('/documents/symantec-search/')}
+             <a href='/documents/symantec-search/'><button id="cv" class="closeviewer">X</button></a>
+             {:else if $pg.url.pathname.includes('/documents/finance-ai/')}
+             <a href='/documents/finance-ai/'><button id="cv" class="closeviewer">X</button></a>
+             {/if}
             <button id="minviewer" class="minviewer" on:click={pgchg} class:active={isActive}>&#8211;</button>
                 <slot /> 
         </div>

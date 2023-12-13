@@ -37,6 +37,11 @@ onMount(  () =>{
 		<p>
 			{#if form?.error}Invalid Username or Password{/if}
 		</p>
+		<div class="userhelper">
+		<a href="/signup/">Create a New User</a>
+		<a href="/forgot-password/">Forgot Password</a>
+		</div>
+		
 	</div>
 	<div class="vid-container">
 		<video src="/1.mp4" autoplay muted playsinline loop />
@@ -44,6 +49,11 @@ onMount(  () =>{
 </main>
 
 <style>
+	.userhelper{
+		display: flex;
+		justify-content: space-between;
+	}
+
 	button {
 		color: white;
 		background-color: rgb(39, 118, 179);
@@ -101,5 +111,19 @@ onMount(  () =>{
 		background-color: rgba(240, 248, 255, 0);
 		border: none;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.692);
+	}
+
+	a {
+		color: rgba(0, 0, 0, 0.849);
+		font-size: 14px;
+		padding: 10px;
+		background-color: rgba(240, 248, 255, 0);
+		border: none;
+		/* border-bottom: 1px solid rgba(0, 0, 0, 0.692); */
+		text-decoration: none;
+	}
+
+	a:hover {
+		color: rgb(39, 118, 179);
 	}
 </style>

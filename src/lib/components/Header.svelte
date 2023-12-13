@@ -1,5 +1,46 @@
 <script>
-import { buttonName } from '$lib/stores/global.js';
+// import { buttonName } from '$lib/stores/global.js';
+
+import {page} from '$app/stores';
+
+let title;
+let imgg;
+
+$: pathName = $page?.url?.pathname;
+
+$: pathName && updateTitle();
+
+$: imgg && updateTitle();
+
+function updateTitle(){
+  if(pathName.includes('/documents/symantec-search/')){
+    title = 'Symantec Search';
+    imgg = '/images/sidebar/symantec-search.png';
+    console.log("Imgg: ", imgg);
+  } else if(pathName.includes('/documents/finance-ai/')){
+    title = 'Database Search';
+    imgg = '/images/sidebar/finance-ai.png';
+  } else if(pathName === '/chatgpt-plus/'){
+    title = 'Guard Rails';
+    imgg = '/images/sidebar/chatgpt-plus.png';
+  } else if(pathName === '/zapier/'){
+    title = 'Zapier Integration';
+    imgg = '/images/sidebar/zapier.png';
+  } else if(pathName === '/api-access/'){
+    title = 'API Access';
+    imgg = '/images/sidebar/apiaccess.png';
+  } else if(pathName === '/settings/'){
+    title = 'Settings';
+    imgg = '/images/sidebar/settings.png';
+  } else {
+    title = '';
+    imgg = '';
+  }
+}
+
+// updateTitle();
+console.log("Imgg: ", imgg);
+
 
 </script>
 
@@ -22,7 +63,9 @@ import { buttonName } from '$lib/stores/global.js';
 			height="60em"
 		/>
 	</a>
-  <span>{$buttonName}</span>
+  <img class="headerimg" src={imgg} alt="{title}">
+
+  <span>{title}</span>
 
  
 </div>
@@ -34,9 +77,18 @@ import { buttonName } from '$lib/stores/global.js';
 
 <style>
 
+  .headerimg {
+    left: 2.5em;
+    bottom: 0.8em;
+    margin: 0.5em;
+    position: absolute;
+    width: 20px;
+    height: auto;
+  }
+
   span {
     color: white;
-    left: 1em;
+    left: 5em;
     bottom: 1em;
     margin: 0.5em;
     position: absolute;

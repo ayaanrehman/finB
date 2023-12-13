@@ -4,10 +4,10 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { selectSearch } from '$lib/stores/global.js';
 	import { searchBoxx } from '$lib/stores/global.js';
-	import { sr } from '$lib/data/helpers';
-	import { srn } from '$lib/data/helpers';
-	import { sfp } from '$lib/data/helpers';
-	import { temp } from '$lib/data/helpers';
+	// import { sr } from '$lib/data/helpers';
+	// import { srn } from '$lib/data/helpers';
+	// import { sfp } from '$lib/data/helpers';
+	// import { temp } from '$lib/data/helpers';
 	// import Layout fr/om '../../routes/+layout.svelte';
 	import FileUpload from './FileUpload.svelte';
 	import { createFolder } from '../data/AddFolder';
@@ -493,12 +493,25 @@ onMount(() => {
 
 	#nav {
 		/*background: rgba(0, 0, 0, 0.2);*/
-		background: #22222286;
+		background: #303030;
 		backdrop-filter: blur(0.5);
 		padding: 20px 10px;
 		height: 100%;
 		width: 300px;
+		position: relative;
+			
+
 	}
+
+	#nav::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 1px;
+		background-image: linear-gradient(to bottom, black, white, black);
+}
 
 	#nav ul {
 		list-style: none;

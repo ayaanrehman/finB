@@ -1,19 +1,13 @@
 <script>
-    import { onMount } from 'svelte';
+    // import { onMount } from 'svelte';
 	import { selectSearch } from '$lib/stores/global.js';
 	import { searchBoxx } from '$lib/stores/global.js';
-	import { sr } from '$lib/data/helpers';
-	import { srn } from '$lib/data/helpers';
-	import { sfp } from '$lib/data/helpers';
-	import { temp } from '$lib/data/helpers';
-	// import Layout fr/om '../../routes/+layout.svelte';
-	import FileUpload from './FileUpload.svelte';
-	import { createFolder } from '../data/AddFolder';
-	import { listFolder } from '../data/listFolders';
-	import { lisFolder } from '$lib/stores/global.js';
-	import SearchList from './SearchList.svelte';
-    import { writable } from 'svelte/store';
-    // export const isTitledocActive = writable(false);
+	// import { sr } from '$lib/data/helpers';
+	// import { srn } from '$lib/data/helpers';
+	// import { sfp } from '$lib/data/helpers';
+	import { filenameStore } from '$lib/stores/global.js';
+	// import { temp } from '$lib/data/helpers';
+	import { page  as pg }  from '$app/stores';
 
 
     export let pageUrl;
@@ -23,7 +17,11 @@
     // $: isTitledocActive.set(pageUrl == `documents/${searchType}/${encodeURIComponent(document.name)}/`);
     let finalDocs = docs;
 
-    console.log('page url is', pageUrl);
+	let currentPath;
+
+	$:currentPath = $pg?.url?.pathname;
+
+    console.log('page url is', currentPath);
     // export let docs2;
 
     let searchInput = '';
@@ -46,18 +44,21 @@
 		
         if(searchType == 'finance-ai'){
             let filename = e.target.dataset.docName;
-		    sr(filename);
-        }
+		    // sr(filename);
+			filenameStore.set({filename: filename, source: 'finance-ai'});
+		}
         else if(searchType == 'symantec-search'){
             let filename = e.target.dataset.docName;
-		    sfp(filename);
+		    // sfp(filename);
+			filenameStore.set({filename: filename, source: 'symantec-search'});
         }
 	}
 
     console.log('search type is', searchType);
     // 
 </script>
-<input class="docsearch" type="text" bind:value={searchInput} placeholder="&#128269; Search..."/>
+<!-- &#128269; -->
+<input class="docsearch" type="text" bind:value={searchInput} placeholder="Search..."/>
 <ul class="scrollable-docs">
     {#each finalDocs as document, i}
 	{#if !(searchType == 'finance-ai' && i == 0)}

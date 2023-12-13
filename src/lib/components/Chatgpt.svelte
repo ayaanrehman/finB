@@ -11,12 +11,25 @@
 	let chatHistory;
 	let stylevar = '';
 
-	onMount(() => {
+	onMount(async () => {
 		const inputBox = document.querySelector('.input-box1');
 		inputBox.focus();
+
+		socket = io.connect('http://192.168.200.29:89/module3');
+		socket.on('chat_response', function (data) {
+			response = data.answer;
+			console.log('This is Response: ', response);
+			messages = [...messages, { text: response, sender: 'server', timestamp: new Date() }];
+			loadanim = false;
+			setTimeout(() => {
+				scrollToBottom();
+			}, 100);
+				
+			
+		});
 	});
 
-	socket = io.connect('http://icsfinblade.com:8080/');
+	
 
 	function formatDate(date) {
 		return date.toLocaleTimeString();
@@ -34,7 +47,7 @@
 	function submitQuestion() {
 		if (chatquestion.trim() !== '') {
 			messages = [...messages, { text: chatquestion, sender: 'client', timestamp: new Date() }];
-			socket.emit('chatgpt_question', { question: chatquestion, stylevar: stylevar });
+			socket.emit('chatgpt_question', { question: chatquestion });
 			loadanim = true;
 			setTimeout(() => {
 				scrollToBottom();
@@ -49,17 +62,7 @@
 
 
 	onMount(async () => {
-		socket.on('chat_response', function (data) {
-			response = data.response;
-			console.log('This is Response: ', response);
-			messages = [...messages, { text: response, sender: 'server', timestamp: new Date() }];
-			loadanim = false;
-			setTimeout(() => {
-				scrollToBottom();
-			}, 100);
-				
-			
-		});
+		
 	});
 
 </script>

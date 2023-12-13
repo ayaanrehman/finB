@@ -12,6 +12,8 @@ export const searchBox = writable(true);
 
 export const lisFolder = writable('structured');
 
-export const buttonName = writable('');
+export const filenameStore = writable('');
+
+// export const buttonName = writable('');
 
 
