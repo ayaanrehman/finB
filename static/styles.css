@@ -1,0 +1,701 @@
+html {
+    height: 100%;
+    margin: 0%;
+    padding: 0%;
+    border: none;
+ }
+*{
+    box-sizing: border-box;
+ }
+
+ .overlay-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 1);
+    z-index: 99999;
+}
+
+body {
+    font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+    margin: 0%;
+    /* background: linear-gradient(
+    to bottom right,
+    rgb(49, 48, 48),
+    rgb(53, 0, 0),
+    rgb(49, 48, 48)
+    ); */
+   
+    /* background-color: #4e4e4e; */
+    /* background-image: url("../images/bg-3.jpg"); */
+    /* background-size: cover;
+    background-repeat:repeat-y;
+    background-position: center; */
+
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url("../images/bg-3.jpg");
+    background-size: cover;
+    background-repeat: repeat;
+    background-position: center;
+    filter: brightness(0.5); /* Adjust brightness */
+    z-index: -1;
+}
+
+header {
+    width: 100%;
+    /* margin-left: 0.0em; */
+}
+
+footer {
+    width: 100%;
+}
+
+.no-select {
+    user-select: none;
+}
+
+.logo {
+    z-index: 3;
+    cursor: pointer;
+}
+
+h2 {
+color: white;
+display: block;
+position: absolute;
+right: 1em;
+top: 0.5em;
+z-index: 3;
+}
+
+.overlay-header {
+
+top: 0;
+left: 0;
+width: 100%;
+height: 4.5em;
+filter: opacity(100%);
+background-color: #272727;
+/* background: linear-gradient(
+    to right,
+    rgb(255, 255, 255),
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0)
+    ); */
+z-index: -1;
+}
+
+
+
+.header-line {
+margin-top: 0;
+margin-bottom: 0;
+border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+
+@media screen and (max-width: 768px) {
+    #nav {
+        display: none;
+    }
+    #nav.show-sidebar{
+        display: block !important;
+    }
+    #openSidebar {
+        display: block !important;
+        
+    }
+    .container  {
+        grid-template-columns: 1fr !important;
+    }
+    .qtn {
+        width: 70% !important;
+    }
+    .logo {
+        width: auto;
+        height: 3.5em;
+    }
+    h2 {
+        top: 0 !important;
+    }
+    .header-line {
+        margin-top: 0px;
+    }
+    .overlay-header {
+        height: 4em;
+    }
+    .ref {
+        left: 0em !important;
+    }
+   .gr {
+        height: 4em !important;
+    }
+    .pie {
+        height: 4em !important;
+    }
+    .input-container {
+        top: 5em !important;
+    }
+    .cntinr {
+        top: 5em !important;
+    }
+    .ref {
+        width: 48% !important;
+    }
+
+}
+
+
+
+.container {
+display: flex;
+align-items: normal;
+
+
+
+}
+
+.buttons {
+display: flex;
+flex-direction: column;
+width: max-content;
+height: max-content;
+margin-left: 1em;
+padding-top: 2%;
+}
+
+
+::-webkit-scrollbar {
+width: 10px;
+display: none;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #ffffff; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: linear-gradient(
+to bottom,
+rgba(0, 0, 0, 0.76),
+rgb(88, 1, 1),
+rgba(0, 0, 0, 0.76)
+
+);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: linear-gradient(
+to bottom,
+rgb(128, 0, 0),
+rgba(255, 0, 0, 0.699),
+rgb(128, 0, 0)
+);
+}
+
+#scroll-to-bottom {
+position: absolute;
+cursor: pointer;
+background-color: #3636368c;
+border-radius: 0%;
+color: white;
+border: white;
+filter: brightness(100%);
+width: auto;
+height: auto;
+font-size: large;
+right: 15%;
+/* display: none; */
+}
+
+#scroll-to-bottom:hover {
+filter: brightness(200%);
+}
+
+#scroll-to-bottom:active {
+filter: brightness(70%);
+}
+
+
+.clear-button {
+cursor: pointer;
+width: 1.5rem;
+border: none;
+position: relative;
+right: 1rem;
+background-color: #810a0a00;
+display: none;
+
+}
+
+.clear-button:hover {
+filter: brightness(200%);
+color: white;
+}
+
+.clear-button:active {
+filter: brightness(70%);
+color: #333;
+}
+
+.message.placeholder {
+color: rgba(255, 255, 255, 0.61);
+text-align: left;
+white-space: normal;
+}
+
+.message.placeholder b {
+display: block; /* Make the "Welcome" text a block-level element */
+margin-bottom: 10px; /* Add spacing below it */
+}
+
+.message.placeholder i {
+display: block; /* Make each list item a block-level element */
+margin-left: 20px; /* Add an indent to the list items */
+}
+
+
+
+
+.content-container {
+display: block;
+width: 100%;
+position: relative;
+padding-left: 30px;
+
+}
+
+#hmil {
+width: 10em;
+height: 75vh;  
+}
+
+.sidbr {
+width: 10em;
+transition: width 0.5s ease;
+height: 75vh;
+position: relative;
+border-radius: 0% 3% 3% 0%;
+z-index: 9999;
+background-color: #006BB6;
+/* background: linear-gradient(
+to bottom,
+rgba(0, 0, 0, 0.76),
+#001C2F,
+rgba(0, 0, 0, 0.76)
+
+); */
+}
+
+.button {
+margin-top: 10px;
+margin-bottom: 10px;
+margin-right: 15px;
+padding: 10px;
+border: none;
+background-color: #009DDE;
+cursor: pointer;
+border-radius: 10px;
+width: auto;
+border: 0px solid #6e6e6e69;
+color: rgb(255, 255, 255);
+font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+font-size: larger;
+font-weight: normal;
+text-align: center;
+}
+
+.button:hover{
+background-color: #ff9900;
+}
+
+.inputs {
+flex: 2;
+display: flex;
+flex-direction: column;
+align-items: left;
+justify-content: left;
+}
+
+.input-box {
+width: 100%;
+margin: 5px;
+margin-bottom: 20px;
+align-self: center;
+padding: 10px;
+border-radius: 0.4em;
+outline: none;
+
+
+background: linear-gradient(#414141, #414141), 
+linear-gradient(to right, red, rgba(255, 0, 0, 0.473), #222);
+background-origin: padding-box, border-box;
+background-repeat: no-repeat;
+border: 0.15em solid transparent;
+
+color: rgb(255, 255, 255);
+font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+font-size: larger;
+font-weight: normal;
+overflow-wrap: normal;
+padding-right: 2em;
+}
+
+
+.input-box::placeholder {
+    color: rgb(255, 255, 255); 
+    border-radius: 0.15em;
+}
+
+
+
+label {
+color: white;
+justify-content: center;
+align-items: center;
+text-align:justify;
+margin-bottom: 10px;
+}
+
+.input-container {
+display: flex;
+flex-direction: row;
+justify-content:center;
+text-align: center;
+overflow-wrap: normal;
+position: relative;
+width: 95%;
+margin-top: 3em;
+}
+
+.qtn {
+    position: relative;
+    left: 0%;
+    width: 50%;
+}
+
+.submit {
+
+cursor: pointer;
+border: none;
+align-self: center;
+width: 2em;
+height: 2em;
+z-index: 10;
+background-image: url("../images/send2.png");
+background-size: cover; 
+background-repeat: no-repeat; 
+background-position: center; 
+background-color: #33333300;
+position: absolute;
+right: 0.5em;
+top: 1em;
+}
+
+
+
+#question-container {
+position: relative;
+}
+
+#sdpt {
+color: white;
+margin-left: 10%;
+display: block;
+}
+
+
+.suggestion button {
+    background-color: rgb(3, 131, 206);
+    color: white;
+    border-radius: 1em;
+    border: none;
+    width: max-content;
+    height: 2em;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.suggestion {
+    display: flex;
+    /* display: none; */
+    justify-content: center;
+
+}
+
+.paresp {
+    max-height: 10em;
+    overflow-y: scroll;
+    color: white;
+
+}
+
+.response {
+height: 20%;
+overflow-y: scroll;
+border: 1px solid #ffffff00;
+background-color: rgb(32, 44, 51);
+width: 50%;
+margin-top: 2em;
+margin-left: auto;
+margin-right: 2%;
+color: rgb(121, 121, 121);
+font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+font-size: medium;
+font-weight: lighter;
+padding: 10px; /* Add some padding to the chat history */
+display: flex;
+flex-direction: column;
+white-space: pre-wrap;
+border-radius: 1em;
+overflow-wrap: normal;
+z-index: 6;
+opacity: 100%;
+animation: resanim 2s linear;
+
+}
+
+
+@keyframes resanim {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+.ref {
+    height: max-content;
+    overflow-y: scroll;
+    border: 1px solid #ffffff00;
+    background-color: rgb(32, 44, 51);
+    width: 30%;
+    margin-top: 2.5em;
+    left: 3em;
+    color: rgb(121, 121, 121);
+    font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+    font-size: medium;
+    font-weight: lighter;
+    /* max-height: 50%; */
+    padding: 10px; /* Add some padding to the chat history */
+    display: flex;
+    white-space: pre-wrap;
+    border-radius: 1em;
+    overflow-wrap: normal;
+    position: relative;
+    z-index: 6;
+    opacity: 100%;
+    animation: refanim 1.5s linear;
+}
+
+@keyframes refanim {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+.visuals {
+    height: auto;
+    background-color: rgb(32, 44, 51);
+    font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+    font-size: medium;
+    font-weight: lighter;
+    width: 40%;
+    margin-top: 1em;
+    color: rgb(121, 121, 121);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1em;
+    position: relative;
+    opacity: 100%;
+    animation: visanim 1.5s linear;
+    cursor: pointer;
+
+}
+
+@keyframes visanim {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+.chat {
+margin-left: 1em;
+width: 100%;
+height: 100%;
+}
+
+.chat-item {
+padding: 5px;
+margin: 5px;
+border-radius: 5px;
+max-width: 70%;
+
+
+}
+
+.right-align {
+background-color: #f0f0f0; /* Background color for questions */
+text-align: right;
+float: right;
+
+
+}
+
+.left-align {
+background-color: #e0e0e0; /* Background color for responses */
+text-align: left;
+float: left;
+}
+
+
+
+/* Style for the question messages (aligned to the right) */
+.message.question {
+background-color: #3498db; /* Set the background color for question messages */
+color: #fff; /* Set the text color for question messages */
+padding: 5px 10px; /* Add padding to question messages */
+border-radius: 10px; /* Add rounded corners to question messages */
+margin: 5px 0; /* Add some margin between messages */
+width: max-content;
+max-width: 45%;
+margin-left: auto;
+
+}
+
+/* Style for the response messages (aligned to the left) */
+.message.response {
+background-color: #333; /* Set the background color for response messages */
+color: #e0e0e0; /* Set the text color for response messages */
+padding: 5px 10px; /* Add padding to response messages */
+border-radius: 10px; /* Add rounded corners to response messages */
+margin: 5px 0; /* Add some margin between messages */
+width: max-content;
+max-width: 45%;
+
+}
+
+#hr-answer {
+display: none;
+}
+
+#finance-answer {
+display: none;
+}
+
+#sfmc-answer {
+display: none;
+}
+
+
+/* CSS for the loading animation container */
+#loading-container {
+    display: block;
+    /* width: auto; */
+    height: auto;
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 9999;
+    position: relative;
+    padding-left: 38px;
+    right: 20px;
+    top: 23px;
+    position: absolute;
+}
+    /* right: 80%; */
+    /* top: 4.12rem;
+
+
+/* CSS for the loading spinner */
+/* .loading-spinner {
+border: 5px solid rgba(255, 255, 255, 0.3);
+border-top: 5px solid #410101;
+border-radius: 100%;
+width: 2rem;
+height: 2rem;
+animation: spin 2s linear infinite;
+} */
+
+/* Keyframes for the spinning animation */
+/* @keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+} */
+
+.dot-flashing {
+position: relative;
+display: none;
+width: 10px;
+height: 10px;
+border-radius: 5px;
+background-color: #810a0a;
+color: #810a0a;
+animation: dot-flashing 1s infinite linear alternate;
+animation-delay: 0.5s;
+}
+.dot-flashing::before, .dot-flashing::after {
+content: "";
+display: inline-block;
+position: absolute;
+top: 0;
+}
+.dot-flashing::before {
+left: -15px;
+width: 10px;
+height: 10px;
+border-radius: 5px;
+background-color: #810a0a;
+color: #810a0a;
+animation: dot-flashing 1s infinite alternate;
+animation-delay: 0s;
+}
+.dot-flashing::after {
+left: 15px;
+width: 10px;
+height: 10px;
+border-radius: 5px;
+background-color: #810a0a;
+color: #810a0a;
+animation: dot-flashing 1s infinite alternate;
+animation-delay: 1s;
+}
+
+@keyframes dot-flashing {
+0% {
+background-color: #810a0a;
+}
+50%, 100% {
+background-color: rgba(152, 128, 255, 0.2);
+}
+}
+
+.ld {
+position: relative;
+}
+
