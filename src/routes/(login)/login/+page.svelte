@@ -1,59 +1,56 @@
 <script>
-    import { onMount } from 'svelte';
-    // import { supabase } from '$lib/supabase.js'
+	import { onMount } from 'svelte';
 
-	// export let form;
+	export let data;
 
-    let email = '';
-    let password = '';
-	let successmsg = false;
-	let failuremsg = false;
+	export let form;
 
+	let email = '';
+	let password = '';
 
-    onMount(() => {
-		if (form?.success) {
-			window.location.href = "/homepage/";
-			successmsg = true;
-			failuremsg = false;
-			// console.log("form user success")
- 		}
-		else
-		{
-			failuremsg = true;
-			successmsg = false;
-			// console.log("form user failure")
-		}
-    });
+onMount(  () =>{
+  if (form?.success) {
+      // goto('/homepage/');
+      window.location.href = "/homepage/";
+  }
+
+  //fsodfiosdfjosd
+  //fnskdfnofoiwenfckjsdnckjaskdc;kdsok;
+  //fnskdfnofoiwenfckjsdnckjaskdc;kdsok;
+});
+
 </script>
 
 <main>
-    <div class="form-container">
-        <img class="logologin" src="/images/finblade1.png" alt="finblade" />
+	<div class="form-container">
+		<img class="logologin" src="/images/finblade1.png" alt="finblade" />
 
-        <form on:submit|preventDefault={handleSubmit}>
-            <input type="email" bind:value={email} placeholder="Enter your email" />
-            <input
-                type="password"
+		<form method="POST">
+			<input type="email" name="email" bind:value={email} placeholder="Enter your email" />
+			<input
+				type="password"
+				name="password"
 				bind:value={password}
-                placeholder="Enter your password"
-            />
-            <button type="submit">Submit</button>
-        </form>
+				placeholder="Enter your password"
+			/>
+			<button type="submit">Submit</button>
+		</form>
 		<p>
-			{#if successmsg}User Authenticated{/if}
+			{#if form?.success}User Authenticated{/if}
 		</p>
 		<p>
-			{#if failuremsg}Invalid Username or Password{/if}
+			{#if form?.error}Invalid Username or Password{/if}
 		</p>
-        <div class="userhelper">
-            <a href="/signup/">Create a New User</a>
-            <a href="/forgot-password/">Forgot Password</a>
-        </div>
-    </div>
-    <div class="vid-container">
-        <!-- <video src="/1.mp4" autoplay muted playsinline loop /> -->
-        <img class="bgimg" src="/images/bg-3.jpg" alt="">
-    </div>
+		<div class="userhelper">
+		<a href="/signup/">Create a New User</a>
+		<a href="/forgot-password/">Forgot Password</a>
+		</div>
+		
+	</div>
+	<div class="vid-container">
+		<!-- <video src="/1.mp4" autoplay muted playsinline loop /> -->
+		<img class="bgimg" src="/images/bg-3.jpg" alt="">
+	</div>
 </main>
 
 <style>
