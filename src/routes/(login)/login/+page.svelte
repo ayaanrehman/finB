@@ -103,7 +103,7 @@
 			{#if form?.error}Invalid Username or Password{/if}
 		</p>
         <div class="userhelper">
-            <!-- <a href="/signup/">Create a New User</a> -->
+            <a href="/signup/">Create a New User</a>
             <a href="/forgot-password/">Forgot Password</a>
         </div>
     </div>
