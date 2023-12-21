@@ -14,6 +14,7 @@ static/pdf
 static/xlsx
 static/csv
 static/__pycache__
+old
 output_supabase/
 
 

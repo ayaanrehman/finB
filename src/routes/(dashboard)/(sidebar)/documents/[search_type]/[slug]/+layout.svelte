@@ -3,7 +3,7 @@
     import { onMount } from 'svelte';
     // import { srn } from '$lib/data/helpers';
     import { selectSearch } from '$lib/stores/global.js';
-	import { searchBoxx } from '$lib/stores/global.js';
+	// import { searchBoxx } from '$lib/stores/global.js';
     import { page  as pg }  from '$app/stores';
 
  
@@ -18,7 +18,7 @@
 
     function root() {
         selectSearch = true;
-        searchBoxx = false;
+        // searchBoxx = false;
 
     }
   

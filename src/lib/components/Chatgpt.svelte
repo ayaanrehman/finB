@@ -10,13 +10,16 @@
 	let loadanim = false;
 	let chatHistory;
 	let stylevar = 'None';
+	let inputBox;
+
+	onMount(() => {
+    inputBox.focus();
+  });
 
 	onMount(async () => {
-		const inputBox = document.querySelector('.input-box1');
-		inputBox.focus();
-
-		socket = io.connect('http://54.146.82.200:8080/module3');
+		// socket = io.connect('https://54.146.82.200:8080/module3');
 		// socket = io.connect('http://172.31.55.58:8080/module3');
+		socket = io.connect('https://icsfinblade.com:444/module3');
 		socket.on('chat_response', function (data) {
 			response = data.answer;
 			console.log('This is Response: ', response);
@@ -93,18 +96,27 @@
 			<button id="scroll-to-top1" on:click={scrollToTop}>&#9650;</button>
 			<button id="scroll-to-bottom1" on:click={scrollToBottom}>&#9660;</button>
 
-			<form on:submit={submitQuestion}>
+			<form on:submit={() => {
+				stylevar='None', 
+				submitQuestion()
+				
+			}}>
 				<div class="input-container1">
 					<div class="qtnn">
 						<input
 							class="input-box1"
 							type="text"
 							bind:value={chatquestion}
+							bind:this={inputBox}
 							placeholder="Enter your question to ChatGPT Plus"
 						/>
 						<button
 							class="submit2 {loadanim ? 'transparent' : ''}"
-							on:click|preventDefault={submitQuestion}
+							on:click|preventDefault={() => {
+								stylevar='None', 
+								submitQuestion()
+								
+							}}
 							type="submit"
 						>
 							{#if loadanim}
@@ -122,12 +134,14 @@
 		<div class="chat-helpers">
 			<div>
 				<button on:click={() => {
-					stylevar='style1', submitQuestion();
+					stylevar='style1', 
+					submitQuestion()
+					
 				}}
 				>Rephrase this statement in ICS Format</button>
 			</div>
 			<div>
-				<button>Translate this sentence</button>
+				<!-- <button>Translate this sentence</button> -->
 			</div>
 			<div>
 				<!-- <button>Suggest synonyms for this phrase</button> -->
@@ -135,11 +149,11 @@
 		</div>
 	</div>
 </div>
-<button
+<!-- <button
 	on:click={(e) => {
 		question = '';
 	}}
-/>
+/> -->
 
 <style lang="scss">
 	@import url('https://fonts.cdnfonts.com/css/leelawadee');

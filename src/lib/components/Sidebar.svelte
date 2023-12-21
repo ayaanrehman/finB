@@ -3,7 +3,7 @@
 	// import output from 'C:/Users/Ayan-PC/Downloads/chat_assistant_10/chat_assistant_10/output.json';
 	import { onDestroy, onMount } from 'svelte';
 	import { selectSearch } from '$lib/stores/global.js';
-	import { searchBoxx } from '$lib/stores/global.js';
+	// import { searchBoxx } from '$lib/stores/global.js';
 	// import { sr } from '$lib/data/helpers';
 	// import { srn } from '$lib/data/helpers';
 	// import { sfp } from '$lib/data/helpers';
@@ -258,6 +258,8 @@ onMount(() => {
 	}
 
 	let financeAiDocs = bucketFiles;
+
+	console.log("THis is Sidebar bucketfiles:", bucketFiles)
 
 	function filterDocuments() {
 		financeAiDocs = bucketFiles.filter((document) =>

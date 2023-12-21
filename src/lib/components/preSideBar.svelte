@@ -15,10 +15,15 @@
 	}
 
 	async function signOutUser() {
-		let res = await signOut();
-		if (!res.error) {
-			goto('/login/');
-		}
+		let res = await fetch('/api/logout', 
+		{method:"POST"}
+	 	)
+		 console.log("res is:", res)
+		 if (res = "logged out") {
+			
+		window.location.href = "/login";
+	}
+
 	}
 
 	// export let pathName = '/' ;
@@ -39,7 +44,7 @@
 
 	let buttons = [
 		{
-			name: 'Symantec Search',
+			name: 'Semantic Search',
 			icon: '/images/sidebar/symantec-search.png',
 			link: '/documents/symantec-search/'
 		},

@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { selectSearch } from '$lib/stores/global.js';
-	import { searchBoxx } from '$lib/stores/global.js';
+	// import { searchBoxx } from '$lib/stores/global.js';
 	import { defaultBase64Img } from '$lib/constants/constants.js';
 	import Ratings from './Ratings.svelte';
 	// import { sfp } from '$lib/data/helpers';
@@ -81,13 +81,15 @@
 		if (srchtp == 'finance-ai') {
 			// socket = io.connect('http://192.168.200.29:89/module1');
 			// socket = io.connect('http://icsfinblade.com:8080/module1');
-			socket = io.connect('http://54.146.82.200:8080/module1');
+			// socket = io.connect('http://54.146.82.200:8080/module1');
 			// socket = io.connect('http://172.31.55.58:8080/module1');
+			socket = io.connect('https://icsfinblade.com:444/module1');
 		} else if (srchtp == 'symantec-search') {
 			// socket = io.connect('http://192.168.200.29:89/module4');
 			// socket = io.connect('http://icsfinblade.com:8080/module4');
-			socket = io.connect('http://54.146.82.200:8080/module4');
+			// socket = io.connect('http://54.146.82.200:8080/module4');
 			// socket = io.connect('http://172.31.55.58:8080/module4');
+			socket = io.connect('https://icsfinblade.com:444/module4');
 		}
 
 		socket.on('receive_response', function (data) {
@@ -182,21 +184,22 @@
 	});
 </script>
 
-<!-- {#if $selectSearch}
+{#if $selectSearch}
 	<div class="input-container">
 		<div class="qtn">
 			<input
 				class="input-box"
 				type="text"
-				placeholder="Please select a database from the Data Lake..."
+				placeholder="Please select a document from the Data Lake..."
 				disabled
 			/>
 			<button style="cursor: unset;" class="submit" />
 		</div>
 	</div>
-{/if} -->
+<!-- {/if} -->
 
 <!-- {#if $searchBoxx} -->
+{:else}
 <div class="search-box-container">
 	<div class="input-container" id="question-container">
 		{#if showContainerarrow2}
@@ -349,7 +352,7 @@
 {/if}
 
 
-<!-- {/if} -->
+{/if}
 
 <style>
 	.search-box-container {

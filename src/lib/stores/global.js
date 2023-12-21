@@ -4,7 +4,7 @@ export const isFirstLoad = writable(false);
 
 export const selectSearch = writable(true);
 
-export const searchBoxx = writable(false);
+// export const searchBoxx = writable(false);
 
 export const chatpage = writable(false);
 
