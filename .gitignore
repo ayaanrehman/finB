@@ -16,6 +16,7 @@ static/csv
 static/__pycache__
 old
 output_supabase/
+keys/
 
 
 # Local Netlify folder
