@@ -8,9 +8,12 @@ export const logIn = async (email, password) => {
         password,
     });
     if (res.data) {
+        console.log(res.data)
         return res.data;
+        
     }
     if (res.error) {
+        console.log(res.error)
         return res.error
     }
 }
@@ -66,4 +69,5 @@ export const getSignedUrl = async (folderName, fullname, bucketName) => {
 export const signOut = async () => {
     const data = await supabase.auth.signOut();
     return data;
+    // console.log("signout")
 }

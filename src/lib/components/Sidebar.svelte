@@ -3,7 +3,7 @@
 	// import output from 'C:/Users/Ayan-PC/Downloads/chat_assistant_10/chat_assistant_10/output.json';
 	import { onDestroy, onMount } from 'svelte';
 	import { selectSearch } from '$lib/stores/global.js';
-	import { searchBoxx } from '$lib/stores/global.js';
+	// import { searchBoxx } from '$lib/stores/global.js';
 	// import { sr } from '$lib/data/helpers';
 	// import { srn } from '$lib/data/helpers';
 	// import { sfp } from '$lib/data/helpers';
@@ -259,6 +259,8 @@ onMount(() => {
 
 	let financeAiDocs = bucketFiles;
 
+	console.log("THis is Sidebar bucketfiles:", bucketFiles)
+
 	function filterDocuments() {
 		financeAiDocs = bucketFiles.filter((document) =>
 			document.name.toLowerCase().includes(searchInput2.toLowerCase())
@@ -354,7 +356,7 @@ onMount(() => {
 		{#if docopen}
 		{#if searchType == 'finance-ai'}
 			{#if financeAiDocs}
-				<SearchList {searchType} docs={financeAiDocs} />
+				<SearchList {pageUrl} {searchType} docs={financeAiDocs} />
 			{/if}
 		{:else if searchType == 'symantec-search'}
 			{#if symantecDocs}
@@ -383,7 +385,8 @@ onMount(() => {
 	.dtlk {
 		display: flex;
 		flex-direction: row;
-		gap:0.3em;color:darkgray;
+		gap:0.3em;
+		color:rgb(255, 255, 255);
 		cursor: pointer;
 		margin: 0;
 	}

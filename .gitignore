@@ -1,10 +1,23 @@
 .DS_Store
-node_modules
-/build
-/.svelte-kit
-/package
+node_modules/
+
+build/
+.svelte-kit/
+package/
 .env
 .env.*
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+static/*.mp4
+static/pdf
+static/xlsx
+static/csv
+static/__pycache__
+old
+output_supabase/
+keys/
+
+
+# Local Netlify folder
+.netlify

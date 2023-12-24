@@ -1,7 +1,7 @@
 <script>
     // import { onMount } from 'svelte';
 	import { selectSearch } from '$lib/stores/global.js';
-	import { searchBoxx } from '$lib/stores/global.js';
+	// import { searchBoxx } from '$lib/stores/global.js';
 	// import { sr } from '$lib/data/helpers';
 	// import { srn } from '$lib/data/helpers';
 	// import { sfp } from '$lib/data/helpers';
@@ -15,7 +15,20 @@
     export let searchType;
 
     // $: isTitledocActive.set(pageUrl == `documents/${searchType}/${encodeURIComponent(document.name)}/`);
+
+	$: {
+    const activeDoc = document.querySelector('.titledoc.active');
+    if (activeDoc) {
+      selectSearch.set(false);
+	} else {
+      selectSearch.set(true);
+    }
+  }
+
+
     let finalDocs = docs;
+
+	let temp;
 
 	let currentPath;
 
@@ -61,7 +74,8 @@
 <input class="docsearch" type="text" bind:value={searchInput} placeholder="Search..."/>
 <ul class="scrollable-docs">
     {#each finalDocs as document, i}
-	{#if !(searchType == 'finance-ai' && i == 0)}
+	<!-- {#if !(searchType == 'finance-ai' && i == 0)} -->
+	{#if document.name !== "" && document.name !== ".emptyFolderPlaceholder"}
         <li class="listTitle">
             <a
                 href="/documents/{searchType}/{document.name}/"
@@ -71,8 +85,8 @@
                 
                 on:click={(e) => {
                     submitFileName(e), temp(0.7);
-                    $searchBoxx = true;
-                    $selectSearch = false;
+                    // $searchBoxx = true;
+                    
                 }}
             >
                 <span>&#128462;</span><span style="pointer-events: none;">{document.name}</span

@@ -1,12 +1,13 @@
 <script>
 	import { onMount } from 'svelte';
 	import { selectSearch } from '$lib/stores/global.js';
-	import { searchBoxx } from '$lib/stores/global.js';
+	// import { searchBoxx } from '$lib/stores/global.js';
 	import { defaultBase64Img } from '$lib/constants/constants.js';
 	import Ratings from './Ratings.svelte';
 	// import { sfp } from '$lib/data/helpers';
 	// import { sr } from '$lib/data/helpers';
 	import { filenameStore } from '$lib/stores/global.js';
+
 
 	let showresponse = false;
 	let showContainerarrow = false;
@@ -20,7 +21,6 @@
 	let visualfull = false;
 
 	let base64img = null;
-
 	// let filename;
 	// filenameStore.subscribe(value => { filename = value; }); // subscribe to the store
 
@@ -41,12 +41,25 @@
 	titledoc = titledoc.split('.');
 	titledoc = titledoc[0];
 
-	onMount(async () => {
-		socket.on('base64d', function (data) {
-			base64img = `data:image/png;base64,${data.base64_data}`;
-			console.log('This is Plotted Image: ', base64img);
-		});
-	});
+	// onMount(async () => {
+	// 	socket.on('base64img', function (data) {
+	// 		base64img = `data:image/png;base64,${data.base64_img}`;
+	// 		console.log('This is Plotted Image: ', base64img);
+	// 	});
+	// });
+	function graphPlotted() {
+		showresponse = false;
+		showContainerarrow = false;
+		showref = false;
+		showContainerarrow2 = false;
+		showLoadingContainer = false;
+		generatingResponse = false;
+		paresp = false;
+		newline = false;
+		visual = true;
+
+	}
+
 
 	function pieerror() {
 		visual = true;
@@ -64,22 +77,34 @@
 		showref = true;
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		if (srchtp == 'finance-ai') {
-        // socket = io.connect('http://192.168.200.29:89/module1');
-		socket = io.connect('http://icsfinblade.com:8080/module1');
-    	} else if (srchtp == 'symantec-search') {
-        // socket = io.connect('http://192.168.200.29:89/module4');
-		socket = io.connect('http://icsfinblade.com:8080/module2');
-    }
-		
+			// socket = io.connect('http://192.168.200.29:89/module1');
+			// socket = io.connect('http://icsfinblade.com:8080/module1');
+			// socket = io.connect('http://54.146.82.200:8080/module1');
+			// socket = io.connect('http://172.31.55.58:8080/module1');
+			socket = io.connect('https://icsfinblade.com:444/module1');
+		} else if (srchtp == 'symantec-search') {
+			// socket = io.connect('http://192.168.200.29:89/module4');
+			// socket = io.connect('http://icsfinblade.com:8080/module4');
+			// socket = io.connect('http://54.146.82.200:8080/module4');
+			// socket = io.connect('http://172.31.55.58:8080/module4');
+			socket = io.connect('https://icsfinblade.com:444/module4');
+		}
+
 		socket.on('receive_response', function (data) {
+			
+			base64img = `data:image/png;base64,${data.base64d}`;
+			if (base64img === `data:image/png;base64,None`) {
+				base64img = null;
+			}
+			console.log('This is Plotted Image: ', data.base64d);
 			showLoadingContainer = false;
 			generatingResponse = false;
 			response = data.response;
 			paresp = true;
 			// ref = data.ref;
-			ref = "Functionality not available yet."
+			ref = 'Functionality not available yet.';
 			console.log('This is Response: ', response);
 		});
 	});
@@ -90,7 +115,7 @@
 		// } else if (!question.trim()) {
 		// 	question = '';
 		// 	alert('Please avoid typing just blank spaces.');
-		
+
 		// } else {
 		socket.emit('submit_question', { question, docfilename });
 		console.log('This is Question: ', question);
@@ -112,7 +137,7 @@
 		generatingResponse = false;
 		paresp = false;
 		visual = false;
-		
+
 		// base64img = null;
 
 		// question = '';
@@ -137,45 +162,45 @@
 	// 		}, 100);
 	// 	});
 	// });
-	
 
 	// Handle Enter key press for each input field
 	onMount(() => {
-    function handleKeyDown(event) {
-        if (event.key === 'Enter') {
-            clearsubmitQuestion();
+		function handleKeyDown(event) {
+			if (event.key === 'Enter') {
+				clearsubmitQuestion();
 
-            setTimeout(() => {
-                submitQuestion();
-            }, 100);
-        }
-    }
+				setTimeout(() => {
+					submitQuestion();
+				}, 100);
+			}
+		}
 
-    document.body.addEventListener('keydown', handleKeyDown);
+		document.body.addEventListener('keydown', handleKeyDown);
 
-    // Return a function that will be called when the component is unmounted
-    return () => {
-        document.body.removeEventListener('keydown', handleKeyDown);
-    };
-});
+		// Return a function that will be called when the component is unmounted
+		return () => {
+			document.body.removeEventListener('keydown', handleKeyDown);
+		};
+	});
 </script>
 
-<!-- {#if $selectSearch}
+{#if $selectSearch}
 	<div class="input-container">
 		<div class="qtn">
 			<input
 				class="input-box"
 				type="text"
-				placeholder="Please select a database from the Data Lake..."
+				placeholder="Please select a document from the Data Lake..."
 				disabled
 			/>
 			<button style="cursor: unset;" class="submit" />
 		</div>
 	</div>
-{/if} -->
+<!-- {/if} -->
 
 <!-- {#if $searchBoxx} -->
-	<div class="search-box-container">
+{:else}
+<div class="search-box-container">
 	<div class="input-container" id="question-container">
 		{#if showContainerarrow2}
 			<div class="containerarrow2">
@@ -209,13 +234,53 @@
 			</div>
 		{/if}
 	</div>
+
+
+	
+{#if visual}
+<!-- <div class="vertical-line4" /> -->
+
+<div class="vsgraph">
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div
+		class="visuals"
+		on:click={() => {
+			fullgraph();
+		}}
+	>
+		<!-- {#if imgnotrcvd} -->
+		<!-- <div class="loaderroll">
+
+</div> -->
+		<p style="color: grey; margin: 0%;">Graph</p>
+		<img
+			id="recentImage"
+			src={base64img}
+			alt="No Chart Available"
+			width="80%"
+			height="auto"
+			style="margin-top: 1em; margin-left: 1em"
+		/>
+		<!-- {/if} -->
+	</div>
+
+	<!-- 
+<div class="containerlinegraph">
+<div class="horizontal-line4" />
+<div class="vertical-line4" />
+</div>
+-->
+</div>
+{/if}
+
 	<div class="cntinr" style="position:relative">
 		{#if showref}
 			<div id="ref" class="ref" readonly="readonly">
 				<div>
 					<b>Reference</b>
 					<br />
-					<p style="color: white;">{ref}</p>
+					<p style="color: grey;">{ref}</p>
 					<br />
 					<a style="color: blanchedalmond; font-size: small;" href="/documents/{titledoc}"
 						>Open Source Document</a
@@ -249,7 +314,7 @@
 								<button
 									class="pie"
 									on:click={() => {
-										pieerror();
+										graphPlotted();
 									}}
 									style="cursor: pointer;">Visualize Graph</button
 								>
@@ -271,56 +336,23 @@
 	</div>
 </div>
 
-	{#if visualfull}
-		<div class="visualsfull">
-			<button
-				class="closegraphbutton"
-				on:click={() => {
-					closefullgraph();
-				}}>Close</button
-			>
-			<br />
-			<img width="40%" height="auto" id="recentImage" src={base64img} alt="No Chart Available" />
-		</div>
-	{/if}
-
-	{#if visual}
-		<div class="vertical-line4" />
-
-		<div class="vsgraph">
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
-			<div
-				class="visuals"
-				on:click={() => {
-					fullgraph();
-				}}
-			>
-				<!-- {#if imgnotrcvd} -->
-				<!-- <div class="loaderroll">
+{#if visualfull}
+	<div class="visualsfull">
 	
-	</div> -->
-				<p style="color: grey; margin: 0%;">Graph</p>
-				<img
-					id="recentImage"
-					src={base64img}
-					alt="No Chart Available"
-					width="80%"
-					height="auto"
-					style="margin-top: 1em; margin-left: 1em"
-				/>
-				<!-- {/if} -->
-			</div>
+		
+		<img id="recentImage" class="base64imgf" src={base64img} alt="No Chart Available" />
+		<button
+		class="closegraphbutton"
+		on:click={() => {
+			closefullgraph();
+		}}>Close Graph</button
+	>
+	
+	</div>
+{/if}
 
-			<!-- 
-<div class="containerlinegraph">
-	<div class="horizontal-line4" />
-	<div class="vertical-line4" />
-</div>
- -->
-		</div>
-	{/if}
-<!-- {/if} -->
+
+{/if}
 
 <style>
 	.search-box-container {
@@ -334,16 +366,32 @@
 
 	.closegraphbutton {
 		color: white;
-		background-color: #000000c9;
+		background-color: rgb(184, 0, 0);
 		border: none;
 		cursor: pointer;
+		width: max-content;
+		height: 2em;
+		position: absolute;
+		left: 2em;
 	}
 
 	.vsgraph {
 		display: flex;
-		justify-content: right;
-		margin-right: 5%;
-		margin-top: 5%;
+		/* justify-content: center; */
+		margin: auto;
+		margin-left: 5%;
+
+		/* position: absolute; */
+		width: 150%;
+		/* height: auto; */
+		/* right: 0; */
+		/* bottom: 0; */
+
+
+	}
+
+	.base64imgf {
+		
 	}
 
 	.cntinr {
@@ -375,14 +423,19 @@
 		background: #00000091;
 		top: 0;
 		left: 0;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
+		width: 200%;
 		position: fixed;
-		z-index: 99;
-		justify-content: center;
-		align-items: center;
+		z-index: 999999;
+		/* justify-content: center; */
+		/* align-items: center; */
+	}
+
+	.base64imgf {
+		margin: auto;
+		width: 50%;
+		height: 99vh;
+		
+		
 	}
 
 	.loader-container {
@@ -533,8 +586,10 @@
 	.vertical-line4 {
 		position: absolute;
 		width: 2px;
-		height: 20%;
-		right: 10%;
+		height: 15%;
+		right: 30%;
+		bottom: 20%;
+
 		background-color: rgba(255, 255, 255, 0.6);
 		animation: verticalLineAnimation4 2s linear;
 	}

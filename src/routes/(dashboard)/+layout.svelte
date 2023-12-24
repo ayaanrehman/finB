@@ -2,8 +2,9 @@
     import Header from "$lib/components/Header.svelte"
     import PageTransition from "$lib/components/PageTransition.svelte";
     import PreSideBar from "$lib/components/preSideBar.svelte";
+
     import { page } from '$app/stores';
-    // export let data;
+    export let data;
 
     $: currentPath = $page.url.pathname;
 
@@ -22,7 +23,7 @@
     </script>
     <Header />
     <div class="main-grid">
-        <PreSideBar />
+        <PreSideBar userDetails={data.userDetails} />
         <PageTransition>
         <div class="container" class:documents={isDocuments}>
                 <slot />

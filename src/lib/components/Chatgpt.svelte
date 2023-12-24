@@ -9,13 +9,17 @@
 	let chatquestion = '';
 	let loadanim = false;
 	let chatHistory;
-	let stylevar = '';
+	let stylevar = 'None';
+	let inputBox;
+
+	onMount(() => {
+    inputBox.focus();
+  });
 
 	onMount(async () => {
-		const inputBox = document.querySelector('.input-box1');
-		inputBox.focus();
-
-		socket = io.connect('http://192.168.200.29:89/module3');
+		// socket = io.connect('https://54.146.82.200:8080/module3');
+		// socket = io.connect('http://172.31.55.58:8080/module3');
+		socket = io.connect('https://icsfinblade.com:444/module3');
 		socket.on('chat_response', function (data) {
 			response = data.answer;
 			console.log('This is Response: ', response);
@@ -47,7 +51,7 @@
 	function submitQuestion() {
 		if (chatquestion.trim() !== '') {
 			messages = [...messages, { text: chatquestion, sender: 'client', timestamp: new Date() }];
-			socket.emit('chatgpt_question', { question: chatquestion });
+			socket.emit('chatgpt_question', { question: chatquestion, stylevar: stylevar });
 			loadanim = true;
 			setTimeout(() => {
 				scrollToBottom();
@@ -75,10 +79,10 @@
 				{#if messages.length === 0}
 					<div class="chatting">
 						<b>Welcome! Start writing a question...</b>
-						<p>Ask questions like:</p>
+						<!-- <p>Ask questions like:</p>
 						<i>"Brainstorm incentives for a customer loyalty program in a small bookstore"</i>
 						<i>"Suggest some codenames for a project introducing flexible work arrangements"</i>
-						<i>"Help me pick a birthday gift for my sister who likes gardening"</i>
+						<i>"Help me pick a birthday gift for my sister who likes gardening"</i> -->
 					</div>
 				{:else}
 					{#each messages as message (message.text)}
@@ -92,18 +96,27 @@
 			<button id="scroll-to-top1" on:click={scrollToTop}>&#9650;</button>
 			<button id="scroll-to-bottom1" on:click={scrollToBottom}>&#9660;</button>
 
-			<form on:submit={submitQuestion}>
+			<form on:submit={() => {
+				stylevar='None', 
+				submitQuestion()
+				
+			}}>
 				<div class="input-container1">
 					<div class="qtnn">
 						<input
 							class="input-box1"
 							type="text"
 							bind:value={chatquestion}
+							bind:this={inputBox}
 							placeholder="Enter your question to ChatGPT Plus"
 						/>
 						<button
 							class="submit2 {loadanim ? 'transparent' : ''}"
-							on:click|preventDefault={submitQuestion}
+							on:click|preventDefault={() => {
+								stylevar='None', 
+								submitQuestion()
+								
+							}}
 							type="submit"
 						>
 							{#if loadanim}
@@ -121,24 +134,26 @@
 		<div class="chat-helpers">
 			<div>
 				<button on:click={() => {
-					stylevar='style1', submitQuestion();
+					stylevar='style1', 
+					submitQuestion()
+					
 				}}
 				>Rephrase this statement in ICS Format</button>
 			</div>
 			<div>
-				<button>Translate this sentence</button>
+				<!-- <button>Translate this sentence</button> -->
 			</div>
 			<div>
-				<button>Suggest synonyms for this phrase</button>
+				<!-- <button>Suggest synonyms for this phrase</button> -->
 			</div>
 		</div>
 	</div>
 </div>
-<button
+<!-- <button
 	on:click={(e) => {
 		question = '';
 	}}
-/>
+/> -->
 
 <style lang="scss">
 	@import url('https://fonts.cdnfonts.com/css/leelawadee');

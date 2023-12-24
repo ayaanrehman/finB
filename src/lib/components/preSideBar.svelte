@@ -3,13 +3,27 @@
 	import { page } from '$app/stores';
 	import { signOut } from '$lib/database/utility.js';
 	import { onMount } from 'svelte';
+	export let userDetails;
 	// import { buttonName } from '$lib/stores/global.js';
 
+	let userName = '';
+	let userEmail = '';
+
+	$: {
+		userName = userDetails?.user_metadata?.name;
+		userEmail = userDetails?.email;
+	}
+
 	async function signOutUser() {
-		let res = await signOut();
-		if (!res.error) {
-			goto('/login/');
-		}
+		let res = await fetch('/api/logout', 
+		{method:"POST"}
+	 	)
+		 console.log("res is:", res)
+		 if (res = "logged out") {
+			
+		window.location.href = "/login";
+	}
+
 	}
 
 	// export let pathName = '/' ;
@@ -30,7 +44,7 @@
 
 	let buttons = [
 		{
-			name: 'Symantec Search',
+			name: 'Semantic Search',
 			icon: '/images/sidebar/symantec-search.png',
 			link: '/documents/symantec-search/'
 		},
@@ -53,56 +67,95 @@
 	{#each buttons as button}
 		<div class="button" class:active={currentPath.includes(button.link)}>
 			<a href={button.link}>
-				<img class="icon" class:iconactive={currentPath.includes(button.link)} src={button.icon} alt={button.name} />
+				<img
+					class="icon"
+					class:iconactive={currentPath.includes(button.link)}
+					src={button.icon}
+					alt={button.name}
+				/>
 				<div class="tag">{button.name}</div>
 			</a>
 		</div>
 	{/each}
-	<button class="accounts" on:mouseenter={() => showPopup = true} on:mouseleave={() => showPopup = false}>
+	<button
+		class="accounts"
+	
+	>
 		<img class="icon" src="/images/user.png" alt="user" />
-        <div class="popup" class:show={showPopup}>
-		<!-- svelte-ignore a11y-mouse-events-have-key-events -->
-		<div class="button" class:active={currentPath.includes('/accounts/')} style="margin-top:auto;">
-			<a href="/accounts/">
-				<!-- {#if activeUser} <span class="user-tag">Account Preferences</span>{/if} -->
-				<img class="icon" src="/images/sidebar/settings.png" alt="user" />
-				<div class="tag">Account Preferences</div>
-			</a>
-		</div>
-		<div class="button">
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
-			<!-- svelte-ignore a11y-missing-attribute -->
-			<a
-				on:click={() => {
-					signOutUser();
-				}}
-			>
-				<img style="filter: invert(1);" class="icon" src="/images/logout.png" alt="logout" />
-				<div class="tag">Logout</div>
-			</a>
-		</div>
+		<div class="popup show">
+			<p style="color: white;">User: {userName}</p>
+			<p style="color: white;">Email: {userEmail}</p>
+			<div class="accx">
+				<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+				<div
+					class="button"
+					class:active={currentPath.includes('/accounts/')}
+					style="margin-top:auto;"
+				>
+					<a href="/accounts/">
+						<!-- {#if activeUser} <span class="user-tag">Account Preferences</span>{/if} -->
+						<img class="icon" src="/images/sidebar/settings.png" alt="user" />
+						<div class="acctxt">Account Preferences</div>
+					</a>
+				</div>
+				<div class="button">
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<!-- svelte-ignore a11y-no-static-element-interactions -->
+					<!-- svelte-ignore a11y-missing-attribute -->
+					<a
+						on:click={() => {
+							signOutUser();
+						}}
+					>
+						<img style="filter: invert(1);" class="icon" src="/images/logout.png" alt="logout" />
+						<div class="acctxt">Logout</div>
+					</a>
+				</div>
+			</div>
 		</div>
 	</button>
 </div>
 
 <style>
-	 .popup {
-        display: none;
-        position: absolute;
-        right: -80px;
-		bottom: 0px;
-        background-color: #ffffff31;
-        border: 1px solid #000000;
-        padding: 10px;
-        z-index: 1;
+	.accx {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		text-align: center;
+		
+	}
+
+	.acctxt {
+		color: rgb(255, 255, 255);
+		font-size: 12px;
+		margin-top: 15px;
+		width: 100%;
+		
+		
+	}
+
+	.popup {
+		display: none;
+		position: absolute;
+		/* right: -100px; */
+		top:-150px;
+		left:0px;
+		/* bottom: 75%; */
+		width: 200px;
+		height: 15em;
+		background-color: #666666c9;
+		border: 1px solid #000000;
+		padding: 10px;
+		z-index: 1;
+		/* vertical-align: bottom; */
 		backdrop-filter: blur(5px);
-    }
+	}
 
-    .popup.show {
-        display: block;
-    }
-
+	/* .popup {
+		display: none;
+	
+	} */
 	.accounts {
 		position: relative;
 		margin-top: auto;
@@ -111,8 +164,9 @@
 		transition: background-color 0.3s ease;
 		border: none;
 		margin-bottom: 10px;
-
-		
+	}
+	button.accounts:hover .popup{
+		display: block;
 	}
 
 	.active1 {
@@ -185,8 +239,10 @@
 	}
 	.button a {
 		position: relative;
-		width: 100%;
+		
 		height: 100%;
+		text-decoration: none;
+		
 	}
 	.button.active a {
 		filter: sepia(100%) hue-rotate(180deg) saturate(500%);
@@ -222,7 +278,7 @@
 	}
 
 	.icon {
-		width: 75%;
+		width: 24px;
 		height: auto;
 		background-color: #00000000;
 		filter: invert(0) brightness(200%);

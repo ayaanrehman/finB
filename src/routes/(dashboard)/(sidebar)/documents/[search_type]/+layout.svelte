@@ -6,6 +6,7 @@
 
     export let data;
 
+    console.log('bucket files', data.bucketFiles);
   
 
 </script>

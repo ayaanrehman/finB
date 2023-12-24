@@ -129,7 +129,7 @@
 
 	<h4 style="color: red;">{errors}</h4>
 
-	{#if userName}
+	{#if userEmail}
 		<h2>Name: {userName}</h2>
 		<h2 style="top: 2em;">Email: {userEmail}</h2>
 
