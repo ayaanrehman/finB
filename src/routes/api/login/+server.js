@@ -18,18 +18,21 @@ export async function POST(event) {
             // return redirect(200, '/')
             console.log("logged in")
             // return { success: true};
+            window.location.href = "/homepage/";
             return new Response("logged in")
             // navigate('/'); // Redirect to the home page
         } else {
             error = 'Invalid credentials';
             console.log("incorrect credentials")
             return { error: true, message: 'Invalid credentials' }; // Show error message
+            // return new Response("incorrect credentials")
         }
     } catch (error) {
         //   console.error(error);??
         error = 'An error occurred'; // Show error message
         console.log("error ocurred")
         return { error: true, message: 'An error occurred' }; // Show error message
+        // return new Response("incorrect credentials provided")
 
     }
 
