@@ -96,6 +96,8 @@
 		padding: 10px;
 		border-radius: 5px;
 		color: aqua;
+		word-wrap: break-word;
+
 
 	}
 </style>
