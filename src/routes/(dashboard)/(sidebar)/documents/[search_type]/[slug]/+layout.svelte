@@ -41,8 +41,8 @@
 <div id="pgctnr" class="doc-page-container">
     <!-- {#if page} -->
         <div class="doc-container" style="border-right: 0.5px solid grey;">
-            {#if $pg.url.pathname.includes('/documents/symantec-search/')}
-             <a href='/documents/symantec-search/'><button id="cv" class="closeviewer">X</button></a>
+            {#if $pg.url.pathname.includes('/documents/semantic-search/')}
+             <a href='/documents/semantic-search/'><button id="cv" class="closeviewer">X</button></a>
              {:else if $pg.url.pathname.includes('/documents/finance-ai/')}
              <a href='/documents/finance-ai/'><button id="cv" class="closeviewer">X</button></a>
              {/if}

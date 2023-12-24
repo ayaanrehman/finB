@@ -292,10 +292,10 @@ onMount(() => {
 		}
 	}
 
-	let symantecDocs = bucketFilesUnStructured;
+	let semanticDocs = bucketFilesUnStructured;
 
 	function filterDocuments2() {
-		symantecDocs = bucketFilesUnStructured.filter((document) =>
+		semanticDocs = bucketFilesUnStructured.filter((document) =>
 			document.name.toLowerCase().includes(searchInput.toLowerCase())
 		);
 	}
@@ -358,9 +358,9 @@ onMount(() => {
 			{#if financeAiDocs}
 				<SearchList {pageUrl} {searchType} docs={financeAiDocs} />
 			{/if}
-		{:else if searchType == 'symantec-search'}
-			{#if symantecDocs}
-				<SearchList {pageUrl} {searchType} docs={symantecDocs} />
+		{:else if searchType == 'semantic-search'}
+			{#if semanticDocs}
+				<SearchList {pageUrl} {searchType} docs={semanticDocs} />
 			{/if}
 		{/if}
 		{/if}

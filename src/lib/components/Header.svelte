@@ -13,9 +13,9 @@ $: pathName && updateTitle();
 $: imgg && updateTitle();
 
 function updateTitle(){
-  if(pathName.includes('/documents/symantec-search/')){
+  if(pathName.includes('/documents/semantic-search/')){
     title = 'Semantic Search';
-    imgg = '/images/sidebar/symantec-search.png';
+    imgg = '/images/sidebar/semantic-search.png';
     console.log("Imgg: ", imgg);
   } else if(pathName.includes('/documents/finance-ai/')){
     title = 'Database Search';

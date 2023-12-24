@@ -45,8 +45,8 @@
 	let buttons = [
 		{
 			name: 'Semantic Search',
-			icon: '/images/sidebar/symantec-search.png',
-			link: '/documents/symantec-search/'
+			icon: '/images/sidebar/semantic-search.png',
+			link: '/documents/semantic-search/'
 		},
 		{
 			name: 'Database Search',

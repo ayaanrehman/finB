@@ -60,10 +60,10 @@
 		    // sr(filename);
 			filenameStore.set({filename: filename, source: 'finance-ai'});
 		}
-        else if(searchType == 'symantec-search'){
+        else if(searchType == 'semantic-search'){
             let filename = e.target.dataset.docName;
 		    // sfp(filename);
-			filenameStore.set({filename: filename, source: 'symantec-search'});
+			filenameStore.set({filename: filename, source: 'semantic-search'});
         }
 	}
 

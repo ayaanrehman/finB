@@ -84,7 +84,7 @@
 			// socket = io.connect('http://54.146.82.200:8080/module1');
 			// socket = io.connect('http://172.31.55.58:8080/module1');
 			socket = io.connect('https://icsfinblade.com:444/module1');
-		} else if (srchtp == 'symantec-search') {
+		} else if (srchtp == 'semantic-search') {
 			// socket = io.connect('http://192.168.200.29:89/module4');
 			// socket = io.connect('http://icsfinblade.com:8080/module4');
 			// socket = io.connect('http://54.146.82.200:8080/module4');

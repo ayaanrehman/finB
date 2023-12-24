@@ -10,7 +10,7 @@
 
 	if(searchType == 'finance-ai'){
 		folderType = 'structured';
-	}else if(searchType == 'symantec-search'){
+	}else if(searchType == 'semantic-search'){
 		folderType = 'unstructured';
 	}
 
@@ -20,7 +20,6 @@
 
 	const handleFileChange = (event) => {
 		selectedFile = event.target.files[0];
-		// console.log(selectedFile);
 	};
 
 	const uploadFile = async () => {
@@ -28,27 +27,20 @@
 		let userID = userId;
 
 		if (userID) {
-			// let res = await supabase.from('dha')
-
 			const { data, error } = await supabase.storage.createBucket(userID, {
 				public: true
-
 				// allowedMimeTypes: ['image/png'],
 				// fileSizeLimit: 1024
 			});
-
-			// console.log(res);
-			// return;
 		}
 
-		// return;
 		if (!selectedFile) {
+			const messageElement = document.getElementById('message');
 			console.error('No file selected.');
 			messageElement.textContent = `No file selected.`;
-			return;
+			// return;
 		}
 		console.log(selectedFile);
-		// return;
 
 		const { data, error } = await supabase.storage
 			.from(userID)
@@ -60,8 +52,10 @@
 			messageElement.textContent = `Error uploading file: ${error.message}`;
 			console.error('Error uploading file:', error.message);
 		} else {
-			messageElement.textContent = 'File uploaded successfully: ' + JSON.stringify(data);
+			messageElement.textContent = 'File uploaded successfully: ' + JSON.stringify(data.path);
 			console.log('File uploaded successfully:', data);
+			window.location.href = '/homepage/';		
+
 		}
 	};
 </script>
@@ -95,5 +89,13 @@
 		border: none;
 		border-radius: 5px;
 		cursor: pointer;
+	}
+
+	#message {
+		margin: 10px;
+		padding: 10px;
+		border-radius: 5px;
+		color: aqua;
+
 	}
 </style>
