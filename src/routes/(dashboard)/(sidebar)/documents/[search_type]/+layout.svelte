@@ -6,17 +6,17 @@
 
     export let data;
 
-    console.log('bucket files', data.bucketFiles);
+    // console.log('bucket files', data.bucketFiles);
   
 
 </script>
 
-<Sidebar searchType={data.searchType} userId={data.userId} pageUrl={data.pathname} bucketFiles={data.bucketFiles} bucketFilesUnStructured={data.bucketFilesUnStructured}/>
+<Sidebar userDetails={data.userDetails} searchType={data.searchType} userId={data.userId} pageUrl={data.pathname} bucketFiles={data.bucketFiles} bucketFilesUnStructured={data.bucketFilesUnStructured}/>
 <!-- {/if} -->
  <main>
     <!-- <SearchBox /> -->
     <slot />
-    <SearchBox />
+    <SearchBox userDetails={data.userDetails} />
      <!-- {#if $searchBox} -->
      <!-- <PageTransition pathname={data.pathname}> -->
      <!-- </PageTransition> -->

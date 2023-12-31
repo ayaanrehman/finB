@@ -8,8 +8,13 @@
 	import { filenameStore } from '$lib/stores/global.js';
 	// import { temp } from '$lib/data/helpers';
 	import { page  as pg }  from '$app/stores';
+	import { supabase } from '$lib/supabase.js';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 
+
+	export let userDetails;
     export let pageUrl;
     export let docs;
     export let searchType;
@@ -19,12 +24,15 @@
 	$: {
     const activeDoc = document.querySelector('.titledoc.active');
     if (activeDoc) {
-      selectSearch.set(false);
+    //   selectSearch.set(false);
+	$selectSearch = false;
 	} else {
-      selectSearch.set(true);
+    //   selectSearch.set(true);
+	$selectSearch = true;
     }
   }
 
+  	let userID = userDetails.id;
 
     let finalDocs = docs;
 
@@ -34,8 +42,65 @@
 
 	$:currentPath = $pg?.url?.pathname;
 
-    console.log('page url is', currentPath);
+    // console.log('page url is', currentPath);
     // export let docs2;
+
+	const downloadFile = async () => {
+		const { data, error } = await supabase
+		.storage
+		.from(userID)
+		.download(`${searchType == 'finance-ai' ? 'structured' : 'unstructured'}/${$filenameStore.filename}.${searchType == 'finance-ai' ? 'xlsx' : 'pdf'}`);
+		// console.log('data in downloadFile is', data);
+		// console.log('error in downloadFile is', error);
+		// console.log('filenameStore.filename is', $filenameStore.filename);
+		// console.log('userID is', userID);
+		// console.log('searchType is', `${searchType == 'finance-ai' ? 'structured' : 'unstructured'}`);
+
+		const url = URL.createObjectURL(data);
+			// Create a link element
+			const link = document.createElement('a');
+			link.href = url;
+			link.download = `${$filenameStore.filename}.${searchType == 'finance-ai' ? 'xlsx' : 'pdf'}`;
+			// Append the link to the body
+			document.body.appendChild(link);
+			// Click the link to start the download
+			link.click();
+			// Clean-up by removing the link
+			document.body.removeChild(link);
+	};
+
+	const deleteFile = async () => {
+		const { data, error } = await supabase
+		.storage
+		.from(userID)
+		.remove([`${searchType == 'finance-ai' ? 'structured' : 'unstructured'}/${$filenameStore.filename}.${searchType == 'finance-ai' ? 'xlsx' : 'pdf'}`])
+		console.log('data in deleteFile is', data);
+		console.log('error in deleteFile is', error);
+		console.log('filenameStore.filename is', $filenameStore.filename);
+		console.log('userID is', userID);
+		console.log('searchType is', `${searchType == 'finance-ai' ? 'structured' : 'unstructured'}`);
+			if (error) {
+				console.error('Error in deleteFile:', error);
+				// Inform the user that the file deletion failed
+				alert('Failed to delete file');
+			} else {
+				console.log('Data in deleteFile:', data);
+				// Inform the user that the file has been deleted
+				alert('File deleted successfully');
+				// Update your application state as needed
+			}
+			if (searchType == 'finance-ai') {
+				// window.location.href = '/documents/finance-ai/';
+				goto('/documents/finance-ai/');
+				
+			} else  {
+				// window.location.href = '/documents/semantic-search/';
+				goto('/documents/semantic-search/');
+
+			}
+	
+	};
+
 
     let searchInput = '';
 	function filterDocuments() {
@@ -67,7 +132,9 @@
         }
 	}
 
-    console.log('search type is', searchType);
+
+
+    // console.log('search type is', searchType);
     // 
 </script>
 <!-- &#128269; -->
@@ -77,8 +144,9 @@
 	<!-- {#if !(searchType == 'finance-ai' && i == 0)} -->
 	{#if document.name !== "" && document.name !== ".emptyFolderPlaceholder"}
         <li class="listTitle">
+			<div class="fileandbtn">
             <a
-                href="/documents/{searchType}/{document.name}/"
+                href="/documents/{searchType}/{document.name.replace(/\+/g, '%2B')}/"
                 data-doc-name={document.name}
                 
                 class="titledoc" class:active={pageUrl == `/documents/${searchType}/${encodeURIComponent(document.name)}/`}
@@ -92,15 +160,59 @@
                 <span>&#128462;</span><span style="pointer-events: none;">{document.name}</span
                 ></a
             >
-            
-        
-        </li>
+			{#if pageUrl == `/documents/${searchType}/${encodeURIComponent(document.name)}/`}
+				<div class="fileconfig">
+					<button title="Download" class="dwnfile" on:click={() => downloadFile(document.name)}>&#x21E9;</button>
+					<button title="Delete" class="delfile" on:click={() => {
+						if (confirm('Are you sure you want to delete this file?')) {
+							deleteFile(document.name)}
+							}}>&#x1F5D1;</button>
+				</div>
+				
+			{/if}
+		</div>
+		</li>
 		{/if}
     {/each}
 
 </ul>
 
 <style lang="scss">
+
+	.fileandbtn {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.fileconfig {
+		display: flex;
+		justify-content: end;
+		gap: 5px;
+		
+	}
+
+	.delfile, .dwnfile {
+		background-color: #89898900;
+		border: none;
+		cursor: pointer;
+		color: #898989;
+		border-radius: 5px;
+		padding: 2px 10px;
+		width: max-content;
+		font-size: large;
+		font-weight: bold;
+	}
+
+	.delfile:hover {
+		background-color: #ff0000;
+		color: white;
+	}
+
+	.dwnfile:hover {
+		background-color: #0077ff;
+		color: rgb(255, 255, 255);
+	}
 
 
 	.addfldr {
@@ -259,6 +371,9 @@
 		outline: none;
 	}
 
+	.docsearch::placeholder {
+		color: rgb(184, 184, 184)	}
+
 	.docsearch2 {
 		background-color: rgba(83, 82, 82, 0);
 		border: none;
@@ -280,11 +395,13 @@
 		white-space: nowrap;
 		
 		
+		
 	}
 
 	.listTitle:hover {
 		white-space: normal; /* Display full text on hover */
 		width: auto;
+		word-wrap: break-word;
 	}
 
 	.titledoc {
@@ -293,13 +410,13 @@
 		font-weight: normal;
 		display: flex;
 		gap: 1em;
-		
-		
-        
+		word-break: break-all;
 	}
 
 	.titledoc:hover,
 	.titledoc.active {
 		color: rgb(74, 170, 226) !important;
+		white-space: normal; /* Display full text on hover */
+		width: auto;
 	}
 </style>

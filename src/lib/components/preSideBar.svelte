@@ -53,7 +53,7 @@
 			icon: '/images/sidebar/finance-ai.png',
 			link: '/documents/finance-ai/'
 		},
-		{ name: 'Guard Rails', icon: '/images/sidebar/chatgpt-plus.png', link: '/chatgpt-plus/' },
+		{ name: 'Secure-GPT', icon: '/images/sidebar/chatgpt-plus.png', link: '/chatgpt-plus/' },
 		{ name: 'Zapier Integration', icon: '/images/sidebar/zapier.png', link: '/zapier/' },
 		{ name: 'API Access', icon: '/images/sidebar/apiaccess.png', link: '/api-access/' },
 		{ name: 'Settings', icon: '/images/sidebar/settings.png', link: '/settings/' }

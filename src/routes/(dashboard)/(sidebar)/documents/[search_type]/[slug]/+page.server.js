@@ -13,14 +13,14 @@ export const load = async({params}) => {
 
     let userId = await getUser();
 
-    console.log('main user is', userId);
+    // console.log('main user is', userId);
 
     let res = await getFilesFromBucket('structured', userId);
     // console.log(url);
     // let document = res.filter(document => document.name.replaceAll('_', '').replaceAll(' ', '') == params.slug.replaceAll('_', ''));
     let document = res.filter(document => document.name == params.slug);
-    console.log('user id is', userId);
-    console.log('doc is', document);
+    // console.log('user id is', userId);
+    // console.log('doc is', document);
     if(!userId){
         throw redirect(302, '/login');
     }
@@ -35,7 +35,7 @@ export const load = async({params}) => {
     let resTwo = await getFilesFromBucket('unstructured', userId);
     // let documentTwo = resTwo.filter(document => document.name.replaceAll('_', '').replaceAll(' ', '') == params.slug.replaceAll('_', ''));
     let documentTwo = resTwo.filter(document => document.name == params.slug);
-    console.log(documentTwo);
+    // console.log(documentTwo);
     if(documentTwo.length){
         
 

@@ -137,7 +137,7 @@ socket.on('receive_response', function(data) {
         addToChatHistory(category, '', response);
     } else {
         // Handle the case where the category is invalid or not recognized
-        console.log('Invalid category received:', category);
+        // console.log('Invalid category received:', category);
     }
 
     document.getElementById("loading-container").style.display = "none";

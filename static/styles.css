@@ -351,10 +351,12 @@ border: 0.15em solid transparent;
 
 color: rgb(255, 255, 255);
 font-family: 'leelawadee-ui-semilight-normal', sans-serif;
-font-size: larger;
+font-size: smaller;
 font-weight: normal;
 overflow-wrap: normal;
 padding-right: 2em;
+/* height: auto; */
+white-space: pre-wrap;
 }
 
 

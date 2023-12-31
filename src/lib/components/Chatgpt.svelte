@@ -19,10 +19,12 @@
 	onMount(async () => {
 		// socket = io.connect('https://54.146.82.200:8080/module3');
 		// socket = io.connect('http://172.31.55.58:8080/module3');
-		socket = io.connect('https://icsfinblade.com:444/module3');
+		// socket = io.connect('https://icsfinblades.com:444/module3');
+		socket = io.connect('http://192.168.200.29:8080/module3');
+		// socket = io.connect('http://192.168.100.113:8080/module3');
 		socket.on('chat_response', function (data) {
 			response = data.answer;
-			console.log('This is Response: ', response);
+			// console.log('This is Response: ', response);
 			messages = [...messages, { text: response, sender: 'server', timestamp: new Date() }];
 			loadanim = false;
 			setTimeout(() => {

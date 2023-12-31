@@ -15,6 +15,13 @@
 	import { lisFolder } from '$lib/stores/global.js';
 	import SearchList from './SearchList.svelte';
 
+	import { supabase } from '$lib/supabase.js';
+	import { page as pg } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { embs } from '$lib/stores/global.js';
+
+
+
 	// export let data;
 	// export let data2;
 
@@ -23,10 +30,15 @@
 	export let bucketFilesUnStructured;
 	export let userId;
 	export let searchType;
+	export let userDetails;
+
+	$:currentPath = $pg?.url?.pathname;
+	
 
 	let isResizing = false;
 	let isOnEdge = false;
 	let keydownHandler;
+	let socket;
 
 	function changeCursor(event) {
 	let nav = document.getElementById('nav');
@@ -39,6 +51,21 @@
 		isOnEdge = false;
 	}
 }
+
+onMount(async () => {
+		socket = io.connect('http://192.168.200.29:8080/module5');
+		// socket = io.connect('http://192.168.100.113:8080/module5');
+		// socket.on('receive_embeddings', function (data) {
+		// 	$embs = data.embeddings;
+		// 	// embs = data.embeddings;
+		// 	console.log('Embeddings progress is', $embs);
+		// 	});
+		socket.on('receive_embeddings', function (data) {
+					console.log('Embeddings progress is', data.embeddings);
+					$embs = data.embeddings;
+				});
+	
+		});
 
 
 onMount(() => {
@@ -259,7 +286,7 @@ onMount(() => {
 
 	let financeAiDocs = bucketFiles;
 
-	console.log("THis is Sidebar bucketfiles:", bucketFiles)
+	// console.log("THis is Sidebar bucketfiles:", bucketFiles)
 
 	function filterDocuments() {
 		financeAiDocs = bucketFiles.filter((document) =>
@@ -308,12 +335,189 @@ onMount(() => {
 	function docopenz() {
 		docopen = !docopen;
 	}
+
+	const handleDragOver = (event) => {
+        event.preventDefault();
+    };
+
+	// const handleDrop = async (event) => {
+    //     event.preventDefault();
+    //     let selectedFile;
+    //     if (event.dataTransfer.items) {
+    //         if (event.dataTransfer.items[0].kind === 'file') {
+    //             selectedFile = event.dataTransfer.items[0].getAsFile();
+    //         }
+    //     } else {
+    //         selectedFile = event.dataTransfer.files[0];
+    //     }
+
+    //     // upload the file to Supabase
+	// 	let folderTypez;
+    //     if (selectedFile) {
+	// 		if(searchType == 'finance-ai'){
+	// 			folderTypez = 'structured';
+	// 		}else if(searchType == 'semantic-search'){
+	// 			folderTypez = 'unstructured';
+	// 		}
+    //         const filePath = `${folderTypez}/${selectedFile.name}`; // adjust the file path as needed
+    //         const { error } = await supabase.storage.from(`${userId}`).upload(filePath, selectedFile);
+    //         if (error) {
+    //             console.error('Error uploading file:', error);
+	// 			console.log(`folder Typez: ${folderTypez}, selectedFile: ${selectedFile}, selectedFilename: ${selectedFile.name}, username: ${userDetails.username}, userid: ${userDetails.id}, prev:${userId}`);
+    //         } else {
+    //             console.log('File uploaded successfully');
+    //         }
+    //     }
+    // };
+
+// 	const handleDrop = async (event) => {
+//     event.preventDefault();
+//     let files = event.dataTransfer.files;
+//     let folderTypez;
+
+//     for (let i = 0; i < files.length; i++) {
+//         let file = files[i];
+
+//         if (file) {
+//             if(searchType == 'finance-ai'){
+//                 folderTypez = 'structured';
+//             }else if(searchType == 'semantic-search'){
+//                 folderTypez = 'unstructured';
+//             }
+//             const filePath = `${folderTypez}/${file.name}`; // adjust the file path as needed
+//             const { error } = await supabase.storage.from(`${userId}`).upload(filePath, file);
+//             if (error) {
+//                 console.error('Error uploading file:', error);
+//             } else {
+//                 console.log('File uploaded successfully');
+//             }
+//         }
+//     }
+// };
+
+
+let uploadProgress = 0; // variable to keep track of the upload progress
+let uploadComplete = false;
+let uploadBar = false;
+
+const handleDrop = async (event) => {
+	event.preventDefault();
+	let files = event.dataTransfer.files;
+	let folderTypez;
+	let firstFileUploaded = false;
+	
+
+	// Check all files before uploading
+    for (let i = 0; i < files.length; i++) {
+        let file = files[i];
+        let fileExtension = file.name.split('.').pop();
+
+        if ((searchType == 'finance-ai' && fileExtension !== 'xlsx') || 
+            (searchType != 'finance-ai' && fileExtension !== 'pdf')) {
+            alert ('Only ".xlsx" file are accepted in Database Search & only ".pdf" files are accepted in Semantic Search');
+            return;
+        }
+    }
+
+
+
+	
+	
+
+
+	// for (let i = 0; i < files.length; i++) {
+	// 	let file = files[i];
+	for (let file of files) {
+		if (file) {
+
+			// Upload files
+			let selectedFileName = file.name;
+			let username = userDetails.user_metadata.name;
+
+			uploadBar = true;
+
+			if(searchType == 'finance-ai'){
+				folderTypez = 'structured';
+			}else if(searchType == 'semantic-search'){
+				folderTypez = 'unstructured';
+			}
+
+			
+	
+
+			// Wrap the emit and response handling in a new Promise
+			async function uploadFile() {
+				return new Promise(async (resolve, reject) => {
+					// Emit the upload event
+					socket.emit('upload', { folderType: folderTypez, selectedFile: selectedFileName, username: username, userid: userId });
+					console.log({ folderTypez, selectedFileName, username, userId });
+
+					$embs = '';
+
+					if (searchType !== 'finance-ai') {
+						while ($embs !== 'Completed') {
+							await new Promise(r => setTimeout(r, 1000));
+						}
+					}
+					// Once $embs === 'Completed', resolve the Promise
+					
+					if (searchType == 'finance-ai' || $embs === 'Completed') {
+                   	 	resolve('Completed');
+               		}
+				});
+			};
+
+			const filePath = `${folderTypez}/${file.name}`;
+			const { error } = await supabase.storage.from(`${userId}`).upload(filePath, file);
+			await uploadFile();
+
+			if (error) {
+				console.error('Error uploading file:', error);
+			} else {
+				
+				console.log('File uploaded successfully');
+				uploadProgress += 100 / files.length; // increment the upload progress
+
+			}
+		}
+
+		if (uploadProgress >= 100) {
+			uploadComplete = true;
+			setTimeout(() => {
+				uploadComplete = false;
+				uploadProgress = 0;
+				uploadBar = false;
+				
+				if (!firstFileUploaded) {
+                goto(`${currentPath}${file.name.replace(/(\.pdf|\.xlsx)$/, '')}`);
+                firstFileUploaded = true;
+				
+		
+           	 }
+			}, 1000);
+			
+		}
+	}
+};
+
+
+
 </script>
 
 <button id="openSidebar" style="margin-top: 1em;"><img src="/images/3hvl.png" alt="" /></button>
 
 <nav id="nav" on:mousemove={changeCursor} on:mousedown={startResize} on:mousemove={doResize} on:mouseup={stopResize} >
-	<ul class="ulstat">
+	{#if uploadBar}
+	<div>
+		<progress value={uploadProgress} max="100" class:complete={uploadComplete}></progress>
+		<span>{Math.round(uploadProgress)}%</span>
+		{#if uploadComplete}
+        <p>File(s) uploaded successfully</p>
+   		{/if}
+	</div>
+	<br>
+	{/if}
+	<ul class="ulstat" on:drop={handleDrop} on:dragover={handleDragOver}>
 		<li>
 			<div>
 				<div class="datacntn">
@@ -326,19 +530,23 @@ onMount(() => {
 					</h4>
 					<button
 						on:click={() => {
-							uploading(), toggleShowDocuments();
+							// uploading(), toggleShowDocuments();
+							upload= !upload; docopen= !docopen;
 						}}
 						class="addbtn"><img src="/images/add_files.png" alt="Add Files" /></button
 					>
 				</div>
-
+				
 				{#if upload}
+				<br>
 					<div>
-						<FileUpload {searchType} {userId} />
+						<FileUpload {searchType} {userId} {userDetails} />
 					</div>
 				{/if}
-				<br />
+				<p style="color: grey; font-size: small">Drop your files to add in this Data Lake</p>
+				
 			</div>
+			
 			<!-- {#if docs2} -->
 			<!-- {#if showDocuments} -->
 			<!-- {/if} -->
@@ -356,11 +564,11 @@ onMount(() => {
 		{#if docopen}
 		{#if searchType == 'finance-ai'}
 			{#if financeAiDocs}
-				<SearchList {pageUrl} {searchType} docs={financeAiDocs} />
+				<SearchList {pageUrl} {searchType} docs={financeAiDocs} {userDetails} />
 			{/if}
 		{:else if searchType == 'semantic-search'}
 			{#if semanticDocs}
-				<SearchList {pageUrl} {searchType} docs={semanticDocs} />
+				<SearchList {pageUrl} {searchType} docs={semanticDocs} {userDetails} />
 			{/if}
 		{/if}
 		{/if}
@@ -380,6 +588,10 @@ onMount(() => {
 </nav>
 
 <style lang="scss">
+
+progress.complete {
+        background-color: green;
+    }
 
 
 	.dtlk {

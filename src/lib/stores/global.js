@@ -14,6 +14,10 @@ export const lisFolder = writable('structured');
 
 export const filenameStore = writable('');
 
+export const embs = writable('');
+
+
+
 // export const buttonName = writable('');
 
 
