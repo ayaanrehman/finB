@@ -124,7 +124,7 @@
 				base64img = `data:image/png;base64,${data.base64d}`;
 			}
 
-			console.log('This is Plotted Image: ', base64img);
+			// console.log('This is Plotted Image: ', base64img);
 			showLoadingContainer = false;
 			generatingResponse = false;
 			response = data.response;
@@ -160,6 +160,8 @@
 		// 	alert('Please avoid typing just blank spaces.');
 
 		// } else {
+
+
 		socket.emit('submit_question', { question, docfilename, username, userid });
 		searchHistory.push({ sender: 'You', message: question, timestamp: new Date() });
 

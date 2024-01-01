@@ -4,13 +4,13 @@
 	import { goto } from '$app/navigation';
 	import { embs } from '$lib/stores/global.js';
 	import { page as pg } from '$app/stores';
-
+	import { filenameStore } from '$lib/stores/global.js';
 
 	export let userId;
 	export let searchType;
 	export let userDetails;
 
-	$:currentPath = $pg?.url?.pathname;
+	$: currentPath = $pg?.url?.pathname;
 
 	// let embs = '';
 	let selectedFile;
@@ -27,25 +27,22 @@
 			$embs = data.embeddings;
 			// embs = data.embeddings;
 			console.log('Embeddings progress is', $embs);
-			});
 		});
+	});
 
-	if(searchType == 'finance-ai'){
+	if (searchType == 'finance-ai') {
 		folderType = 'structured';
-	}else if(searchType == 'semantic-search'){
+	} else if (searchType == 'semantic-search') {
 		folderType = 'unstructured';
 	}
 
-
 	// console.log('user id store is', userId);
-
 
 	const handleFileChange = (event) => {
 		selectedFile = event.target.files[0];
 	};
 
 	const uploadFile = async () => {
-
 		let userID = userId;
 
 		if (userID) {
@@ -71,31 +68,41 @@
 		const messageElement = document.getElementById('message');
 
 		let selectedFileName = selectedFile.name;
-		socket.emit('upload', { folderType: folderType, selectedFile: selectedFileName, username: username, userid: userid });
-		// socket.emit('chatgpt_question', { question: chatquestion, stylevar: stylevar });
-		console.log({ folderType, selectedFileName, username, userid });
 
 		if (error) {
 			messageElement.textContent = `Error uploading file: ${error.message}`;
 			console.error('Error uploading file:', error.message);
+			return;
 		} else {
-			// messageElement.textContent = 'File uploaded successfully: ' + JSON.stringify(data.path);
-			// console.log('File uploaded successfully:', data);
-			// console.log('Fileeeeeeeeeeeeeeee:', `${currentPath}${selectedFileName.replace(/(\.pdf|\.xlsx)$/, '')}`);
-			alert('File uploaded successfully');
-			// goto('/homepage/');	
-			// goto(`${$page.path}/${selectedFileName}`);
+			socket.emit('upload', {
+				folderType: folderType,
+				selectedFile: selectedFileName,
+				username: username,
+				userid: userid
+			});
+			console.log({ folderType, selectedFileName, username, userid });
+			if ($embs !== 'Started' && $embs !== 'Completed' && $embs !== "") {
+				alert('Failed to upload file. Please try again' + $embs);
+				return;
+			} else if ($embs == 'Completed') {
+				alert('File uploaded successfully');
+				setFileNameStore();
+				$embs = '';
 
-			// if (folderType == 'structured') {
-			// 	goto('/documents/finance-ai/');
-			// } else {
-				
 				goto(`${currentPath}${selectedFileName.replace(/(\.pdf|\.xlsx)$/, '')}`);
-			// } /documents/semantic-search/Resume%20-%20Mohammed%20Abdullah.pdf/
-			//   /documents/semantic-search/Resume%20-%20Mohammed%20Abdullah/
+			}
 		}
-	
-		
+		function setFileNameStore() {
+			if (searchType == 'finance-ai') {
+				let filename = selectedFileName.replace(/(\.pdf|\.xlsx)$/, '');
+				// sr(filename);
+				filenameStore.set({ filename: filename, source: 'finance-ai' });
+			} else if (searchType == 'semantic-search') {
+				let filename = selectedFileName.replace(/(\.pdf|\.xlsx)$/, '');
+				// sfp(filename);
+				filenameStore.set({ filename: filename, source: 'semantic-search' });
+			}
+		}
 	};
 </script>
 
@@ -140,7 +147,5 @@
 		border-radius: 5px;
 		color: aqua;
 		word-wrap: break-word;
-
-
 	}
 </style>

@@ -19,6 +19,7 @@
 	import { page as pg } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { embs } from '$lib/stores/global.js';
+	import { filenameStore } from '$lib/stores/global.js';
 
 
 
@@ -51,6 +52,20 @@
 		isOnEdge = false;
 	}
 }
+
+
+
+onMount(() => {
+    document.body.addEventListener('dragover', handleDragOver);
+    document.body.addEventListener('dragleave', handleDragLeave);
+    document.body.addEventListener('drop', handleDrop);
+
+    return () => {
+      document.body.removeEventListener('dragover', handleDragOver);
+      document.body.removeEventListener('dragleave', handleDragLeave);
+      document.body.removeEventListener('drop', handleDrop);
+    };
+  });
 
 onMount(async () => {
 		socket = io.connect('http://192.168.200.29:8080/module5');
@@ -336,9 +351,18 @@ onMount(() => {
 		docopen = !docopen;
 	}
 
+	let isDragging = false;
+
 	const handleDragOver = (event) => {
         event.preventDefault();
+		isDragging = true;
     };
+
+	const handleDragLeave = (event) => {
+		event.preventDefault();
+		isDragging = false;
+	};
+
 
 	// const handleDrop = async (event) => {
     //     event.preventDefault();
@@ -400,8 +424,10 @@ let uploadProgress = 0; // variable to keep track of the upload progress
 let uploadComplete = false;
 let uploadBar = false;
 
+
 const handleDrop = async (event) => {
 	event.preventDefault();
+	isDragging = false;
 	let files = event.dataTransfer.files;
 	let folderTypez;
 	let firstFileUploaded = false;
@@ -418,11 +444,6 @@ const handleDrop = async (event) => {
             return;
         }
     }
-
-
-
-	
-	
 
 
 	// for (let i = 0; i < files.length; i++) {
@@ -455,7 +476,12 @@ const handleDrop = async (event) => {
 					$embs = '';
 
 					if (searchType !== 'finance-ai') {
-						while ($embs !== 'Completed') {
+						if ($embs !== 'Started' && $embs !== 'Completed' && $embs !== "") {
+						alert('Failed to upload file. Please try again' + $embs);
+						uploadBar = false;
+						$embs = '';
+						return;
+					} else while ($embs !== 'Completed') {
 							await new Promise(r => setTimeout(r, 1000));
 						}
 					}
@@ -469,11 +495,18 @@ const handleDrop = async (event) => {
 
 			const filePath = `${folderTypez}/${file.name}`;
 			const { error } = await supabase.storage.from(`${userId}`).upload(filePath, file);
-			await uploadFile();
 
 			if (error) {
-				console.error('Error uploading file:', error);
+				console.error(error.message);
+				alert('Error uploading file: ' + error.message);
+				uploadBar = false
+				$embs = '';
+				return;
+			
+
+		
 			} else {
+				await uploadFile();
 				
 				console.log('File uploaded successfully');
 				uploadProgress += 100 / files.length; // increment the upload progress
@@ -489,6 +522,7 @@ const handleDrop = async (event) => {
 				uploadBar = false;
 				
 				if (!firstFileUploaded) {
+					setFileNameStore()
                 goto(`${currentPath}${file.name.replace(/(\.pdf|\.xlsx)$/, '')}`);
                 firstFileUploaded = true;
 				
@@ -497,8 +531,23 @@ const handleDrop = async (event) => {
 			}, 1000);
 			
 		}
+		function setFileNameStore() {
+		
+        if(searchType == 'finance-ai'){
+            let filename = file.name.replace(/(\.pdf|\.xlsx)$/, '');
+		    // sr(filename);
+			filenameStore.set({filename: filename, source: 'finance-ai'});
+		}
+        else if(searchType == 'semantic-search'){
+            let filename = file.name.replace(/(\.pdf|\.xlsx)$/, '');
+		    // sfp(filename);
+			filenameStore.set({filename: filename, source: 'semantic-search'});
+        }
+	}
 	}
 };
+
+
 
 
 
@@ -517,7 +566,7 @@ const handleDrop = async (event) => {
 	</div>
 	<br>
 	{/if}
-	<ul class="ulstat" on:drop={handleDrop} on:dragover={handleDragOver}>
+	<ul class="ulstat" on:drop={handleDrop} on:dragover={handleDragOver} on:dragleave={handleDragLeave}>
 		<li>
 			<div>
 				<div class="datacntn">
@@ -572,6 +621,16 @@ const handleDrop = async (event) => {
 			{/if}
 		{/if}
 		{/if}
+		<div 
+			on:dragover={handleDragOver} 
+			on:dragleave={handleDragLeave} 
+			on:drop={handleDrop} 
+			class:dragging={isDragging}
+			>
+			{#if isDragging}
+			<span class="drop-text">Drop here</span>
+		  {/if}
+		</div>
 
 		<!-- </li> -->
 		<!-- {/if} -->
@@ -585,13 +644,35 @@ const handleDrop = async (event) => {
 			<li />
 		</div>
 	</ul>
+	
 </nav>
+
 
 <style lang="scss">
 
-progress.complete {
+	progress.complete {
         background-color: green;
     }
+
+	.dragging {
+		background-color: #f0f0f093;
+		border: 1px dashed #303030;;
+		border-radius: 5px;
+		color: #303030;
+		outline: 1px dashed #303030;
+		width: 100%; /* adjust as needed */
+		height: max-content; /* adjust as needed */
+		margin: auto;
+		padding: 1em;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.drop-text {
+		font-size: medium;
+		
+	}
 
 
 	.dtlk {
