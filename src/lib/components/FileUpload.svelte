@@ -13,15 +13,18 @@
 	$: currentPath = $pg?.url?.pathname;
 
 	// let embs = '';
-	let selectedFile;
+	let file;
 	let folderType;
 	let socket;
 
+	let selectedFileName = '';
 	let username = userDetails.user_metadata.name;
-	let userid = userDetails.id;
+	let folderTypez;
+
 
 	onMount(async () => {
 		socket = io.connect('http://192.168.200.29:8080/module5');
+		// socket = io.connect('https://icsfinblade.com:444/module5');
 		// socket = io.connect('http://192.168.100.113:8080/module5');
 		socket.on('receive_embeddings', function (data) {
 			$embs = data.embeddings;
@@ -39,71 +42,136 @@
 	// console.log('user id store is', userId);
 
 	const handleFileChange = (event) => {
-		selectedFile = event.target.files[0];
+		file = event.target.files[0];
 	};
 
 	const uploadFile = async () => {
-		let userID = userId;
+		selectedFileName = file.name;
 
-		if (userID) {
-			const { data, error } = await supabase.storage.createBucket(userID, {
+		const messageElement = document.getElementById('message');
+		messageElement.textContent = `Uploading file...`;
+
+		if (userId) {
+			const { data, error } = await supabase.storage.createBucket(userId, {
 				public: true
 				// allowedMimeTypes: ['image/png'],
 				// fileSizeLimit: 1024
 			});
 		}
 
-		if (!selectedFile) {
+		if (!file) {
 			const messageElement = document.getElementById('message');
 			console.error('No file selected.');
 			messageElement.textContent = `No file selected.`;
 			// return;
 		}
-		// console.log(selectedFile);
+		// console.log(selectedFile)
 
-		const { data, error } = await supabase.storage
-			.from(userID)
-			.upload(`${folderType}/${selectedFile.name}`, selectedFile);
+		// let selectedFileName = selectedFile.name;
 
-		const messageElement = document.getElementById('message');
+		// if (error) {
+		// 	messageElement.textContent = `Error uploading file: ${error.message}`;
+		// 	console.error('Error uploading file:', error.message);
+		// 	return;
+		// } else {
+		// 	socket.emit('upload', {
+		// 		folderType: folderType,
+		// 		selectedFile: selectedFileName,
+		// 		username: username,
+		// 		userid: userid
+		// 	});
+		// 	console.log({ folderType, selectedFileName, username, userid });
 
-		let selectedFileName = selectedFile.name;
+		// 	if(searchType == 'semantic-search'){
+		// 		if ($embs !== 'Started' && $embs !== 'Completed' && $embs !== "") {
+		// 			alert('Failed to upload file. Please try again' + $embs);
+		// 			$embs = '';
+		// 			return;
+		// 		} else if ($embs == 'Completed') {
+		// 			alert('File uploaded successfully1');
+		// 			setFileNameStore();
+		// 			$embs = '';
+		// 			messageElement.textContent = '';
+		// 			goto(`${currentPath}${selectedFileName.replace(/(\.pdf|\.xlsx)$/, '')}`);
+		// 		}
+		// 	} else {
 
-		if (error) {
-			messageElement.textContent = `Error uploading file: ${error.message}`;
-			console.error('Error uploading file:', error.message);
-			return;
-		} else {
-			socket.emit('upload', {
-				folderType: folderType,
-				selectedFile: selectedFileName,
-				username: username,
-				userid: userid
-			});
-			console.log({ folderType, selectedFileName, username, userid });
-			if ($embs !== 'Started' && $embs !== 'Completed' && $embs !== "") {
-				alert('Failed to upload file. Please try again' + $embs);
-				return;
-			} else if ($embs == 'Completed') {
-				alert('File uploaded successfully');
-				setFileNameStore();
+		// 		alert('File uploaded successfully2');
+		// 		setFileNameStore();
+		// 		$embs = '';
+		// 		messageElement.textContent = '';
+		// 		goto(`${currentPath}${selectedFileName.replace(/(\.pdf|\.xlsx)$/, '')}`);
+		// 	}
+		// };
+
+		if (searchType == 'finance-ai') {
+			folderTypez = 'structured';
+		} else if (searchType == 'semantic-search') {
+			folderTypez = 'unstructured';
+		}
+
+		// Wrap the emit and response handling in a new Promise
+		async function uploadFile() {
+			return new Promise(async (resolve, reject) => {
+				// Emit the upload event
+				socket.emit('upload', {
+					folderType: folderTypez,
+					selectedFile: selectedFileName,
+					username: username,
+					userid: userId
+				});
+				console.log({ folderTypez, selectedFileName, username, userId });
+
 				$embs = '';
 
-				goto(`${currentPath}${selectedFileName.replace(/(\.pdf|\.xlsx)$/, '')}`);
-			}
+				if (searchType !== 'finance-ai') {
+					if ($embs !== 'Started' && $embs !== 'Completed' && $embs !== '') {
+						alert('Failed to upload file. Please try again' + $embs);
+						uploadBar = false;
+						$embs = '';
+						return;
+					} else
+						while ($embs !== 'Completed') {
+							await new Promise((r) => setTimeout(r, 1000));
+						}
+				}
+				// Once $embs === 'Completed', resolve the Promise
+
+				if (searchType == 'finance-ai' || $embs === 'Completed') {
+					resolve('Completed');
+				}
+			});
 		}
-		function setFileNameStore() {
-			if (searchType == 'finance-ai') {
-				let filename = selectedFileName.replace(/(\.pdf|\.xlsx)$/, '');
-				// sr(filename);
-				filenameStore.set({ filename: filename, source: 'finance-ai' });
-			} else if (searchType == 'semantic-search') {
-				let filename = selectedFileName.replace(/(\.pdf|\.xlsx)$/, '');
-				// sfp(filename);
-				filenameStore.set({ filename: filename, source: 'semantic-search' });
-			}
+
+		const filePath = `${folderTypez}/${file.name}`;
+		const { error } = await supabase.storage.from(`${userId}`).upload(filePath, file);
+
+		if (error) {
+			console.error(error.message);
+			alert('Error uploading file: ' + error.message);
+			$embs = '';
+			return;
+		} else {
+			await uploadFile();
+			alert('File uploaded successfully');
+			console.log('File uploaded successfully');
+			setFileNameStore();
+			$embs = '';
+			goto(`${currentPath}${file.name.replace(/(\.pdf|\.xlsx)$/, '')}`);
 		}
 	};
+
+	function setFileNameStore() {
+		if (searchType == 'finance-ai') {
+			let filename = selectedFileName.replace(/(\.pdf|\.xlsx)$/, '');
+			// sr(filename);
+			filenameStore.set({ filename: filename, source: 'finance-ai' });
+		} else if (searchType == 'semantic-search') {
+			let filename = selectedFileName.replace(/(\.pdf|\.xlsx)$/, '');
+			// sfp(filename);
+			filenameStore.set({ filename: filename, source: 'semantic-search' });
+		}
+	}
 </script>
 
 <main>
@@ -145,7 +213,8 @@
 		margin: 10px;
 		padding: 10px;
 		border-radius: 5px;
-		color: aqua;
+		color: white;
+		font-size: small;
 		word-wrap: break-word;
 	}
 </style>

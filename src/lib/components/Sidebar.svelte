@@ -23,6 +23,7 @@
 
 
 
+
 	// export let data;
 	// export let data2;
 
@@ -53,8 +54,6 @@
 	}
 }
 
-
-
 onMount(() => {
     document.body.addEventListener('dragover', handleDragOver);
     document.body.addEventListener('dragleave', handleDragLeave);
@@ -69,6 +68,7 @@ onMount(() => {
 
 onMount(async () => {
 		socket = io.connect('http://192.168.200.29:8080/module5');
+		// socket = io.connect('https://icsfinblade.com:444/module5');
 		// socket = io.connect('http://192.168.100.113:8080/module5');
 		// socket.on('receive_embeddings', function (data) {
 		// 	$embs = data.embeddings;
@@ -424,14 +424,22 @@ let uploadProgress = 0; // variable to keep track of the upload progress
 let uploadComplete = false;
 let uploadBar = false;
 
-
 const handleDrop = async (event) => {
 	event.preventDefault();
 	isDragging = false;
 	let files = event.dataTransfer.files;
 	let folderTypez;
 	let firstFileUploaded = false;
+	let userID = userDetails.id;
 	
+	
+	if (userID) {
+			const { data, error } = await supabase.storage.createBucket(userID, {
+				public: true
+				// allowedMimeTypes: ['image/png'],
+				// fileSizeLimit: 1024
+			});
+		}
 
 	// Check all files before uploading
     for (let i = 0; i < files.length; i++) {
@@ -444,6 +452,11 @@ const handleDrop = async (event) => {
             return;
         }
     }
+
+
+
+	
+	
 
 
 	// for (let i = 0; i < files.length; i++) {
@@ -476,25 +489,36 @@ const handleDrop = async (event) => {
 					$embs = '';
 
 					if (searchType !== 'finance-ai') {
+
 						if ($embs !== 'Started' && $embs !== 'Completed' && $embs !== "") {
 						alert('Failed to upload file. Please try again' + $embs);
 						uploadBar = false;
 						$embs = '';
 						return;
-					} else while ($embs !== 'Completed') {
+
+						} else while ($embs !== 'Completed') {
 							await new Promise(r => setTimeout(r, 1000));
 						}
 					}
 					// Once $embs === 'Completed', resolve the Promise
 					
-					if (searchType == 'finance-ai' || $embs === 'Completed') {
+					else if (searchType == 'finance-ai' || $embs === 'Completed') {
                    	 	resolve('Completed');
                		}
+
+					else {
+						alert('Failed to upload file. Please try again' + $embs);
+						uploadBar = false;
+						$embs = '';
+						reject('Failed');
+						return;
+					}
 				});
 			};
 
 			const filePath = `${folderTypez}/${file.name}`;
 			const { error } = await supabase.storage.from(`${userId}`).upload(filePath, file);
+			
 
 			if (error) {
 				console.error(error.message);
@@ -502,18 +526,18 @@ const handleDrop = async (event) => {
 				uploadBar = false
 				$embs = '';
 				return;
-			
 
-		
 			} else {
 				await uploadFile();
-				
+
 				console.log('File uploaded successfully');
+				setTimeout(() => {
 				uploadProgress += 100 / files.length; // increment the upload progress
+			}, 100);
 
 			}
 		}
-
+		setTimeout(() => {
 		if (uploadProgress >= 100) {
 			uploadComplete = true;
 			setTimeout(() => {
@@ -523,14 +547,16 @@ const handleDrop = async (event) => {
 				
 				if (!firstFileUploaded) {
 					setFileNameStore()
+					
                 goto(`${currentPath}${file.name.replace(/(\.pdf|\.xlsx)$/, '')}`);
                 firstFileUploaded = true;
 				
 		
            	 }
 			}, 1000);
-			
+		
 		}
+	}, 200);
 		function setFileNameStore() {
 		
         if(searchType == 'finance-ai'){
@@ -546,7 +572,6 @@ const handleDrop = async (event) => {
 	}
 	}
 };
-
 
 
 
