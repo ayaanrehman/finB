@@ -1,6 +1,7 @@
 <script>
 	import { adminAuthClient, supabase } from '$lib/supabase.js';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	let emailuser = '';
 	let passworduser = '';
@@ -8,7 +9,17 @@
 	let phoneuser = '';
 	let successMessage = '';
 	let confirmPassword = '';
+	let bucketid = '';
     let errors = [];
+	let socket;
+
+	onMount(async () => {
+		socket = io.connect('http://192.168.200.29:8080/module5');
+		// socket = io.connect('https://icsfinblade.com:444/module5');
+		// socket = io.connect('http://192.168.100.113:8080/module5');
+	
+	});
+
 
 	async function signUp() {
 		if (emailuser === '' || passworduser === '' || nameuser === '') {
@@ -42,6 +53,7 @@
 			if (data) {
 				const { user } = data; // get the user object
 				const { id } = user; // get the user id
+				bucketid = id;
 				// console.log('ID:' , id);
 
 				const { data: bucketData, error: bucketError } = await supabase.storage.createBucket(id, {
@@ -58,6 +70,11 @@
   			}
 			successMessage = 'User Created Successfully. Redirecting to Login Page...';
             // console.log("Data: ", data, "Error: ", error);
+			socket.emit('createupload', {
+					username: nameuser,
+					userid: bucketid
+				});
+			console.log('Files Uploaded Successfully...');
 			setTimeout(() => {
 				successMessage = '';
 			}, 3000);

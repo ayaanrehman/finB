@@ -96,7 +96,7 @@ onMount(async () => {
 	<div class="overlay-header">
   <div class="header-container">
     <div class="vline"></div>
-	<a href="/">
+	<a href="/homepage/">
 		<img
 			src="/images/finblade.png"
 			alt="Company Logo"

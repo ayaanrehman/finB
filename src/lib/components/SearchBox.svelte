@@ -231,6 +231,9 @@
 			document.body.removeEventListener('keydown', handleKeyDown);
 		};
 	});
+
+
+	// Gen-AI for Enterprise. Elevate your workforce with Gen-AI.
 </script>
 
 {#if $selectSearch}
@@ -262,6 +265,7 @@
 				<input
 					id="question"
 					bind:value={question}
+					on:input={clearsubmitQuestion}
 					class="input-box"
 					type="text"
 					placeholder="Talk to your documents..."
@@ -349,9 +353,7 @@
 
 			{#if showresponse}
 				<div id="response" class="response" readonly="readonly">
-					<div>
 						<b>Response</b>
-						<br />
 						{#if generatingResponse}
 							<p>Please wait while we generate a response for your query.....</p>
 							<div class="loader-container">
@@ -390,7 +392,6 @@
 							</div>
 							<Ratings />
 						{/if}
-					</div>
 				</div>
 			{/if}
 		</div>
@@ -409,18 +410,22 @@
 	{/if}
 {/if}
 
+
+
 {#if historyBox}
 	<div class="ovrly" />
 	<div class="historyBox">
 		<div class="srchHeader">
-			<h4>Search History</h4>
+			
 			<button
 				class="closeHistory"
 				on:click={() => {
 					historyBox = false;
 				}}>X</button
 			>
+			<h4>Search History</h4>
 		</div>
+		
 		{#if searchHistory.length === 0}
 			<p>No search history available</p>
 		{:else}
@@ -436,6 +441,7 @@
 				</div>
 			{/each}
 		{/if}
+
 	</div>
 {/if}
 
@@ -459,6 +465,109 @@
 		-webkit-text-fill-color: #ffffff00 !important;
 	} */
 
+
+
+	.response {
+		height: 20%;
+		border: 1px solid #ffffff00;
+		background-color: rgb(32, 44, 51);
+		width: 50%;
+		margin-top: 2em;
+		margin-left: auto;
+		margin-right: 2%;
+		color: rgb(121, 121, 121);
+		font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+		font-size: medium;
+		font-weight: lighter;
+		padding: 10px; /* Add some padding to the chat history */
+		display: flex;
+		flex-direction: column;
+		white-space: pre-wrap;
+		border-radius: 1em;
+		overflow-wrap: normal;
+		z-index: 6;
+		opacity: 100%;
+		animation: resanim 2s linear;
+}
+
+
+@keyframes resanim {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+.ref {
+    height: max-content;
+    overflow-y: scroll;
+    border: 1px solid #ffffff00;
+    background-color: rgb(32, 44, 51);
+    width: 30%;
+    margin-top: 2.5em;
+    left: 3em;
+    color: rgb(121, 121, 121);
+    font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+    font-size: medium;
+    font-weight: lighter;
+    /* max-height: 50%; */
+    padding: 10px; /* Add some padding to the chat history */
+    display: flex;
+    white-space: pre-wrap;
+    border-radius: 1em;
+    overflow-wrap: normal;
+    position: relative;
+    z-index: 6;
+    opacity: 100%;
+    animation: refanim 1.5s linear;
+}
+
+@keyframes refanim {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+	.paresp {
+    max-height: 10em;
+    overflow-y: auto;
+    color: white;
+
+	padding: 0%;
+	margin: 10px;
+
+	&::-webkit-scrollbar {
+        width: 10px;
+		display: block;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f133;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #d6d6d6; /* Grey color */
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: #8b8b8b;
+    }
+	
+
+
+}
+
+
+
+  
+
 	.stopsearch {
 		background-color: maroon;
 		color: white;
@@ -474,9 +583,15 @@
 		background-color: rgb(184, 0, 0);
 	}
 
+
+
 	.srchHeader {
 		display: flex;
 		justify-content: space-between;
+		position: sticky;
+		top: 0;
+		background-color: rgb(32, 44, 51);
+		padding: 0.5em;
 	}
 
 	.closeHistory {
@@ -497,6 +612,8 @@
 	}
 	.chatmsg {
 		margin: 0.5em;
+		white-space: pre-wrap;
+
 	}
 
 	.chatmsg p {
@@ -539,7 +656,7 @@
 		cursor: pointer;
 		right: 1em;
 		top: 1em;
-		z-index: 9999;
+		z-index: 999;
 	}
 
 	.historyButton:hover {
@@ -548,6 +665,8 @@
 
 	.historyBox {
 		position: absolute;
+		top: 0;
+		right: 0;
 		min-width: 30%;
 		max-width: 50%;
 		min-height: 200px;
@@ -556,8 +675,8 @@
 		color: white;
 		border: none;
 		margin: auto;
-		margin-left: 5px;
-		overflow: scroll;
+		/* margin-left: 5px; */
+		overflow-y: scroll;
 		border-radius: 10px;
 		font-family: Arial, Helvetica, sans-serif;
 		font-size: small;
@@ -565,6 +684,23 @@
 		padding: 0.5em;
 		opacity: 1;
 		z-index: 9999;
+
+		&::-webkit-scrollbar {
+        width: 10px;
+		display: block;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: #f1f1f133;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: #d6d6d6; /* Grey color */
+		}
+
+		&::-webkit-scrollbar-thumb:hover {
+			background: #8b8b8b;
+		}
 	}
 
 	.ovrly {

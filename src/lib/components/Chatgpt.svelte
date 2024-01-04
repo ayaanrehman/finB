@@ -202,10 +202,12 @@
 	}
 	.client {
 		text-align: right;
+		white-space: pre-wrap;
 	}
 
 	.server {
 		text-align: left;
+		white-space: pre-wrap;
 	}
 
 	#scroll-to-bottom1 {
