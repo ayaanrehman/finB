@@ -65,7 +65,7 @@
 		setTimeout(() => {
 			// typeText()
 			tagline = true;
-		}, 1800);
+		}, 1720);
 		
 	});
 </script>
@@ -126,7 +126,7 @@
 						<!-- <p>{currentText}</p> -->
 						{#if tagline}
 						<div style="position: relative;">
-						<p>"Elevate your workforce with Gen-AI."</p>
+						<p>Elevate your workforce with Gen-AI.</p>
 						<div id="movingBox"></div>
 						</div>
 						{:else}

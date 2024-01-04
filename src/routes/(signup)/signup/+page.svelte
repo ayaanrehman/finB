@@ -111,13 +111,14 @@
 				<input
 					type="email"
 					name="email"
+					autocomplete="off"
 					bind:value={emailuser}
 					placeholder="Enter your email"
 				/>
 			</div>
 			<div class="input-group">
 				<span>Phone (Optional): </span>
-				<input type="text" name="phone" bind:value={phoneuser} placeholder="Enter your phone" />
+				<input type="text" autocomplete="off" name="phone" bind:value={phoneuser} placeholder="Enter your phone" />
 			</div>
 			<div class="input-group">
 				<span>Password: </span>

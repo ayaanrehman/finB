@@ -266,6 +266,7 @@
 					id="question"
 					bind:value={question}
 					on:input={clearsubmitQuestion}
+					autocomplete="off"
 					class="input-box"
 					type="text"
 					placeholder="Talk to your documents..."
