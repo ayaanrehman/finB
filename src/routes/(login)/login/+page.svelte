@@ -5,6 +5,20 @@
 	let showLogo = false;
 
 	let emailInput;
+	let tagline = false;
+
+	// let text = "Elevate your workforce with Gen-AI.";
+	// let index = 0;
+	// let currentText = "";
+
+
+// 	function typeText() {
+// 		if (index < text.length) {
+// 		currentText += text.charAt(index);
+// 		index++;
+// 		setTimeout(typeText, 30);
+// 		}
+//   }
 
 	onMount(() => {
 		const interval = setInterval(() => {
@@ -46,6 +60,14 @@
 			password = '';
 		}
 	}
+
+	onMount(() => {
+		setTimeout(() => {
+			// typeText()
+			tagline = true;
+		}, 1800);
+		
+	});
 </script>
 
 <div class="overlay" class:fade-out={successmsg}></div>
@@ -61,6 +83,7 @@
 				<input
 					type="email"
 					name="email"
+					autocomplete="off"
 					bind:value={email}
 					bind:this={emailInput}
 					placeholder="Enter your email"
@@ -88,25 +111,52 @@
 			<!-- <video src="/1.mp4" autoplay muted playsinline loop /> -->
 			<!-- <img class="bgimg" src="/images/bg-31.jpg" alt="" /> -->
 			<div class="wallp">
-				{#if time > 0}
+				<!-- {#if time > 0}
 					<p>{time < 10 ? `00:0${time}` : `00:${time}`}</p>
-				{:else if showLogo}
+				{:else if showLogo} -->
 					<div class="dot" />
 
 					<div class="logo-animation">
 						<img src="/images/finblade.png" width="200px" height="auto" alt="Company Logo" />
-						<p>
+						<!-- <p>
 							"Unlocking financial insights with the power of AI where semantic search meets data
 							excellence!"
-						</p>
+						</p> -->
+
+						<!-- <p>{currentText}</p> -->
+						{#if tagline}
+						<div style="position: relative;">
+						<p>"Elevate your workforce with Gen-AI."</p>
+						<div id="movingBox"></div>
+						</div>
+						{:else}
+						<p style="color: black;">"Placeholder"</p>
+						{/if}
+
 					</div>
-				{/if}
+				<!-- {/if} -->
 			</div>
 		</div>
 	</main>
 
 
 <style>
+
+	@keyframes moveRight {
+	0% { left: 0; }
+	100% { left: 100%; }
+	}
+
+	#movingBox {
+	position: absolute;
+	top: 0;
+	width: 1000px;
+	background-color: black;
+	color: white;
+	padding: 20px;
+	animation: moveRight 3s forwards;
+	}
+
 	.overlay {
 		position: absolute;
 		top: 0;
@@ -157,7 +207,7 @@
 		animation: grow 3s, fadeOut 2s forwards;
 	}
 
-	.dot::before {
+	/* .dot::before {
 		content: '';
 		position: absolute;
 		top: -30px;
@@ -169,7 +219,7 @@
 		box-sizing: border-box;
 		opacity: 0.5;
 		animation: rotate 3s linear;
-	}
+	} */
 
 	@keyframes grow {
 		0% {
@@ -180,14 +230,14 @@
 		}
 	}
 
-	@keyframes rotate {
+	/* @keyframes rotate {
 		0% {
 			transform: rotate(0deg);
 		}
 		100% {
 			transform: rotate(360deg);
 		}
-	}
+	} */
 
 	@keyframes fadeOut {
 		0% {
