@@ -1,7 +1,16 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount, beforeUpdate } from 'svelte';
+	import { preSidebarEnabled } from '$lib/stores/global.js';
 
 	export let userDetails;
+
+	beforeUpdate(() => {
+		$preSidebarEnabled = false;
+	});
+
+	onDestroy(() => {
+		$preSidebarEnabled = true;
+	});
 
 	let username = userDetails?.user_metadata?.name.split(' ')[0];
 
@@ -10,8 +19,10 @@
 	const apps = [
 		{ name: 'Semantic Search', url: '/documents/semantic-search/', backgroundImage: '/images/homepage/semantic.jpeg' },
 		{ name: 'Database Search', url: '/documents/finance-ai/', backgroundImage: '/images/homepage/pandas.jpeg' },
+		{ name: 'Web Seach', url: '/websearch/', backgroundImage: '/images/homepage/websearch.jpeg' },
 		{ name: 'Secure-GPT', url: '/chatgpt-plus/', backgroundImage: '/images/homepage/sgpt.jpeg' },
 		{ name: 'Zapier Integration', url: '/zapier/', backgroundImage: '/images/homepage/zapier.jpeg' },
+		{ name: 'API Access', url: '/api-access/', backgroundImage: '/images/homepage/api.jpeg' },
 		{ name: 'Settings', url: '/settings', backgroundImage: '/images/homepage/settings.jpeg' },
 		{ name: 'Account Preferences', url: '/accounts/', backgroundImage: '/images/homepage/accounts.jpeg' }
 	];
@@ -70,7 +81,7 @@
 
 	.tile-container {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		row-gap: 60px;
         column-gap: 20px;
 		justify-items: center;
@@ -97,6 +108,38 @@
         font-size: 18px;
         text-decoration: none;
         transition: transform .2s;
+    }
+
+	/* For screens smaller than 600px */
+	@media (max-width: 1300px) {
+	.tile {
+		width: 250px; /* adjust as needed */
+		height: 125px; /* adjust as needed */
+	}
+	}
+
+	/* For screens smaller than 400px */
+	@media (max-width: 1100px) {
+		.tile {
+			width: 200px; /* adjust as needed */
+			height: 100px; /* adjust as needed */
+		}
+	}
+
+	/* For screens smaller than 600px */
+	@media (max-width: 900px) {
+	.tile {
+		width: 150px; /* adjust as needed */
+		height: 75px; /* adjust as needed */
+	}
+    }
+
+    /* For screens smaller than 400px */
+    @media (max-width: 700px) {
+        .tile {
+            width: 100px; /* adjust as needed */
+            height: 50px; /* adjust as needed */
+        }
     }
 
     .tile:hover {

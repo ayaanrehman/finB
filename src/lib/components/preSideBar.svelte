@@ -53,6 +53,7 @@
 			icon: '/images/sidebar/finance-ai.png',
 			link: '/documents/finance-ai/'
 		},
+		{ name: 'Web Search', icon: '/images/sidebar/web-search.png', link: '/websearch/' },
 		{ name: 'Secure-GPT', icon: '/images/sidebar/chatgpt-plus.png', link: '/chatgpt-plus/' },
 		{ name: 'Zapier Integration', icon: '/images/sidebar/zapier.png', link: '/zapier/' },
 		{ name: 'API Access', icon: '/images/sidebar/apiaccess.png', link: '/api-access/' },
@@ -232,7 +233,6 @@
 		background-color: #992d2d00;
 		width: 50px;
 		height: 50px;
-
 		margin: 5px;
 		transition: background-color 0.3s ease;
 		position: relative;
@@ -251,11 +251,7 @@
 		position: absolute;
 	}
 
-	.button:nth-child(4) {
-		margin-bottom: 1em;
-	}
-
-	.button:nth-child(4)::after {
+	.button:nth-child(5)::after {
 		content: '';
 		display: block;
 		width: 50%;
@@ -266,7 +262,7 @@
 		bottom: -0.5em; /* Adjust as needed */
 	}
 
-	.button:nth-child(6)::after {
+	.button:nth-child(7)::after {
 		content: '';
 		display: block;
 		width: 50%;

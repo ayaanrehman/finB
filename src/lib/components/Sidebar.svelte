@@ -597,12 +597,11 @@ const handleDrop = async (event) => {
 		<li>
 			<div>
 				<div class="datacntn">
-					<h4
-						class="dtlk"
-						on:click={docopenz}
-					>
-						{#if docopen}<span>&#x25BC;</span>{:else}<span>&#x25BA;</span>{/if}<span>Data Lake</span
-						>
+					<!-- <h4	class="dtlk" on:click={docopenz}>
+						{#if docopen}<span>&#x25BC;</span>{:else}<span>&#x25BA;</span>{/if}<span>Data Lake</span>
+					</h4> -->
+					<h4	class="dtlk" >
+						<span>Data Lake</span>
 					</h4>
 					<button
 						on:click={() => {
@@ -707,7 +706,7 @@ const handleDrop = async (event) => {
 		flex-direction: row;
 		gap:0.3em;
 		color:rgb(255, 255, 255);
-		cursor: pointer;
+		/*cursor: pointer;*/
 		margin: 0;
 	}
 	.datacntn {

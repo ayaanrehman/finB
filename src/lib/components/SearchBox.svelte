@@ -8,6 +8,7 @@
 	// import { sr } from '$lib/data/helpers';
 	import { filenameStore } from '$lib/stores/global.js';
 	import { page as pg } from '$app/stores';
+	import { fly } from 'svelte/transition';
 	
 	export let userDetails;
 	
@@ -414,17 +415,22 @@
 
 
 {#if historyBox}
-	<div class="ovrly" />
-	<div class="historyBox">
+	<div class="ovrly" 
+	on:click={() => {
+		historyBox = false;
+	}}
+	 />
+	 <div class="historyBox" in:fly="{{ x: 1000, duration: 1000 }}" out:fly="{{ x: 1000, duration: 500 }}">
+
 		<div class="srchHeader">
-			
+			<h4>Search History</h4>
 			<button
 				class="closeHistory"
 				on:click={() => {
 					historyBox = false;
 				}}>X</button
 			>
-			<h4>Search History</h4>
+			
 		</div>
 		
 		{#if searchHistory.length === 0}
@@ -591,8 +597,8 @@
 		justify-content: space-between;
 		position: sticky;
 		top: 0;
-		background-color: rgb(32, 44, 51);
-		padding: 0.5em;
+		background-color: rgba(0, 0, 0, 0.8);
+		/* padding: 0.5em; */
 	}
 
 	.closeHistory {
@@ -669,7 +675,7 @@
 		top: 0;
 		right: 0;
 		min-width: 30%;
-		max-width: 50%;
+		max-width: 30%;
 		min-height: 200px;
 		max-height: 100%;
 		background: linear-gradient(to bottom, rgb(0, 0, 0), #363636, rgba(0, 0, 0));
