@@ -140,7 +140,7 @@
 		<h2 style="top: 2em;">Email: {userEmail}</h2>
 
 		<h3>Change Name</h3>
-		<input type="text" bind:value={newName} placeholder="New Name" />
+		<input type="text" autocomplete="off" bind:value={newName} placeholder="New Name" />
 		<button
 			on:click={() => {
 				changeName();
@@ -158,7 +158,7 @@
 		<button on:click={changePassword}>Change Password</button>
 
 		<h3>Change Email</h3>
-		<input type="text" bind:value={newEmail} placeholder="New Email" />
+		<input type="text" autocomplete="off" bind:value={newEmail} placeholder="New Email" />
 		<button
 			on:click={() => {
 				changeEmail();
@@ -166,7 +166,7 @@
 		>
 
 		<h3>Change Mobile</h3>
-		<input type="text" bind:value={newPhone} placeholder="New Mobile" />
+		<input type="text" autocomplete="off" bind:value={newPhone} placeholder="New Mobile" />
 		<button
 			on:click={() => {
 				changeMobile();

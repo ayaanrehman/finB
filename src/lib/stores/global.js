@@ -16,6 +16,8 @@ export const filenameStore = writable('');
 
 export const embs = writable('');
 
+export const preSidebarEnabled = writable(false);
+
 
 
 // export const buttonName = writable('');

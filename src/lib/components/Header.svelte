@@ -96,7 +96,7 @@ onMount(async () => {
 	<div class="overlay-header">
   <div class="header-container">
     <div class="vline"></div>
-	<a href="/">
+	<a href="/homepage/">
 		<img
 			src="/images/finblade.png"
 			alt="Company Logo"
@@ -128,7 +128,7 @@ onMount(async () => {
 
 {#if loading}
   <div class="loadingbox">
-    <h5>Creating Embeddings:</h5>
+    <h5>Creating Embeddings: {$embs}</h5>
   <div class="loading-ring"></div>
 </div>
 {/if}

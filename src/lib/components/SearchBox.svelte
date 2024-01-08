@@ -1,5 +1,5 @@
 <script>
-	import { onMount, afterUpdate } from 'svelte';
+	import { onMount, afterUpdate, onDestroy } from 'svelte';
 	import { selectSearch } from '$lib/stores/global.js';
 	// import { searchBoxx } from '$lib/stores/global.js';
 	import { defaultBase64Img } from '$lib/constants/constants.js';
@@ -8,8 +8,11 @@
 	// import { sr } from '$lib/data/helpers';
 	import { filenameStore } from '$lib/stores/global.js';
 	import { page as pg } from '$app/stores';
+	import { fly } from 'svelte/transition';
 	
 	export let userDetails;
+
+	export let searchType;
 	
 
 	let showresponse = false;
@@ -22,6 +25,7 @@
 	let visual = false;
 	let newline = false;
 	let visualfull = false;
+
 
 	let historyBox = false;
 	let historyButton = true;
@@ -57,6 +61,8 @@
 	titledoc = titledoc[0];
 
 	$:currentPath = $pg?.url?.pathname;
+
+
 
 	onMount(() => {
     if (currentPath === "/documents/semantic-search/" || currentPath === "/documents/finance-ai/") {
@@ -152,30 +158,54 @@
 		});
 	});
 
+	let inputContainer = false;
+	let firstInput = true;
+	
+
+	onMount(() => {
+		setTimeout(() => {
+			firstInput = false;
+		}, 100);
+	});
+
+	let steps = [];
+
+	onMount(() => {
+		setTimeout(() => {
+		steps.forEach((step, index) => {
+			setTimeout(() => {
+				step.style.opacity = 1;
+			}, (index + 1) * 1000); // delay increases for each step
+		});
+	}, 1000);
+	});
+
 	function submitQuestion() {
-		// if (question.length < 1) {
-		// 	alert('Please type something.');
-		// } else if (!question.trim()) {
-		// 	question = '';
-		// 	alert('Please avoid typing just blank spaces.');
-
-		// } else {
-
 
 		socket.emit('submit_question', { question, docfilename, username, userid });
 		searchHistory.push({ sender: 'You', message: question, timestamp: new Date() });
 
-		// console.log('This is Question: ', question);
-		// console.log('This is Filename: ', docfilename);
-		// console.log('This is Username: ', username);
-		// console.log('This is Userid: ', userid);
-		// console.log('This is Source: ', srchtp);
-		showLoadingContainer = true;
-		showContainerarrow = true;
-		paresp = false;
-		showresponse = true;
-		generatingResponse = true;
-		// }
+		if (inputContainer) {
+			showLoadingContainer = true;
+			showContainerarrow = true;
+			paresp = false;
+			showresponse = true;
+			generatingResponse = true;
+		} else {
+			inputContainer = true;
+			setTimeout(() => {
+				showLoadingContainer = true;
+				showContainerarrow = true;
+				paresp = false;
+				showresponse = true;
+				generatingResponse = true;
+			}, 1000);
+		
+		}
+
+
+
+		
 	}
 
 	function clearsubmitQuestion() {
@@ -231,26 +261,101 @@
 			document.body.removeEventListener('keydown', handleKeyDown);
 		};
 	});
+
+
+	// Gen-AI for Enterprise. Elevate your workforce with Gen-AI.
+	
+
+	onMount(() => {
+
+		setTimeout(() => {
+			let boxes = document.querySelectorAll('.box');
+			let lines = document.querySelectorAll('.line');
+		
+		
+			let index = 0;
+
+			let interval = setInterval(() => {
+			if (index < boxes.length) {
+				boxes[index].style.opacity = 1;
+				if (index < lines.length) {
+				lines[index].style.opacity = 1;
+				}
+				index++;
+			} else {
+				clearInterval(interval);
+			}
+			}, 1000);
+		}, 500);
+
+		
+
+
+
+	});
+
 </script>
 
 {#if $selectSearch}
-	<div class="input-container">
-		<div class="qtn">
-			<input
-				class="input-box"
-				type="text"
-				placeholder="Please select a document from the Data Lake..."
-				disabled
-			/>
-			<button style="cursor: unset;" class="submit" />
+	<div class="disabledQ">
+		<div class="input-container" class:first={firstInput}>
+			<div class="qtn">
+				<input
+					class="input-box"
+					type="text"
+					placeholder="Please select a document from the Data Lake..."
+					disabled
+				/>
+				<button style="cursor: unset;" class="submit" />
+			</div>
+	
 		</div>
+	
+		<!-- <div class="steps" bind:this={steps}>
+			<p>Step 1: Select a document from the Data Lake</p>
+			<p>Step 2: Ask a question</p>
+
+
+		</div> -->
+		<div id="container">
+		    <div class="box-container">
+				<div class="box" id="box1">1</div>
+				{#if searchType === 'semantic-search'}
+				<p bind:this={steps[0]}>Choose a PDF file from your Desktop</p>
+				{:else}
+				<p bind:this={steps[0]}>Choose an XLSX file from your Desktop</p>
+				{/if}
+			</div>
+			<div class="line" id="line1"></div>
+		
+			<div class="box-container">
+				<div class="box" id="box2">2</div>
+				<p bind:this={steps[1]}>Drag and drop here</p>
+			</div>
+			<div class="line" id="line2"></div>
+		
+			<div class="box-container">
+				<div class="box" id="box3">3</div>
+				<p bind:this={steps[2]}>Start talking to your document</p>
+			</div>
+			<!-- <div class="line" id="line3"></div>
+		
+			<div class="box-container">
+				<div class="box" id="box4">4</div>
+				<p bind:this={steps[3]}>Enjoy!</p>
+			</div> -->
+		</div>
+		
+
 	</div>
+
+	
 	<!-- {/if} -->
 
 	<!-- {#if $searchBoxx} -->
 {:else}
 	<div class="search-box-container">
-		<div class="input-container" id="question-container">
+		<div class="input-container" id="question-container" class:active={inputContainer}>
 			{#if showContainerarrow2}
 				<div class="containerarrow2">
 					<div class="horizontal-line2" />
@@ -262,6 +367,8 @@
 				<input
 					id="question"
 					bind:value={question}
+					on:input={clearsubmitQuestion}
+					autocomplete="off"
 					class="input-box"
 					type="text"
 					placeholder="Talk to your documents..."
@@ -349,9 +456,7 @@
 
 			{#if showresponse}
 				<div id="response" class="response" readonly="readonly">
-					<div>
 						<b>Response</b>
-						<br />
 						{#if generatingResponse}
 							<p>Please wait while we generate a response for your query.....</p>
 							<div class="loader-container">
@@ -390,7 +495,6 @@
 							</div>
 							<Ratings />
 						{/if}
-					</div>
 				</div>
 			{/if}
 		</div>
@@ -409,9 +513,16 @@
 	{/if}
 {/if}
 
+
+
 {#if historyBox}
-	<div class="ovrly" />
-	<div class="historyBox">
+	<div class="ovrly" 
+	on:click={() => {
+		historyBox = false;
+	}}
+	 />
+	 <div class="historyBox" in:fly="{{ x: 1000, duration: 1000 }}" out:fly="{{ x: 1000, duration: 500 }}">
+
 		<div class="srchHeader">
 			<h4>Search History</h4>
 			<button
@@ -420,7 +531,9 @@
 					historyBox = false;
 				}}>X</button
 			>
+			
 		</div>
+		
 		{#if searchHistory.length === 0}
 			<p>No search history available</p>
 		{:else}
@@ -436,6 +549,7 @@
 				</div>
 			{/each}
 		{/if}
+
 	</div>
 {/if}
 
@@ -459,6 +573,266 @@
 		-webkit-text-fill-color: #ffffff00 !important;
 	} */
 
+#container {
+  display: flex;
+  align-items: center;
+	justify-content: center;
+	align-items: center;
+	/* background-color: #0000006b; */
+
+	width: 95%;
+	height: 50%;
+	z-index: 999;
+}
+
+.box {
+  width: 50px;
+  height: 50px;
+  border-radius: 20%;
+  border-color: rgba(255, 255, 255, 0.363);
+  border-width: 1px;
+  border-style: solid;
+  background: radial-gradient(
+   circle at 50% 50%,
+	rgb(70, 70, 70),
+	rgb(36, 36, 36),
+	black
+);
+/* background-color: #555555; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.box-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	
+}
+
+.box-container p {
+	position: absolute;
+	top: 50px;
+	margin: 20px;
+	width: 150px;
+	text-align: center;
+	opacity: 0;
+	font-size: smaller;
+	color: gainsboro;
+	transition: opacity 1s;
+}
+
+
+
+.line {
+  width: 150px;
+  height: 1px;
+  background: linear-gradient(
+	to right,
+	rgba(3, 3, 44, 0.712),
+	rgba(255, 255, 255, 0.438),
+	rgba(24, 0, 0, 0.63)
+  );
+  /* background-color: white; */
+  opacity: 0;
+  transition: opacity 0.5s;
+  animation: stepAnimation 2s forwards;
+}
+
+@keyframes stepAnimation {
+	0% {
+  		width: 0;
+	}
+	50% {
+		width: 10px;
+	}
+	100% {
+		width: 150px;
+	}
+	}
+
+
+.disabledQ {
+	width: 100%;
+}
+
+.input-container {
+	display: flex;
+	flex-direction: row;
+	justify-content:center;
+	text-align: center;
+	overflow-wrap: normal;
+	position: relative;
+	width: 95%;
+	margin-top: 10em;
+	transition: margin-top 1s ease-in-out;
+}
+
+.input-container.active {
+	margin-top: 2em;
+}
+
+.input-container.first {
+	margin-top: 2em;
+}
+
+.steps {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	
+	width: 100%;
+	height: 50%;
+	opacity: 0;
+	z-index: 999;
+	transition: opacity 1s ease;
+}
+
+
+
+.qtn {
+		position: relative;
+		left: 0%;
+		width: 50%;
+}
+
+.input-box {
+    width: 100%;
+    /* margin-bottom: 20px; */
+    align-self: center;
+    padding: 10px;
+    border-radius: 24px;
+	border: 1px solid #5f6368;
+	background-color: #202124;
+    font-family: Roborto, arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    overflow-wrap: normal;
+    padding-right: 2em;
+    white-space: pre-wrap;
+	/* margin: 0 auto; */
+	margin: 7px 0;
+	box-shadow: none;
+	color: white;
+
+}
+
+.input-box:focus {
+	outline: none;
+	border: 1px solid #444444;
+	box-shadow: 0 0 10px #719ECE;
+}
+
+
+
+	.response {
+		height: 20%;
+		border: 1px solid #ffffff00;
+		background-color: rgb(32, 44, 51);
+		width: 50%;
+		margin-top: 2em;
+		margin-left: auto;
+		margin-right: 2%;
+		color: rgb(121, 121, 121);
+		font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+		font-size: medium;
+		font-weight: lighter;
+		padding: 10px; /* Add some padding to the chat history */
+		display: flex;
+		flex-direction: column;
+		white-space: pre-wrap;
+		border-radius: 1em;
+		overflow-wrap: normal;
+		z-index: 6;
+		opacity: 100%;
+		animation: resanim 2s linear;
+}
+
+
+@keyframes resanim {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+.ref {
+    height: max-content;
+    overflow-y: scroll;
+    border: 1px solid #ffffff00;
+    background-color: rgb(32, 44, 51);
+    width: 30%;
+    margin-top: 2.5em;
+    left: 3em;
+    color: rgb(121, 121, 121);
+    font-family: 'leelawadee-ui-semilight-normal', sans-serif;
+    font-size: medium;
+    font-weight: lighter;
+    /* max-height: 50%; */
+    padding: 10px; /* Add some padding to the chat history */
+    display: flex;
+    white-space: pre-wrap;
+    border-radius: 1em;
+    overflow-wrap: normal;
+    position: relative;
+    z-index: 6;
+    opacity: 100%;
+    animation: refanim 1.5s linear;
+}
+
+@keyframes refanim {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100%;
+    }
+}
+
+	.paresp {
+    max-height: 10em;
+    overflow-y: auto;
+    color: white;
+
+	padding: 0%;
+	margin: 10px;
+
+	&::-webkit-scrollbar {
+        width: 10px;
+		display: block;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f133;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #d6d6d6; /* Grey color */
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: #8b8b8b;
+    }
+	
+
+
+}
+
+
+
+  
+
 	.stopsearch {
 		background-color: maroon;
 		color: white;
@@ -474,9 +848,15 @@
 		background-color: rgb(184, 0, 0);
 	}
 
+
+
 	.srchHeader {
 		display: flex;
 		justify-content: space-between;
+		position: sticky;
+		top: 0;
+		background-color: rgba(0, 0, 0, 0.8);
+		/* padding: 0.5em; */
 	}
 
 	.closeHistory {
@@ -497,6 +877,8 @@
 	}
 	.chatmsg {
 		margin: 0.5em;
+		white-space: pre-wrap;
+
 	}
 
 	.chatmsg p {
@@ -539,7 +921,7 @@
 		cursor: pointer;
 		right: 1em;
 		top: 1em;
-		z-index: 9999;
+		z-index: 999;
 	}
 
 	.historyButton:hover {
@@ -548,16 +930,18 @@
 
 	.historyBox {
 		position: absolute;
+		top: 0;
+		right: 0;
 		min-width: 30%;
-		max-width: 50%;
+		max-width: 30%;
 		min-height: 200px;
 		max-height: 100%;
 		background: linear-gradient(to bottom, rgb(0, 0, 0), #363636, rgba(0, 0, 0));
 		color: white;
 		border: none;
 		margin: auto;
-		margin-left: 5px;
-		overflow: scroll;
+		/* margin-left: 5px; */
+		overflow-y: scroll;
 		border-radius: 10px;
 		font-family: Arial, Helvetica, sans-serif;
 		font-size: small;
@@ -565,6 +949,23 @@
 		padding: 0.5em;
 		opacity: 1;
 		z-index: 9999;
+
+		&::-webkit-scrollbar {
+        width: 10px;
+		display: block;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: #f1f1f133;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: #d6d6d6; /* Grey color */
+		}
+
+		&::-webkit-scrollbar-thumb:hover {
+			background: #8b8b8b;
+		}
 	}
 
 	.ovrly {

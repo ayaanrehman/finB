@@ -69,10 +69,13 @@
 			document.body.removeChild(link);
 	};
 
+
+
 	const deleteFile = async () => {
 		const { data, error } = await supabase
 		.storage
 		.from(userID)
+		// .remove([`${searchType == 'finance-ai' ? 'structured' : 'unstructured'}/${$filenameStore.filename}.${searchType == 'finance-ai' ? 'xlsx' : 'pdf'}`])
 		.remove([`${searchType == 'finance-ai' ? 'structured' : 'unstructured'}/${$filenameStore.filename}.${searchType == 'finance-ai' ? 'xlsx' : 'pdf'}`])
 		console.log('data in deleteFile is', data);
 		console.log('error in deleteFile is', error);
@@ -165,6 +168,7 @@
 					<button title="Download" class="dwnfile" on:click={() => downloadFile(document.name)}>&#x21E9;</button>
 					<button title="Delete" class="delfile" on:click={() => {
 						if (confirm('Are you sure you want to delete this file?')) {
+							console.log("This is docsssssssss:", document.name);
 							deleteFile(document.name)}
 							}}>&#x1F5D1;</button>
 				</div>

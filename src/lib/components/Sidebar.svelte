@@ -499,12 +499,15 @@ const handleDrop = async (event) => {
 						return;
 
 						} else while ($embs !== 'Completed') {
+							// console.log('Embeddings progress i222', $embs);
 							await new Promise(r => setTimeout(r, 1000));
 						}
+						resolve('Completed');
 					}
 					// Once $embs === 'Completed', resolve the Promise
 					
-					else if (searchType == 'finance-ai' || $embs === 'Completed') {
+					else if (searchType == 'finance-ai') {
+						// console.log('Embeddings progress isss', $embs);
                    	 	resolve('Completed');
                		}
 
@@ -526,7 +529,7 @@ const handleDrop = async (event) => {
 				console.error(error.message);
 				alert('Error uploading file: ' + error.message);
 				uploadBar = false
-				$embs = '';
+				// $embs = '';
 				return;
 
 			} else {
@@ -549,8 +552,13 @@ const handleDrop = async (event) => {
 				
 				if (!firstFileUploaded) {
 					setFileNameStore()
-					
-                goto(`${currentPath}${file.name.replace(/(\.pdf|\.xlsx)$/, '')}`);
+
+
+				if (searchType == 'finance-ai') {	
+                goto(`/documents/finance-ai/${file.name.replace(/(\.pdf|\.xlsx)$/, '')}`);
+				} else if (searchType == 'semantic-search') {
+				goto(`/documents/semantic-search/${file.name.replace(/(\.pdf|\.xlsx)$/, '')}`);
+				}
                 firstFileUploaded = true;
 				
 		
@@ -597,12 +605,11 @@ const handleDrop = async (event) => {
 		<li>
 			<div>
 				<div class="datacntn">
-					<h4
-						class="dtlk"
-						on:click={docopenz}
-					>
-						{#if docopen}<span>&#x25BC;</span>{:else}<span>&#x25BA;</span>{/if}<span>Data Lake</span
-						>
+					<!-- <h4	class="dtlk" on:click={docopenz}>
+						{#if docopen}<span>&#x25BC;</span>{:else}<span>&#x25BA;</span>{/if}<span>Data Lake</span>
+					</h4> -->
+					<h4	class="dtlk" >
+						<span>Data Lake</span>
 					</h4>
 					<button
 						on:click={() => {
@@ -707,7 +714,7 @@ const handleDrop = async (event) => {
 		flex-direction: row;
 		gap:0.3em;
 		color:rgb(255, 255, 255);
-		cursor: pointer;
+		/*cursor: pointer;*/
 		margin: 0;
 	}
 	.datacntn {

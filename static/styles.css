@@ -8,6 +8,10 @@ html {
     box-sizing: border-box;
  }
 
+ h1, h1, h3, h4, h5, h6, p, a {
+    color: #ffffff;
+ }
+
  .overlay-video {
     position: absolute;
     top: 0;
@@ -29,10 +33,12 @@ body {
     ); */
    
     /* background-color: #4e4e4e; */
-    /* background-image: url("../images/bg-3.jpg"); */
-    /* background-size: cover;
+    background-image: url("../images/bg-3.jpg");
+    background-size: cover;
     background-repeat:repeat-y;
-    background-position: center; */
+    background-position: center;
+
+    
 
 }
 
@@ -47,7 +53,7 @@ body::before {
     background-size: cover;
     background-repeat: repeat;
     background-position: center;
-    filter: brightness(0.5); /* Adjust brightness */
+    filter: brightness(0.5); 
     z-index: -1;
 }
 
@@ -333,7 +339,7 @@ align-items: left;
 justify-content: left;
 }
 
-.input-box {
+/* .input-box {
 width: 100%;
 margin: 5px;
 margin-bottom: 20px;
@@ -355,9 +361,11 @@ font-size: smaller;
 font-weight: normal;
 overflow-wrap: normal;
 padding-right: 2em;
-/* height: auto; */
 white-space: pre-wrap;
-}
+
+} */
+
+
 
 
 .input-box::placeholder {
@@ -375,22 +383,7 @@ text-align:justify;
 margin-bottom: 10px;
 }
 
-.input-container {
-display: flex;
-flex-direction: row;
-justify-content:center;
-text-align: center;
-overflow-wrap: normal;
-position: relative;
-width: 95%;
-margin-top: 3em;
-}
 
-.qtn {
-    position: relative;
-    left: 0%;
-    width: 50%;
-}
 
 .submit {
 
@@ -441,82 +434,9 @@ display: block;
 
 }
 
-.paresp {
-    max-height: 10em;
-    overflow-y: scroll;
-    color: white;
-
-}
-
-.response {
-height: 20%;
-overflow-y: scroll;
-border: 1px solid #ffffff00;
-background-color: rgb(32, 44, 51);
-width: 50%;
-margin-top: 2em;
-margin-left: auto;
-margin-right: 2%;
-color: rgb(121, 121, 121);
-font-family: 'leelawadee-ui-semilight-normal', sans-serif;
-font-size: medium;
-font-weight: lighter;
-padding: 10px; /* Add some padding to the chat history */
-display: flex;
-flex-direction: column;
-white-space: pre-wrap;
-border-radius: 1em;
-overflow-wrap: normal;
-z-index: 6;
-opacity: 100%;
-animation: resanim 2s linear;
-
-}
 
 
-@keyframes resanim {
-    0% {
-        opacity: 0;
-    }
 
-    100% {
-        opacity: 100%;
-    }
-}
-
-.ref {
-    height: max-content;
-    overflow-y: scroll;
-    border: 1px solid #ffffff00;
-    background-color: rgb(32, 44, 51);
-    width: 30%;
-    margin-top: 2.5em;
-    left: 3em;
-    color: rgb(121, 121, 121);
-    font-family: 'leelawadee-ui-semilight-normal', sans-serif;
-    font-size: medium;
-    font-weight: lighter;
-    /* max-height: 50%; */
-    padding: 10px; /* Add some padding to the chat history */
-    display: flex;
-    white-space: pre-wrap;
-    border-radius: 1em;
-    overflow-wrap: normal;
-    position: relative;
-    z-index: 6;
-    opacity: 100%;
-    animation: refanim 1.5s linear;
-}
-
-@keyframes refanim {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 100%;
-    }
-}
 
 .visuals {
     height: auto;
