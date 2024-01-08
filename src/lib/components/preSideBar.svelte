@@ -251,6 +251,10 @@
 		position: absolute;
 	}
 
+	.button:nth-child(5) {
+		margin-bottom: 20px;
+	}
+
 	.button:nth-child(5)::after {
 		content: '';
 		display: block;

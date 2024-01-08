@@ -81,13 +81,26 @@
 
 	.tile-container {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(5, 1fr);
+		
 		row-gap: 60px;
         column-gap: 20px;
-		justify-items: center;
 		align-items: center;
+		justify-content: center;
 		padding: 20px;
+		margin: 0 auto !important;
+
 	}
+
+
+
+	@media (max-width: 1600px) {
+    .tile-container {
+        grid-template-columns: repeat(4, 1fr);
+   	 }
+	}
+
+
 
     .tile {
         display: flex;
@@ -110,37 +123,26 @@
         transition: transform .2s;
     }
 
-	/* For screens smaller than 600px */
 	@media (max-width: 1300px) {
-	.tile {
-		width: 250px; /* adjust as needed */
-		height: 125px; /* adjust as needed */
-	}
-	}
-
-	/* For screens smaller than 400px */
-	@media (max-width: 1100px) {
 		.tile {
-			width: 200px; /* adjust as needed */
-			height: 100px; /* adjust as needed */
+			width: 200px;
+			height: 100px;
 		}
 	}
 
-	/* For screens smaller than 600px */
-	@media (max-width: 900px) {
-	.tile {
-		width: 150px; /* adjust as needed */
-		height: 75px; /* adjust as needed */
+	@media (max-width: 1000px) {
+		.tile {
+			width: 150px;
+   		    height: 75px;
+		}
 	}
-    }
 
-    /* For screens smaller than 400px */
-    @media (max-width: 700px) {
-        .tile {
-            width: 100px; /* adjust as needed */
-            height: 50px; /* adjust as needed */
-        }
-    }
+	@media (max-width: 700px) {
+		.tile {
+			width: 100px;
+    	    height: 50px;
+		}
+	}
 
     .tile:hover {
         transform: scale(1.1);

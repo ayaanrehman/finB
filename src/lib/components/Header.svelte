@@ -128,7 +128,7 @@ onMount(async () => {
 
 {#if loading}
   <div class="loadingbox">
-    <h5>Creating Embeddings:</h5>
+    <h5>Creating Embeddings: {$embs}</h5>
   <div class="loading-ring"></div>
 </div>
 {/if}

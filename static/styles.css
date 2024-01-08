@@ -38,6 +38,8 @@ body {
     background-repeat:repeat-y;
     background-position: center;
 
+    
+
 }
 
 body::before {
@@ -51,7 +53,7 @@ body::before {
     background-size: cover;
     background-repeat: repeat;
     background-position: center;
-    filter: brightness(0.5); /* Adjust brightness */
+    filter: brightness(0.5); 
     z-index: -1;
 }
 
@@ -337,7 +339,7 @@ align-items: left;
 justify-content: left;
 }
 
-.input-box {
+/* .input-box {
 width: 100%;
 margin: 5px;
 margin-bottom: 20px;
@@ -359,10 +361,11 @@ font-size: smaller;
 font-weight: normal;
 overflow-wrap: normal;
 padding-right: 2em;
-/* height: auto; */
 white-space: pre-wrap;
 
-}
+} */
+
+
 
 
 .input-box::placeholder {
@@ -380,22 +383,7 @@ text-align:justify;
 margin-bottom: 10px;
 }
 
-.input-container {
-display: flex;
-flex-direction: row;
-justify-content:center;
-text-align: center;
-overflow-wrap: normal;
-position: relative;
-width: 95%;
-margin-top: 3em;
-}
 
-.qtn {
-    position: relative;
-    left: 0%;
-    width: 50%;
-}
 
 .submit {
 
