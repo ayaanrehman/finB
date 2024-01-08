@@ -2,6 +2,7 @@
     import Header from "$lib/components/Header.svelte"
     import PageTransition from "$lib/components/PageTransition.svelte";
     import PreSideBar from "$lib/components/preSideBar.svelte";
+    import { preSidebarEnabled } from '$lib/stores/global.js';
 
     import { page } from '$app/stores';
     export let data;
@@ -23,7 +24,9 @@
     </script>
     <Header />
     <div class="main-grid">
+        {#if $preSidebarEnabled}
         <PreSideBar userDetails={data.userDetails} />
+        {/if}
         <PageTransition>
         <div class="container" class:documents={isDocuments}>
                 <slot />
