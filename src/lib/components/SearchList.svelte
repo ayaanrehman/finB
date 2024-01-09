@@ -359,11 +359,30 @@
 
 	.scrollable-docs {
 		max-height: 40vh;
-		overflow-y: auto;
+		overflow-y: scroll;
+		overflow-x: hidden;
         padding-left: 20px !important;
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
+
+		&::-webkit-scrollbar {
+        width: 10px;
+		display: block;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: #f1f1f133;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: #d6d6d6; /* Grey color */
+		}
+
+		&::-webkit-scrollbar-thumb:hover {
+			background: #8b8b8b;
+		}
+	
 	}
 
 	.docsearch {

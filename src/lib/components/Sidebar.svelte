@@ -36,7 +36,7 @@
 
 	$:currentPath = $pg?.url?.pathname;
 	
-
+	let uploadingFile = '';
 	let isResizing = false;
 	let isOnEdge = false;
 	let keydownHandler;
@@ -88,7 +88,7 @@ onMount(async () => {
 		$: embsmessage = $embs === 'Started' ? 'Understanding the document...' : 
 						 $embs === '40%' ? 'Creating chunks...' : 
 					     $embs === '60%' ? 'Creating embeddings...' : 
-						 $embs === 'Completed' ? 'Successful...': $embs;
+						 $embs === 'Completed' ? 'Successful uploaded...': $embs;
 
 
 onMount(() => {
@@ -374,62 +374,6 @@ onMount(() => {
 	};
 
 
-	// const handleDrop = async (event) => {
-    //     event.preventDefault();
-    //     let selectedFile;
-    //     if (event.dataTransfer.items) {
-    //         if (event.dataTransfer.items[0].kind === 'file') {
-    //             selectedFile = event.dataTransfer.items[0].getAsFile();
-    //         }
-    //     } else {
-    //         selectedFile = event.dataTransfer.files[0];
-    //     }
-
-    //     // upload the file to Supabase
-	// 	let folderTypez;
-    //     if (selectedFile) {
-	// 		if(searchType == 'finance-ai'){
-	// 			folderTypez = 'structured';
-	// 		}else if(searchType == 'semantic-search'){
-	// 			folderTypez = 'unstructured';
-	// 		}
-    //         const filePath = `${folderTypez}/${selectedFile.name}`; // adjust the file path as needed
-    //         const { error } = await supabase.storage.from(`${userId}`).upload(filePath, selectedFile);
-    //         if (error) {
-    //             console.error('Error uploading file:', error);
-	// 			console.log(`folder Typez: ${folderTypez}, selectedFile: ${selectedFile}, selectedFilename: ${selectedFile.name}, username: ${userDetails.username}, userid: ${userDetails.id}, prev:${userId}`);
-    //         } else {
-    //             console.log('File uploaded successfully');
-    //         }
-    //     }
-    // };
-
-// 	const handleDrop = async (event) => {
-//     event.preventDefault();
-//     let files = event.dataTransfer.files;
-//     let folderTypez;
-
-//     for (let i = 0; i < files.length; i++) {
-//         let file = files[i];
-
-//         if (file) {
-//             if(searchType == 'finance-ai'){
-//                 folderTypez = 'structured';
-//             }else if(searchType == 'semantic-search'){
-//                 folderTypez = 'unstructured';
-//             }
-//             const filePath = `${folderTypez}/${file.name}`; // adjust the file path as needed
-//             const { error } = await supabase.storage.from(`${userId}`).upload(filePath, file);
-//             if (error) {
-//                 console.error('Error uploading file:', error);
-//             } else {
-//                 console.log('File uploaded successfully');
-//             }
-//         }
-//     }
-// };
-
-
 let uploadProgress = 0; // variable to keep track of the upload progress
 let uploadComplete = false;
 let uploadBar = false;
@@ -478,6 +422,7 @@ const handleDrop = async (event) => {
 			// Upload files
 			let selectedFileName = file.name;
 			let username = userDetails.user_metadata.name;
+			uploadingFile = selectedFileName;
 
 			uploadBar = true;
 			
@@ -529,6 +474,7 @@ const handleDrop = async (event) => {
 								alert('Failed to upload file. Please try again: ' + $embs);
 								uploadBar = false;
 								$embs = '';
+								uploadingFile = '';
 								return;
 							}};
 
@@ -548,6 +494,7 @@ const handleDrop = async (event) => {
 						alert('Failed to upload file. Please try again: ' + $embs);
 						uploadBar = false;
 						$embs = '';
+						uploadingFile = '';
 						reject('Failed');
 						return;
 					}
@@ -570,6 +517,8 @@ const handleDrop = async (event) => {
 				await uploadFile();
 
 				console.log('File uploaded successfully');
+				$embs = '';
+				uploadingFile = '';
 				setTimeout(() => {
 				uploadProgress += 100 / files.length; // increment the upload progress
 			}, 100);
@@ -583,6 +532,7 @@ const handleDrop = async (event) => {
 				uploadComplete = false;
 				uploadProgress = 0;
 				uploadBar = false;
+				
 				
 				if (!firstFileUploaded) {
 					setFileNameStore()
@@ -629,7 +579,9 @@ const handleDrop = async (event) => {
 	<div>
 		<progress value={uploadProgress} max="100" class:complete={uploadComplete}></progress>
 		<span>{Math.round(uploadProgress)}%</span>
-		<p>{embsmessage}</p>
+		<br>
+		<br>
+		<span style="word-wrap: break-word;">{embsmessage}<p style="color: cornflowerblue;">{uploadingFile}</p></span>
 		<!-- {#if uploadComplete}
         <p>File(s) uploaded successfully</p>
    		{/if} -->
@@ -916,6 +868,8 @@ const handleDrop = async (event) => {
 	.scrollable-docs {
 		max-height: 40vh;
 		overflow-y: auto;
+
+	
 	}
 
 	.docsearch {
