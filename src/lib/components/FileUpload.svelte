@@ -24,6 +24,7 @@
 
 	onMount(async () => {
 		socket = io.connect('http://192.168.200.29:8080/module5');
+		// socket = io.connect('http://10.20.20.62:8080/module5');
 		// socket = io.connect('https://icsfinblade.com:444/module5');
 		// socket = io.connect('http://192.168.100.113:8080/module5');
 		socket.on('receive_embeddings', function (data) {
@@ -134,10 +135,11 @@
 						while ($embs !== 'Completed') {
 							await new Promise((r) => setTimeout(r, 1000));
 						}
+						resolve('Completed');	
 				}
 				// Once $embs === 'Completed', resolve the Promise
 
-				if (searchType == 'finance-ai' || $embs === 'Completed') {
+				if (searchType == 'finance-ai') {
 					resolve('Completed');
 				}
 			});

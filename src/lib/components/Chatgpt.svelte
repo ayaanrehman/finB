@@ -21,6 +21,7 @@
 		// socket = io.connect('http://172.31.55.58:8080/module3');
 		// socket = io.connect('https://icsfinblades.com:444/module3');
 		socket = io.connect('http://192.168.200.29:8080/module3');
+		// socket = io.connect('http://10.20.20.62:8080/module3');
 		// socket = io.connect('http://192.168.100.113:8080/module3');
 		socket.on('chat_response', function (data) {
 			response = data.answer;

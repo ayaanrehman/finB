@@ -14,6 +14,8 @@
 
 	export let searchType;
 	
+	let whichsrch = true;
+	let searchMode = 'Normal Search';
 
 	let showresponse = false;
 	let showContainerarrow = false;
@@ -109,6 +111,7 @@
 			// socket = io.connect('http://172.31.55.58:8080/module1');
 			// socket = io.connect('https://icsfinblades.com:444/module1');
 			socket = io.connect('http://192.168.200.29:8080/module1');
+			// socket = io.connect('http://10.20.20.62:8080/module1');
 			// socket = io.connect('http://192.168.100.113:8080/module1');
 			
 		} else if (srchtp == 'semantic-search') {
@@ -118,6 +121,7 @@
 			// socket = io.connect('http://172.31.55.58:8080/module4');
 			// socket = io.connect('https://icsfinblades.com:444/module4');
 			socket = io.connect('http://192.168.200.29:8080/module4');
+			// socket = io.connect('http://10.20.20.62:8080/module4');
 			// socket = io.connect('http://192.168.100.113:8080/module4');
 		}
 
@@ -181,6 +185,7 @@
 	});
 
 	function submitQuestion() {
+		whichsrch = false;
 
 		socket.emit('submit_question', { question, docfilename, username, userid });
 		searchHistory.push({ sender: 'You', message: question, timestamp: new Date() });
@@ -202,6 +207,7 @@
 			}, 1000);
 		
 		}
+		searchMode = 'Normal Search';
 
 
 
@@ -216,6 +222,8 @@
 		generatingResponse = false;
 		paresp = false;
 		visual = false;
+		whichsrch = true;
+		searchMode = 'Normal Search';
 
 		// base64img = null;
 
@@ -294,6 +302,32 @@
 
 	});
 
+
+
+
+
+	
+	let rotation = 0;
+
+	function whichsrchz() {
+		const container = document.getElementById('searchBoxContainer');
+			rotation += 120;
+			container.style.transform = `rotateX(${rotation}deg)`;
+			lever.style.transform = `rotate(${rotation}deg)`;
+
+			switch (rotation % 360) {
+				case 0:
+					searchMode = 'Normal Search';
+					break;
+				case 120:
+					searchMode = 'Ensamble Search';
+					break;
+				case 240:
+					searchMode = 'HYDE Search';
+					break;
+			}
+	}
+
 </script>
 
 {#if $selectSearch}
@@ -355,6 +389,29 @@
 	<!-- {#if $searchBoxx} -->
 {:else}
 	<div class="search-box-container">
+		{#if whichsrch && searchType === 'semantic-search'}
+		<div class="whichsrch">
+			<div class="srchlvr">
+				<div id="searchBoxContainer">
+					<span id="searchBox1" class="searchBox" >Normal Search</span>
+					<span id="searchBox2" class="searchBox" >HYDE Search</span>
+					<span id="searchBox3" class="searchBox" >Ensamble Search</span>
+				</div>
+				<div class="lever">
+					<button id="lever" on:click={whichsrchz}>
+						<span />
+						<span />
+						<span />
+						<span />
+						<span />
+						<span />
+						<span />
+						<span />
+					</button>
+				</div>
+			</div>
+		</div>
+		{/if}
 		<div class="input-container" id="question-container" class:active={inputContainer}>
 			{#if showContainerarrow2}
 				<div class="containerarrow2">
@@ -363,6 +420,9 @@
 					<div class="arrowhead2" />
 				</div>
 			{/if}
+			
+
+			
 			<div class="qtn">
 				<input
 					id="question"
@@ -387,6 +447,13 @@
 					</div>
 				{/if}
 			</div>
+			
+			
+				
+			
+	
+
+
 
 			{#if showContainerarrow}
 				<div class="containerarrow">
@@ -396,6 +463,7 @@
 				</div>
 			{/if}
 		</div>
+		<!-- <p style="width: 100%; text-align: center;">{searchMode}</p> -->
 
 		{#if visual}
 			<!-- <div class="vertical-line4" /> -->
@@ -1000,6 +1068,7 @@
 
 	.search-box-container {
 		width: 100%;
+		position: relative;
 	}
 
 	.selectSearch {
@@ -1289,6 +1358,131 @@
 		background-color: rgba(255, 255, 255, 0.6);
 		animation: verticalLineAnimation2 1s linear;
 	}
+
+	.whichsrch {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		top: 0;
+		left: 35%;
+		right: 35%;
+		background-color: rgba(0, 0, 0, 0.8);
+		width: max-content;
+		height: max-content;
+		border-radius: 0 0 20px 20px;
+		border: 1px solid rgba(255, 255, 255, 0.4);
+		padding: 1% 2%;
+		
+		
+	}
+
+	.srchlvr {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: row;
+		/* height: 100vh; */
+	}
+
+	.lever {
+		transform: scale(0.6);
+		/* margin: auto; */
+	}
+
+	#searchBoxContainer {
+		perspective: 1000px;
+		
+		transform-style: preserve-3d;
+		transition: transform 1s;
+		height: 30px;
+		width: 130px;
+		/* margin: auto; */
+		justify-content: center;
+		align-items: center;
+		
+	}
+
+	.searchBox {
+		position: absolute;
+		font-size: smaller;
+		padding: 5px;
+		margin: auto;
+		width: 130px;
+		height: 40px;
+		line-height: 30px;
+		border: none;
+		color: white;
+		text-align: center;
+		background-color: #0b1d3fee;
+		border: 1px solid #808080;
+		
+	}
+
+	#searchBox1 {
+		transform: rotateX(0deg) translateZ(45px);
+	}
+
+	#searchBox2 {
+		transform: rotateX(120deg) translateZ(45px);
+	}
+
+	#searchBox3 {
+		transform: rotateX(240deg) translateZ(45px);
+	}
+
+	#lever {
+		display: block;
+		margin: 20px auto;
+		transition: transform 1s;
+		height: 80px;
+		width: 80px;
+		border-radius: 50%;
+		border: 16px solid #ad753d; /* Dark brown color for the wheel */
+		box-sizing: border-box;
+		position: relative;
+		cursor: grabbing;
+		background: radial-gradient(circle, #ad753d 35%, transparent 40%, #ad753d 40%);
+	}
+
+	#lever span:nth-child(n)::before {
+		content: '';
+		position: absolute;
+		height: 30px;
+		width: 2px;
+		background: #ad753d;
+		top: 50%;
+		left: 50%;
+		transform-origin: 50% 0;
+	}
+
+	#lever span:nth-child(1)::before {
+		transform: rotate(0deg) translate(0, -50px);
+	}
+	#lever span:nth-child(2)::before {
+		transform: rotate(45deg) translate(0, -50px);
+	}
+	#lever span:nth-child(3)::before {
+		transform: rotate(90deg) translate(0, -50px);
+	}
+	#lever span:nth-child(4)::before {
+		transform: rotate(135deg) translate(0, -50px);
+	}
+	#lever span:nth-child(5)::before {
+		transform: rotate(180deg) translate(0, -50px);
+	}
+	#lever span:nth-child(6)::before {
+		transform: rotate(225deg) translate(0, -50px);
+	}
+	#lever span:nth-child(7)::before {
+		transform: rotate(270deg) translate(0, -50px);
+	}
+	#lever span:nth-child(8)::before {
+		transform: rotate(315deg) translate(0, -50px);
+	}
+
+
 
 	/*.arrowhead2 {
 		position: absolute;

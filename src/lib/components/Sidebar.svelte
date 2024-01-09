@@ -68,6 +68,7 @@ onMount(() => {
 
 onMount(async () => {
 		socket = io.connect('http://192.168.200.29:8080/module5');
+		// socket = io.connect('http://10.20.20.62:8080/module5');
 		// socket = io.connect('https://icsfinblade.com:444/module5');
 		// socket = io.connect('http://192.168.100.113:8080/module5');
 		// socket.on('receive_embeddings', function (data) {
@@ -81,6 +82,13 @@ onMount(async () => {
 				});
 	
 		});
+
+		let embsmessage = '';
+
+		$: embsmessage = $embs === 'Started' ? 'Understanding the document...' : 
+						 $embs === '40%' ? 'Creating chunks...' : 
+					     $embs === '60%' ? 'Creating embeddings...' : 
+						 $embs === 'Completed' ? 'Successful...': $embs;
 
 
 onMount(() => {
@@ -428,6 +436,7 @@ let uploadBar = false;
 
 const handleDrop = async (event) => {
 	event.preventDefault();
+	
 	isDragging = false;
 	let files = event.dataTransfer.files;
 	let folderTypez;
@@ -471,6 +480,7 @@ const handleDrop = async (event) => {
 			let username = userDetails.user_metadata.name;
 
 			uploadBar = true;
+			
 
 			if(searchType == 'finance-ai'){
 				folderTypez = 'structured';
@@ -489,20 +499,43 @@ const handleDrop = async (event) => {
 					console.log({ folderTypez, selectedFileName, username, userId });
 
 					$embs = '';
+					$embs = 'Uploading file...';
 
 					if (searchType !== 'finance-ai') {
+						console.log('Embeddings progress is1', $embs);
 
-						if ($embs !== 'Started' && $embs !== 'Completed' && $embs !== "") {
-						alert('Failed to upload file. Please try again' + $embs);
-						uploadBar = false;
-						$embs = '';
-						return;
+						// if ($embs !== 'Started' && $embs !== "" && $embs !== 'Uploading file...') {
+						// 	console.log('Embeddings progress is2', $embs);
+						// 	alert('Failed to upload file. Please try again: ' + $embs);
+						// 	uploadBar = false;
+						// 	$embs = '';
+						// 	return;
 
-						} else while ($embs !== 'Completed') {
-							// console.log('Embeddings progress i222', $embs);
+						// } else while ($embs !== 'Completed') {
+						// 	// console.log('Embeddings progress i222', $embs);
+						// 	await new Promise(r => setTimeout(r, 1000));
+						// }
+
+						while ($embs == 'Started' || $embs == "" || $embs == 'Uploading file...') {
 							await new Promise(r => setTimeout(r, 1000));
-						}
-						resolve('Completed');
+							
+							
+							if ($embs == 'Completed') {
+								resolve('Completed');
+
+							} else if ($embs !== 'Started' && $embs !== "" && $embs !== 'Uploading file...' && $embs !== 'Completed') {
+
+								console.log('Embeddings progress is2', $embs);
+								alert('Failed to upload file. Please try again: ' + $embs);
+								uploadBar = false;
+								$embs = '';
+								return;
+							}};
+
+
+
+
+						
 					}
 					// Once $embs === 'Completed', resolve the Promise
 					
@@ -512,7 +545,7 @@ const handleDrop = async (event) => {
                		}
 
 					else {
-						alert('Failed to upload file. Please try again' + $embs);
+						alert('Failed to upload file. Please try again: ' + $embs);
 						uploadBar = false;
 						$embs = '';
 						reject('Failed');
@@ -533,6 +566,7 @@ const handleDrop = async (event) => {
 				return;
 
 			} else {
+				
 				await uploadFile();
 
 				console.log('File uploaded successfully');
@@ -595,9 +629,10 @@ const handleDrop = async (event) => {
 	<div>
 		<progress value={uploadProgress} max="100" class:complete={uploadComplete}></progress>
 		<span>{Math.round(uploadProgress)}%</span>
-		{#if uploadComplete}
+		<p>{embsmessage}</p>
+		<!-- {#if uploadComplete}
         <p>File(s) uploaded successfully</p>
-   		{/if}
+   		{/if} -->
 	</div>
 	<br>
 	{/if}
