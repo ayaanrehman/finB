@@ -195,8 +195,8 @@
 
 	input {
 		background-color: #1e1e1e;
+		border: 1px solid rgb(235, 235, 235);
 		color: white;
-		border: none;
 		border-radius: 0.5em;
 		padding: 0.5em 1em;
 		margin: 0.5em;
