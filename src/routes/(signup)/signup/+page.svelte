@@ -105,7 +105,7 @@
 		<form>
 			<div class="input-group">
 				<span>Name: </span>
-				<input type="text" name="name" bind:value={nameuser} placeholder="Enter your name" />
+				<input type="text" autocomplete="off" name="name" bind:value={nameuser} placeholder="Enter your name" />
 			</div>
 			<div class="input-group">
 				<span>Email: </span>
@@ -137,6 +137,8 @@
 					name="confirmPassword"
 					bind:value={confirmPassword}
 					placeholder="Confirm your password"
+					
+					
 				/>
 			</div>
 
@@ -201,11 +203,15 @@
 	input {
 		margin-bottom: 1em;
 		border-radius: 5px;
-		border: none;
+		border: 1px solid rgb(211, 211, 211);
 		padding: 0.5em;
-		background-color: #3d3d3d;
+		background-color: #525252;
 		color: white;
 		width: 50%;
+	}
+
+	input::placeholder {
+		color: rgb(199, 199, 199);
 	}
 
 	button {

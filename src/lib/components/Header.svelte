@@ -278,6 +278,7 @@ onMount(async () => {
     align-items: center;
     padding: 0.5em;
     max-height: 4.5em;
+    /* background: linear-gradient(to left, rgb(255, 255, 255), rgb(0, 0, 0)); */
   }
 
   .vline {

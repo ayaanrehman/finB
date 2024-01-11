@@ -15,7 +15,7 @@
 	export let searchType;
 
 	let whichsrch = true;
-	let searchMode = 'Normal Search';
+	let searchMode = 'standard';
 	let searchModeBox = false;
 
 
@@ -103,7 +103,7 @@
 		newline = true;
 		showref = true;
 	}
-
+let refsrc = [];
 	onMount(async () => {
 		if (srchtp == 'finance-ai') {
 			// socket = io.connect('http://192.168.200.29:89/module1');
@@ -155,8 +155,12 @@
 			}
 			// searchHistory.push({ sender: 'ICS Assistant', message: response });
 			paresp = true;
-			// ref = data.ref;
-			ref = 'Functionality not available yet.';
+			refsrc = data.ref;
+			console.log('This is refsrc: ', refsrc);
+			// ref = refsrc.map(item => String(item).replace(/.*\.pdf/, 'Page: ')).join('\n');
+			ref = refsrc.map(item => String(item.join('')).replace(/.*\.pdf/, 'Page ')).join('\n');
+			console.log('This is ref: ', ref);
+			// ref = 'Functionality not available yet.';
 			// console.log('This is Response: ', response);
 		});
 	});
@@ -183,7 +187,7 @@
 	});
 
 	function submitQuestion() {
-		whichsrch = false;
+		// whichsrch = false;
 
 		socket.emit('submit_question', { question, docfilename, username, userid, searchMode });
 		searchHistory.push({ sender: 'You', message: question, timestamp: new Date() });
@@ -204,7 +208,7 @@
 				generatingResponse = true;
 			}, 1000);
 		}
-		searchMode = 'Normal Search';
+		searchMode = 'standard';
 		loadURL = "/images/FinBlade_Icon.gif";
 	}
 
@@ -217,7 +221,7 @@
 		paresp = false;
 		visual = false;
 		whichsrch = true;
-		searchMode = 'Normal Search';
+		// searchMode = 'standard';
 		loadURL = "/images/FinBlade_Icon.png";
 
 		// base64img = null;
@@ -314,13 +318,13 @@
 
 		switch (rotation % 360) {
 			case 0:
-				searchMode = 'Normal Search';
+				searchMode = 'standard';
 				break;
 			case 120:
-				searchMode = 'Ensamble Search';
+				searchMode = 'ensemble';
 				break;
 			case 240:
-				searchMode = 'HYDE Search';
+				searchMode = 'hyde';
 				break;
 		}
 	}
@@ -392,7 +396,7 @@ on:click={() => {
 		{#if whichsrch && searchType === 'semantic-search'}
 			<div class="searchModeItems" bind:this={boz}>
 				{#if !searchModeBox}
-					<span class="searchModeSpan">Using {searchMode}</span>
+					<span class="searchModeSpan">Using {searchMode} search</span>
 				{/if}
 				<button
 					class="searchModeButton"
@@ -435,18 +439,18 @@ on:click={() => {
 			</div> -->
 					<div class="searchTypeSelection">
 						<label>
-							<input type="radio" bind:group={searchMode} value="Normal Search" />
-							Normal Search
+							<input type="radio" bind:group={searchMode} value="standard" />
+							Standard Search
 						</label>
 
 						<label>
-							<input type="radio" bind:group={searchMode} value="HYDE Search" />
+							<input type="radio" bind:group={searchMode} value="hyde" />
 							HYDE Search
 						</label>
 
 						<label>
-							<input type="radio" bind:group={searchMode} value="Ensamble Search" />
-							Ensamble Search
+							<input type="radio" bind:group={searchMode} value="ensemble" />
+							Ensemble Search
 						</label>
 					</div>
 				</div>
@@ -539,11 +543,11 @@ on:click={() => {
 					<div>
 						<b>Reference</b>
 						<br />
-						<p style="color: grey;">{ref}</p>
-						<br />
+						<p>{ref}</p>
+						<!-- <br />
 						<a style="color: blanchedalmond; font-size: small;" href="/documents/{titledoc}"
 							>Open Source Document</a
-						>
+						> -->
 					</div>
 				</div>
 			{/if}
@@ -584,16 +588,29 @@ on:click={() => {
 									style="cursor: pointer;">Visualize Graph</button
 								>
 							{/if}
+
+							{#if searchType === 'semantic-search'}
 							<button
 								class="gr"
 								on:click={() => {
 									showrefunc();
 								}}
-								style="background-color: maroon;cursor: pointer;">Get Reference</button
+								style="background-color: grey;cursor: pointer;">Get Reference</button
 							>
+							{/if}
+
 							<!-- <button class="clr" style="background-color: maroon; cursor: pointer;" on:click={() => {clearsubmitQuestion(); question='';}}>Clear Search</button> -->
 						</div>
+						<br>
+
 						<Ratings />
+						<button
+						class="stopsearch"
+						on:click={() => {
+							clearsubmitQuestion();
+							question = '';
+						}}>Clear Search</button
+					>
 					{/if}
 				</div>
 			{/if}
@@ -718,7 +735,6 @@ on:click={() => {
 	.searchModeSpan {
 		border: none;
 		color: white;
-		cursor: pointer;
 		border-radius: 5px;
 		width: max-content;
 		height: max-content;
@@ -924,7 +940,7 @@ on:click={() => {
 		overflow-y: scroll;
 		border: 1px solid #ffffff00;
 		background-color: rgb(32, 44, 51);
-		width: 30%;
+		width: 13em;
 		margin-top: 2.5em;
 		left: 3em;
 		color: rgb(121, 121, 121);
@@ -941,6 +957,32 @@ on:click={() => {
 		z-index: 6;
 		opacity: 100%;
 		animation: refanim 1.5s linear;
+	}
+
+	.ref p {
+		overflow-x: hidden;
+		word-wrap: break-word;
+		max-width: 12em;
+		max-height: 10em;
+
+		
+		&::-webkit-scrollbar {
+			width: 10px;
+			display: block;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: #f1f1f133;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: #d6d6d6; /* Grey color */
+		}
+
+		&::-webkit-scrollbar-thumb:hover {
+			background: #8b8b8b;
+		}
+
 	}
 
 	@keyframes refanim {
@@ -1121,7 +1163,7 @@ on:click={() => {
 	}
 
 	.texta {
-		background-color: rgb(26, 26, 26);
+		background-color: rgb(100, 100, 100);
 		color: white;
 		border: none;
 		border-radius: 10px;
