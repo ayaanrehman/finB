@@ -185,7 +185,7 @@
 	function submitQuestion() {
 		whichsrch = false;
 
-		socket.emit('submit_question', { question, docfilename, username, userid });
+		socket.emit('submit_question', { question, docfilename, username, userid, searchMode });
 		searchHistory.push({ sender: 'You', message: question, timestamp: new Date() });
 
 		if (inputContainer) {
