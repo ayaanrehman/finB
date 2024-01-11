@@ -730,14 +730,14 @@ on:click={() => {
 	.searchModeItems {
 		display: flex;
 		position: absolute;
-		right: 20%;
+		bottom: 0;
+		right: 0;
 		flex-direction: row;
 		justify-content: space-between;
-		margin: auto;
 		background-color: rgba(0, 0, 0, 0.8);
 		width: fit-content;
 		padding: 5px;
-		border-radius: 0 0 10px 10px;
+		border-radius: 10px 10px 0px 0px;
 		border: 1px solid #ffffff79;
 	}
 

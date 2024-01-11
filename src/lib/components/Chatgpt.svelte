@@ -12,6 +12,8 @@
 	let stylevar = 'None';
 	let inputBox;
 
+	let typing = false;
+
 	let loadURL = "/images/FinBlade_Icon.png";
 
 	onMount(() => {
@@ -28,12 +30,14 @@
 		socket.on('chat_response', function (data) {
 			response = data.answer;
 			// console.log('This is Response: ', response);
+			messages = messages.filter(message => !message.typing);
 			messages = [...messages, { text: response, sender: 'server', timestamp: new Date() }];
 			// loadanim = false;
 			loadURL = "/images/FinBlade_Icon.png";
 			setTimeout(() => {
 				scrollToBottom();
 			}, 100);
+			typing = false;
 				
 			
 		});
@@ -57,7 +61,9 @@
 	function submitQuestion() {
 		if (chatquestion.trim() !== '') {
 			messages = [...messages, { text: chatquestion, sender: 'client', timestamp: new Date() }];
+			messages = [...messages, { text: '', sender: 'server', timestamp: new Date(), typing: true }];
 			socket.emit('chatgpt_question', { question: chatquestion, stylevar: stylevar });
+			typing = true;
 			// loadanim = true;
 			loadURL = "/images/FinBlade_Icon.gif";
 			setTimeout(() => {
@@ -79,7 +85,7 @@
 </script>
 
 <div class="chat1">
-	<h3 style="color: white;">Enterprise AI Chat with GuardRails</h3>
+	<!-- <h3 style="color: white;">Enterprise AI Chat with GuardRails</h3> -->
 	<div class="chat-gpt-container">
 		<div id="chat-history1" class="chat-history1"  readonly="readyonly">
 			<div class="message placeholder" bind:this={chatHistory}>
@@ -95,9 +101,17 @@
 					{#each messages as message (message.text)}
 						<div class="message {message.sender}">
 							<p>{message.text}</p>
+							{#if message.typing}
+								<div class="typing-indicator">
+									<span></span>
+									<span></span>
+									<span></span>
+								</div>
+							{/if}
 							<span style="font-size: x-small;">{formatDate(message.timestamp)}</span>
 						</div>
 					{/each}
+				
 				{/if}
 			</div>
 			<button id="scroll-to-top1" on:click={scrollToTop}>&#9650;</button>
@@ -157,6 +171,7 @@
 		</div>
 	</div>
 </div>
+
 <!-- <button
 	on:click={(e) => {
 		question = '';
@@ -169,6 +184,49 @@
 	.transparent {
 		background-image: none !important;
 		cursor: default;
+	}
+
+	.typing-indicator {
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height: 20px;
+	}
+
+	.typing-indicator span {
+		position: absolute;
+		top: 0;
+		width: 6px;
+		height: 6px;
+		margin: 0 1px;
+		background: #292929;
+		border-radius: 50%;
+		animation: typing-indicator 1.4s infinite;
+		animation-fill-mode: both;
+	}
+
+	.typing-indicator span:nth-child(1) {
+		left: 6px;
+		top: 5px;
+		animation-delay: 0.2s;
+	}
+
+	.typing-indicator span:nth-child(2) {
+		left: 18px;
+		top: 5px;
+		animation-delay: 0.4s;
+	}
+
+	.typing-indicator span:nth-child(3) {
+		left: 30px;
+		top: 5px;
+		animation-delay: 0.6s;
+	}
+
+	@keyframes typing-indicator {
+		0% { transform: scale(1); }
+		20% { transform: scale(1, 2.2); }
+		40% { transform: scale(1); }
 	}
 
 	.message {
@@ -239,7 +297,7 @@
 	}
 
 	.message.placeholder {
-		height: calc(100% - 80px);
+		height: calc(100% - 50px);
 		overflow-y: auto;
 		padding: 1em;
 	}
@@ -266,8 +324,8 @@
 		justify-content: center;
 		background-color: rgba(26, 26, 26, 0);
 		width: 100%;
-		height: 90vh;
-		max-height: 90vh;
+		height: 87vh;
+		max-height: 87vh;
 		padding: 1em;
 		color: white;
 		font-family: 'Leelawadee', sans-serif !important;
