@@ -36,7 +36,7 @@
 
 	$:currentPath = $pg?.url?.pathname;
 	
-
+	let uploadingFile = '';
 	let isResizing = false;
 	let isOnEdge = false;
 	let keydownHandler;
@@ -68,6 +68,7 @@ onMount(() => {
 
 onMount(async () => {
 		socket = io.connect('http://192.168.200.29:8080/module5');
+		// socket = io.connect('http://10.20.20.62:8080/module5');
 		// socket = io.connect('https://icsfinblade.com:444/module5');
 		// socket = io.connect('http://192.168.100.113:8080/module5');
 		// socket.on('receive_embeddings', function (data) {
@@ -81,6 +82,13 @@ onMount(async () => {
 				});
 	
 		});
+
+		let embsmessage = '';
+
+		$: embsmessage = $embs === 'Started' ? 'Understanding the document...' : 
+						 $embs === '40%' ? 'Creating chunks...' : 
+					     $embs === '60%' ? 'Creating embeddings...' : 
+						 $embs === 'Completed' ? 'Successful uploaded...': $embs;
 
 
 onMount(() => {
@@ -366,68 +374,13 @@ onMount(() => {
 	};
 
 
-	// const handleDrop = async (event) => {
-    //     event.preventDefault();
-    //     let selectedFile;
-    //     if (event.dataTransfer.items) {
-    //         if (event.dataTransfer.items[0].kind === 'file') {
-    //             selectedFile = event.dataTransfer.items[0].getAsFile();
-    //         }
-    //     } else {
-    //         selectedFile = event.dataTransfer.files[0];
-    //     }
-
-    //     // upload the file to Supabase
-	// 	let folderTypez;
-    //     if (selectedFile) {
-	// 		if(searchType == 'finance-ai'){
-	// 			folderTypez = 'structured';
-	// 		}else if(searchType == 'semantic-search'){
-	// 			folderTypez = 'unstructured';
-	// 		}
-    //         const filePath = `${folderTypez}/${selectedFile.name}`; // adjust the file path as needed
-    //         const { error } = await supabase.storage.from(`${userId}`).upload(filePath, selectedFile);
-    //         if (error) {
-    //             console.error('Error uploading file:', error);
-	// 			console.log(`folder Typez: ${folderTypez}, selectedFile: ${selectedFile}, selectedFilename: ${selectedFile.name}, username: ${userDetails.username}, userid: ${userDetails.id}, prev:${userId}`);
-    //         } else {
-    //             console.log('File uploaded successfully');
-    //         }
-    //     }
-    // };
-
-// 	const handleDrop = async (event) => {
-//     event.preventDefault();
-//     let files = event.dataTransfer.files;
-//     let folderTypez;
-
-//     for (let i = 0; i < files.length; i++) {
-//         let file = files[i];
-
-//         if (file) {
-//             if(searchType == 'finance-ai'){
-//                 folderTypez = 'structured';
-//             }else if(searchType == 'semantic-search'){
-//                 folderTypez = 'unstructured';
-//             }
-//             const filePath = `${folderTypez}/${file.name}`; // adjust the file path as needed
-//             const { error } = await supabase.storage.from(`${userId}`).upload(filePath, file);
-//             if (error) {
-//                 console.error('Error uploading file:', error);
-//             } else {
-//                 console.log('File uploaded successfully');
-//             }
-//         }
-//     }
-// };
-
-
 let uploadProgress = 0; // variable to keep track of the upload progress
 let uploadComplete = false;
 let uploadBar = false;
 
 const handleDrop = async (event) => {
 	event.preventDefault();
+	
 	isDragging = false;
 	let files = event.dataTransfer.files;
 	let folderTypez;
@@ -469,8 +422,10 @@ const handleDrop = async (event) => {
 			// Upload files
 			let selectedFileName = file.name;
 			let username = userDetails.user_metadata.name;
+			uploadingFile = selectedFileName;
 
 			uploadBar = true;
+			
 
 			if(searchType == 'finance-ai'){
 				folderTypez = 'structured';
@@ -489,20 +444,44 @@ const handleDrop = async (event) => {
 					console.log({ folderTypez, selectedFileName, username, userId });
 
 					$embs = '';
+					$embs = 'Uploading file...';
 
 					if (searchType !== 'finance-ai') {
+						console.log('Embeddings progress is1', $embs);
 
-						if ($embs !== 'Started' && $embs !== 'Completed' && $embs !== "") {
-						alert('Failed to upload file. Please try again' + $embs);
-						uploadBar = false;
-						$embs = '';
-						return;
+						// if ($embs !== 'Started' && $embs !== "" && $embs !== 'Uploading file...') {
+						// 	console.log('Embeddings progress is2', $embs);
+						// 	alert('Failed to upload file. Please try again: ' + $embs);
+						// 	uploadBar = false;
+						// 	$embs = '';
+						// 	return;
 
-						} else while ($embs !== 'Completed') {
-							// console.log('Embeddings progress i222', $embs);
+						// } else while ($embs !== 'Completed') {
+						// 	// console.log('Embeddings progress i222', $embs);
+						// 	await new Promise(r => setTimeout(r, 1000));
+						// }
+
+						while ($embs == 'Started' || $embs == "" || $embs == 'Uploading file...') {
 							await new Promise(r => setTimeout(r, 1000));
-						}
-						resolve('Completed');
+							
+							
+							if ($embs == 'Completed') {
+								resolve('Completed');
+
+							} else if ($embs !== 'Started' && $embs !== "" && $embs !== 'Uploading file...' && $embs !== 'Completed') {
+
+								console.log('Embeddings progress is2', $embs);
+								alert('Failed to upload file. Please try again: ' + $embs);
+								uploadBar = false;
+								$embs = '';
+								uploadingFile = '';
+								return;
+							}};
+
+
+
+
+						
 					}
 					// Once $embs === 'Completed', resolve the Promise
 					
@@ -512,9 +491,10 @@ const handleDrop = async (event) => {
                		}
 
 					else {
-						alert('Failed to upload file. Please try again' + $embs);
+						alert('Failed to upload file. Please try again: ' + $embs);
 						uploadBar = false;
 						$embs = '';
+						uploadingFile = '';
 						reject('Failed');
 						return;
 					}
@@ -533,9 +513,12 @@ const handleDrop = async (event) => {
 				return;
 
 			} else {
+				
 				await uploadFile();
 
 				console.log('File uploaded successfully');
+				$embs = '';
+				uploadingFile = '';
 				setTimeout(() => {
 				uploadProgress += 100 / files.length; // increment the upload progress
 			}, 100);
@@ -549,6 +532,7 @@ const handleDrop = async (event) => {
 				uploadComplete = false;
 				uploadProgress = 0;
 				uploadBar = false;
+				
 				
 				if (!firstFileUploaded) {
 					setFileNameStore()
@@ -595,9 +579,12 @@ const handleDrop = async (event) => {
 	<div>
 		<progress value={uploadProgress} max="100" class:complete={uploadComplete}></progress>
 		<span>{Math.round(uploadProgress)}%</span>
-		{#if uploadComplete}
+		<br>
+		<br>
+		<span style="word-wrap: break-word;">{embsmessage}<p style="color: cornflowerblue;">{uploadingFile}</p></span>
+		<!-- {#if uploadComplete}
         <p>File(s) uploaded successfully</p>
-   		{/if}
+   		{/if} -->
 	</div>
 	<br>
 	{/if}
@@ -881,6 +868,8 @@ const handleDrop = async (event) => {
 	.scrollable-docs {
 		max-height: 40vh;
 		overflow-y: auto;
+
+	
 	}
 
 	.docsearch {

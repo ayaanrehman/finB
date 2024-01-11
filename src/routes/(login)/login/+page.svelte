@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	let time = 3;
 	let showLogo = false;
@@ -50,7 +51,9 @@
 		if (text == 'logged in') {
 			successmsg = true;
 			failuremsg = false;
-			window.location.href = '/homepage/';
+			// window.location.href = '/homepage/';
+			// goto('/homepage/');
+			goto('/documents/semantic-search/');
 			console.log('login success');
 		} else {
 			successmsg = false;
@@ -76,7 +79,7 @@
 			<!-- <img class="logologin" src="/images/FinBlade Logo-02 2.png" alt="finblade" /> -->
 			<div>
 				<p style="color: black;">Log in to</p>
-				<img class="logologin" src="/images/finblade-Recovered.png" alt="finblade" />
+				<img class="logologin" src="/images/finblade-text-black.png" alt="finblade" style="width: 120px; height: auto" />
 			</div>
 
 			<form on:submit|preventDefault={handleSubmit}>
@@ -117,7 +120,10 @@
 					<div class="dot" />
 
 					<div class="logo-animation">
-						<img src="/images/finblade.png" width="200px" height="auto" alt="Company Logo" />
+						<div>
+						<img src="/images/FinBlade_Icon.gif" width="40px" height="auto" alt="Company Logo" style="margin-right: 5px;" />
+						<img src="/images/finblade-text.png" width="200px" height="auto" alt="Company Logo" />
+						</div>
 						<!-- <p>
 							"Unlocking financial insights with the power of AI where semantic search meets data
 							excellence!"

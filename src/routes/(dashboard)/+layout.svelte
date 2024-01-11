@@ -24,9 +24,9 @@
     </script>
     <Header />
     <div class="main-grid">
-        {#if $preSidebarEnabled}
+        <!-- {#if $preSidebarEnabled} -->
         <PreSideBar userDetails={data.userDetails} />
-        {/if}
+        <!-- {/if} -->
         <PageTransition>
         <div class="container" class:documents={isDocuments}>
                 <slot />
