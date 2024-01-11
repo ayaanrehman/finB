@@ -12,6 +12,10 @@
 	let stylevar = 'None';
 	let inputBox;
 
+	let typing = false;
+
+	let loadURL = "/images/FinBlade_Icon.png";
+
 	onMount(() => {
     inputBox.focus();
   });
@@ -26,11 +30,14 @@
 		socket.on('chat_response', function (data) {
 			response = data.answer;
 			// console.log('This is Response: ', response);
+			messages = messages.filter(message => !message.typing);
 			messages = [...messages, { text: response, sender: 'server', timestamp: new Date() }];
-			loadanim = false;
+			// loadanim = false;
+			loadURL = "/images/FinBlade_Icon.png";
 			setTimeout(() => {
 				scrollToBottom();
 			}, 100);
+			typing = false;
 				
 			
 		});
@@ -54,8 +61,11 @@
 	function submitQuestion() {
 		if (chatquestion.trim() !== '') {
 			messages = [...messages, { text: chatquestion, sender: 'client', timestamp: new Date() }];
+			messages = [...messages, { text: '', sender: 'server', timestamp: new Date(), typing: true }];
 			socket.emit('chatgpt_question', { question: chatquestion, stylevar: stylevar });
-			loadanim = true;
+			typing = true;
+			// loadanim = true;
+			loadURL = "/images/FinBlade_Icon.gif";
 			setTimeout(() => {
 				scrollToBottom();
 				chatquestion = '';
@@ -75,7 +85,7 @@
 </script>
 
 <div class="chat1">
-	<h3 style="color: white;">Enterprise AI Chat with GuardRails</h3>
+	<!-- <h3 style="color: white;">Enterprise AI Chat with GuardRails</h3> -->
 	<div class="chat-gpt-container">
 		<div id="chat-history1" class="chat-history1"  readonly="readyonly">
 			<div class="message placeholder" bind:this={chatHistory}>
@@ -91,9 +101,17 @@
 					{#each messages as message (message.text)}
 						<div class="message {message.sender}">
 							<p>{message.text}</p>
+							{#if message.typing}
+								<div class="typing-indicator">
+									<span></span>
+									<span></span>
+									<span></span>
+								</div>
+							{/if}
 							<span style="font-size: x-small;">{formatDate(message.timestamp)}</span>
 						</div>
 					{/each}
+				
 				{/if}
 			</div>
 			<button id="scroll-to-top1" on:click={scrollToTop}>&#9650;</button>
@@ -114,7 +132,8 @@
 							placeholder="Enter your question to ChatGPT Plus"
 						/>
 						<button
-							class="submit2 {loadanim ? 'transparent' : ''}"
+							class="submit2"
+							style="background-image: url({loadURL});"
 							on:click|preventDefault={() => {
 								stylevar='None', 
 								submitQuestion()
@@ -122,11 +141,11 @@
 							}}
 							type="submit"
 						>
-							{#if loadanim}
+							<!-- {#if loadanim}
 								<div id="loading-container2">
 									<div class="dot-flashing2" />
 								</div>
-							{/if}
+							{/if} -->
 						</button>
 					</div>
 
@@ -152,6 +171,7 @@
 		</div>
 	</div>
 </div>
+
 <!-- <button
 	on:click={(e) => {
 		question = '';
@@ -164,6 +184,49 @@
 	.transparent {
 		background-image: none !important;
 		cursor: default;
+	}
+
+	.typing-indicator {
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height: 20px;
+	}
+
+	.typing-indicator span {
+		position: absolute;
+		top: 0;
+		width: 6px;
+		height: 6px;
+		margin: 0 1px;
+		background: #292929;
+		border-radius: 50%;
+		animation: typing-indicator 1.4s infinite;
+		animation-fill-mode: both;
+	}
+
+	.typing-indicator span:nth-child(1) {
+		left: 6px;
+		top: 5px;
+		animation-delay: 0.2s;
+	}
+
+	.typing-indicator span:nth-child(2) {
+		left: 18px;
+		top: 5px;
+		animation-delay: 0.4s;
+	}
+
+	.typing-indicator span:nth-child(3) {
+		left: 30px;
+		top: 5px;
+		animation-delay: 0.6s;
+	}
+
+	@keyframes typing-indicator {
+		0% { transform: scale(1); }
+		20% { transform: scale(1, 2.2); }
+		40% { transform: scale(1); }
 	}
 
 	.message {
@@ -203,10 +266,12 @@
 	}
 	.client {
 		text-align: right;
+		white-space: pre-wrap;
 	}
 
 	.server {
 		text-align: left;
+		white-space: pre-wrap;
 	}
 
 	#scroll-to-bottom1 {
@@ -232,7 +297,7 @@
 	}
 
 	.message.placeholder {
-		height: calc(100% - 80px);
+		height: calc(100% - 50px);
 		overflow-y: auto;
 		padding: 1em;
 	}
@@ -259,8 +324,8 @@
 		justify-content: center;
 		background-color: rgba(26, 26, 26, 0);
 		width: 100%;
-		height: 90vh;
-		max-height: 90vh;
+		height: 87vh;
+		max-height: 87vh;
 		padding: 1em;
 		color: white;
 		font-family: 'Leelawadee', sans-serif !important;
@@ -299,7 +364,7 @@
 	}
 	.chat1 .chat-history1 .message.placeholder {
 		color: #fff;
-		font-style: italic;
+		
 	}
 	.chat1 .chat-history1 .message.placeholder p {
 		margin: 0;
@@ -321,7 +386,7 @@
 		border-top: 1em solid rgb(26, 26, 26);
 		border-left: 1em solid transparent;
 	}
-	.chat1 .chat-history1 .message.placeholder::after {
+	/*.chat1 .chat-history1 .message.placeholder::after {
 		content: '';
 		position: absolute;
 		bottom: 0;
@@ -330,7 +395,7 @@
 		height: 0;
 		border-bottom: 1em solid rgb(26, 26, 26);
 		border-right: 1em solid transparent;
-	}
+	}*/
 
 	.input-box1 {
 		width: 100%;
@@ -353,7 +418,6 @@
 		width: 2em;
 		height: 2em;
 		z-index: 10;
-		background-image: url("/images/FinBlade_Icon.png");
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;
@@ -377,7 +441,7 @@
 	}
 
 	/* CSS for the loading animation container */
-	#loading-container2 {
+	/*#loading-container2 {
 		height: auto;
 		background-color: rgba(255, 255, 255, 0);
 		z-index: 9999;
@@ -431,5 +495,5 @@
 		100% {
 			background-color: rgba(152, 128, 255, 0.2);
 		}
-	}
+	}*/
 </style>

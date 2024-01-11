@@ -16,7 +16,7 @@
  <main>
     <!-- <SearchBox /> -->
     <slot />
-    <SearchBox userDetails={data.userDetails} />
+    <SearchBox userDetails={data.userDetails} searchType={data.searchType} />
      <!-- {#if $searchBox} -->
      <!-- <PageTransition pathname={data.pathname}> -->
      <!-- </PageTransition> -->

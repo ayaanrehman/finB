@@ -1,8 +1,36 @@
 <script>
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+
+	let time = 3;
+	let showLogo = false;
 
 	let emailInput;
 	let tagline = false;
+
+	// let text = "Elevate your workforce with Gen-AI.";
+	// let index = 0;
+	// let currentText = "";
+
+
+// 	function typeText() {
+// 		if (index < text.length) {
+// 		currentText += text.charAt(index);
+// 		index++;
+// 		setTimeout(typeText, 30);
+// 		}
+//   }
+
+	onMount(() => {
+		const interval = setInterval(() => {
+			if (time > 0) {
+				time--;
+			} else {
+				clearInterval(interval);
+				showLogo = true;
+			}
+		}, 1000);
+	});
 
 	onMount(() => {
 		emailInput.focus();
@@ -23,7 +51,9 @@
 		if (text == 'logged in') {
 			successmsg = true;
 			failuremsg = false;
-			window.location.href = '/homepage/';
+			// window.location.href = '/homepage/';
+			// goto('/homepage/');
+			goto('/documents/semantic-search/');
 			console.log('login success');
 		} else {
 			successmsg = false;
@@ -36,86 +66,101 @@
 
 	onMount(() => {
 		setTimeout(() => {
+			// typeText()
 			tagline = true;
 		}, 1720);
+		
 	});
 </script>
 
-<div class="overlay" class:fade-out={successmsg} />
-<main>
-	<div class="form-container">
-		<!-- <img class="logologin" src="/images/FinBlade Logo-02 2.png" alt="finblade" /> -->
-		<div>
-			<p style="color: black;">Log in to</p>
-			<img class="logologin" src="/images/finblade-Recovered.png" alt="finblade" />
-		</div>
+<div class="overlay" class:fade-out={successmsg}></div>
+	<main>
+		<div class="form-container">
+			<!-- <img class="logologin" src="/images/FinBlade Logo-02 2.png" alt="finblade" /> -->
+			<div>
+				<p style="color: black;">Log in to</p>
+				<img class="logologin" src="/images/finblade-text-black.png" alt="finblade" style="width: 120px; height: auto" />
+			</div>
 
-		<form on:submit|preventDefault={handleSubmit}>
-			<input
-				type="email"
-				name="email"
-				autocomplete="off"
-				bind:value={email}
-				bind:this={emailInput}
-				placeholder="Enter your email"
-			/>
-			<input
-				type="password"
-				name="password"
-				bind:value={password}
-				placeholder="Enter your password"
-			/>
-			<button type="submit">Submit</button>
-		</form>
-		{#if successmsg}
-			<p class="successmsg">User Authenticated Successfully</p>
-		{/if}
-		{#if failuremsg}
-			<p class="failuremsg">Invalid Username or Password</p>
-		{/if}
-		<div class="userhelper">
-			<a href="/signup/">Create a New User</a>
-			<a href="/forgot-password/">Forgot Password</a>
-		</div>
-	</div>
-	<div class="vid-container">
-		<div class="wallp">
-			<div class="dot" />
-
-			<div class="logo-animation">
-				<img src="/images/finblade.png" width="200px" height="auto" alt="Company Logo" />
-
-				{#if tagline}
-					<div style="position: relative;">
-						<p>Elevate your workforce with Gen-AI.</p>
-						<div id="movingBox" />
-					</div>
-				{:else}
-					<p style="color: black;">"Placeholder"</p>
-				{/if}
+			<form on:submit|preventDefault={handleSubmit}>
+				<input
+					type="email"
+					name="email"
+					autocomplete="off"
+					bind:value={email}
+					bind:this={emailInput}
+					placeholder="Enter your email"
+				/>
+				<input
+					type="password"
+					name="password"
+					bind:value={password}
+					placeholder="Enter your password"
+				/>
+				<button type="submit">Submit</button>
+			</form>
+			{#if successmsg}
+				<p class="successmsg">User Authenticated Successfully</p>
+			{/if}
+			{#if failuremsg}
+				<p class="failuremsg">Invalid Username or Password</p>
+			{/if}
+			<div class="userhelper">
+				<a href="/signup/">Create a New User</a>
+				<a href="/forgot-password/">Forgot Password</a>
 			</div>
 		</div>
-	</div>
-</main>
+		<div class="vid-container">
+			<!-- <video src="/1.mp4" autoplay muted playsinline loop /> -->
+			<!-- <img class="bgimg" src="/images/bg-31.jpg" alt="" /> -->
+			<div class="wallp">
+				<!-- {#if time > 0}
+					<p>{time < 10 ? `00:0${time}` : `00:${time}`}</p>
+				{:else if showLogo} -->
+					<div class="dot" />
+
+					<div class="logo-animation">
+						<div>
+						<img src="/images/FinBlade_Icon.gif" width="40px" height="auto" alt="Company Logo" style="margin-right: 5px;" />
+						<img src="/images/finblade-text.png" width="200px" height="auto" alt="Company Logo" />
+						</div>
+						<!-- <p>
+							"Unlocking financial insights with the power of AI where semantic search meets data
+							excellence!"
+						</p> -->
+
+						<!-- <p>{currentText}</p> -->
+						{#if tagline}
+						<div style="position: relative;">
+						<p>Elevate your workforce with Gen-AI.</p>
+						<div id="movingBox"></div>
+						</div>
+						{:else}
+						<p style="color: black;">"Placeholder"</p>
+						{/if}
+
+					</div>
+				<!-- {/if} -->
+			</div>
+		</div>
+	</main>
+
 
 <style>
+
 	@keyframes moveRight {
-		0% {
-			left: 0;
-		}
-		100% {
-			left: 100%;
-		}
+	0% { left: 0; }
+	100% { left: 100%; }
 	}
 
 	#movingBox {
-		position: absolute;
-		top: 0;
-		width: 1000px;
-		background-color: black;
-		color: white;
-		padding: 20px;
-		animation: moveRight 3s forwards;
+	position: absolute;
+	top: 0;
+	width: 1000px;
+	background-color: black;
+	color: white;
+	padding: 20px;
+	animation: moveRight 3s forwards;
 	}
 
 	.overlay {
@@ -132,8 +177,8 @@
 	}
 
 	.fade-out {
-		animation: ofadeout 2s forwards;
-	}
+    animation: ofadeout 2s forwards;
+}
 
 	@keyframes ofadein {
 		0% {
@@ -156,6 +201,8 @@
 			display: block;
 		}
 	}
+
+
 
 	.dot {
 		position: absolute;
