@@ -15,15 +15,6 @@
 	import { lisFolder } from '$lib/stores/global.js';
 	import SearchList from './SearchList.svelte';
 
-	import { supabase } from '$lib/supabase.js';
-	import { page as pg } from '$app/stores';
-	import { goto } from '$app/navigation';
-	import { embs } from '$lib/stores/global.js';
-	import { filenameStore } from '$lib/stores/global.js';
-
-
-
-
 	// export let data;
 	// export let data2;
 
@@ -33,14 +24,11 @@
 	export let userId;
 	export let searchType;
 	export let userDetails;
-
-	$:currentPath = $pg?.url?.pathname;
 	
 
 	let isResizing = false;
 	let isOnEdge = false;
 	let keydownHandler;
-	let socket;
 
 	function changeCursor(event) {
 	let nav = document.getElementById('nav');
@@ -53,34 +41,6 @@
 		isOnEdge = false;
 	}
 }
-
-onMount(() => {
-    document.body.addEventListener('dragover', handleDragOver);
-    document.body.addEventListener('dragleave', handleDragLeave);
-    document.body.addEventListener('drop', handleDrop);
-
-    return () => {
-      document.body.removeEventListener('dragover', handleDragOver);
-      document.body.removeEventListener('dragleave', handleDragLeave);
-      document.body.removeEventListener('drop', handleDrop);
-    };
-  });
-
-onMount(async () => {
-		// socket = io.connect('http://192.168.200.29:8080/module5');
-		socket = io.connect('https://icsfinblade.com:444/module5');
-		// socket = io.connect('http://192.168.100.113:8080/module5');
-		// socket.on('receive_embeddings', function (data) {
-		// 	$embs = data.embeddings;
-		// 	// embs = data.embeddings;
-		// 	console.log('Embeddings progress is', $embs);
-		// 	});
-		socket.on('receive_embeddings', function (data) {
-					console.log('Embeddings progress is', data.embeddings);
-					$embs = data.embeddings;
-				});
-	
-		});
 
 
 onMount(() => {
@@ -350,249 +310,12 @@ onMount(() => {
 	function docopenz() {
 		docopen = !docopen;
 	}
-
-	let isDragging = false;
-
-	const handleDragOver = (event) => {
-        event.preventDefault();
-		isDragging = true;
-    };
-
-	const handleDragLeave = (event) => {
-		event.preventDefault();
-		isDragging = false;
-	};
-
-
-	// const handleDrop = async (event) => {
-    //     event.preventDefault();
-    //     let selectedFile;
-    //     if (event.dataTransfer.items) {
-    //         if (event.dataTransfer.items[0].kind === 'file') {
-    //             selectedFile = event.dataTransfer.items[0].getAsFile();
-    //         }
-    //     } else {
-    //         selectedFile = event.dataTransfer.files[0];
-    //     }
-
-    //     // upload the file to Supabase
-	// 	let folderTypez;
-    //     if (selectedFile) {
-	// 		if(searchType == 'finance-ai'){
-	// 			folderTypez = 'structured';
-	// 		}else if(searchType == 'semantic-search'){
-	// 			folderTypez = 'unstructured';
-	// 		}
-    //         const filePath = `${folderTypez}/${selectedFile.name}`; // adjust the file path as needed
-    //         const { error } = await supabase.storage.from(`${userId}`).upload(filePath, selectedFile);
-    //         if (error) {
-    //             console.error('Error uploading file:', error);
-	// 			console.log(`folder Typez: ${folderTypez}, selectedFile: ${selectedFile}, selectedFilename: ${selectedFile.name}, username: ${userDetails.username}, userid: ${userDetails.id}, prev:${userId}`);
-    //         } else {
-    //             console.log('File uploaded successfully');
-    //         }
-    //     }
-    // };
-
-// 	const handleDrop = async (event) => {
-//     event.preventDefault();
-//     let files = event.dataTransfer.files;
-//     let folderTypez;
-
-//     for (let i = 0; i < files.length; i++) {
-//         let file = files[i];
-
-//         if (file) {
-//             if(searchType == 'finance-ai'){
-//                 folderTypez = 'structured';
-//             }else if(searchType == 'semantic-search'){
-//                 folderTypez = 'unstructured';
-//             }
-//             const filePath = `${folderTypez}/${file.name}`; // adjust the file path as needed
-//             const { error } = await supabase.storage.from(`${userId}`).upload(filePath, file);
-//             if (error) {
-//                 console.error('Error uploading file:', error);
-//             } else {
-//                 console.log('File uploaded successfully');
-//             }
-//         }
-//     }
-// };
-
-
-let uploadProgress = 0; // variable to keep track of the upload progress
-let uploadComplete = false;
-let uploadBar = false;
-
-const handleDrop = async (event) => {
-	event.preventDefault();
-	isDragging = false;
-	let files = event.dataTransfer.files;
-	let folderTypez;
-	let firstFileUploaded = false;
-	let userID = userDetails.id;
-	
-	
-	if (userID) {
-			const { data, error } = await supabase.storage.createBucket(userID, {
-				public: true
-				// allowedMimeTypes: ['image/png'],
-				// fileSizeLimit: 1024
-			});
-		}
-
-	// Check all files before uploading
-    for (let i = 0; i < files.length; i++) {
-        let file = files[i];
-        let fileExtension = file.name.split('.').pop();
-
-        if ((searchType == 'finance-ai' && fileExtension !== 'xlsx') || 
-            (searchType != 'finance-ai' && fileExtension !== 'pdf')) {
-            alert ('Only ".xlsx" file are accepted in Database Search & only ".pdf" files are accepted in Semantic Search');
-            return;
-        }
-    }
-
-
-
-	
-	
-
-
-	// for (let i = 0; i < files.length; i++) {
-	// 	let file = files[i];
-	for (let file of files) {
-		if (file) {
-
-			// Upload files
-			let selectedFileName = file.name;
-			let username = userDetails.user_metadata.name;
-
-			uploadBar = true;
-
-			if(searchType == 'finance-ai'){
-				folderTypez = 'structured';
-			}else if(searchType == 'semantic-search'){
-				folderTypez = 'unstructured';
-			}
-
-			
-	
-
-			// Wrap the emit and response handling in a new Promise
-			async function uploadFile() {
-				return new Promise(async (resolve, reject) => {
-					// Emit the upload event
-					$embs = '';
-					socket.emit('upload', { folderType: folderTypez, selectedFile: selectedFileName, username: username, userid: userId });
-					console.log({ folderTypez, selectedFileName, username, userId });
-
-					
-
-					if (searchType !== 'finance-ai') {
-
-						if ($embs !== 'Started' && $embs !== 'Completed' && $embs !== "") {
-						alert('Failed to upload file. Please try again' + $embs);
-						uploadBar = false;
-						$embs = '';
-						return;
-
-						} else while ($embs !== 'Completed') {
-							await new Promise(r => setTimeout(r, 1000));
-						}
-					}
-					// Once $embs === 'Completed', resolve the Promise
-					
-					else if (searchType == 'finance-ai' || $embs === 'Completed') {
-                   	 	resolve('Completed');
-               		}
-					
-					else {
-						alert('Failed to upload file. Please try again' + $embs);
-						uploadBar = false;
-						$embs = '';
-						reject('Failed');
-						return;
-					}
-				});
-			};
-
-			const filePath = `${folderTypez}/${file.name}`;
-			const { error } = await supabase.storage.from(`${userId}`).upload(filePath, file);
-			
-
-			if (error) {
-				console.error(error.message);
-				alert('Error uploading file: ' + error.message);
-				uploadBar = false
-				$embs = '';
-				return;
-
-			} else {
-				await uploadFile();
-
-				console.log('File uploaded successfully');
-				setTimeout(() => {
-				uploadProgress += 100 / files.length; // increment the upload progress
-			}, 100);
-
-			}
-		}
-		setTimeout(() => {
-		if (uploadProgress >= 100) {
-			uploadComplete = true;
-			setTimeout(() => {
-				uploadComplete = false;
-				uploadProgress = 0;
-				uploadBar = false;
-				
-				if (!firstFileUploaded) {
-					setFileNameStore()
-					
-                goto(`${currentPath}${file.name.replace(/(\.pdf|\.xlsx)$/, '')}`);
-                firstFileUploaded = true;
-				
-		
-           	 }
-			}, 1000);
-		
-		}
-	}, 200);
-		function setFileNameStore() {
-		
-        if(searchType == 'finance-ai'){
-            let filename = file.name.replace(/(\.pdf|\.xlsx)$/, '');
-		    // sr(filename);
-			filenameStore.set({filename: filename, source: 'finance-ai'});
-		}
-        else if(searchType == 'semantic-search'){
-            let filename = file.name.replace(/(\.pdf|\.xlsx)$/, '');
-		    // sfp(filename);
-			filenameStore.set({filename: filename, source: 'semantic-search'});
-        }
-	}
-	}
-};
-
-
-
-
 </script>
 
 <button id="openSidebar" style="margin-top: 1em;"><img src="/images/3hvl.png" alt="" /></button>
 
 <nav id="nav" on:mousemove={changeCursor} on:mousedown={startResize} on:mousemove={doResize} on:mouseup={stopResize} >
-	{#if uploadBar}
-	<div>
-		<progress value={uploadProgress} max="100" class:complete={uploadComplete}></progress>
-		<span>{Math.round(uploadProgress)}%</span>
-		{#if uploadComplete}
-        <p>File(s) uploaded successfully</p>
-   		{/if}
-	</div>
-	<br>
-	{/if}
-	<ul class="ulstat" on:drop={handleDrop} on:dragover={handleDragOver} on:dragleave={handleDragLeave}>
+	<ul class="ulstat">
 		<li>
 			<div>
 				<div class="datacntn">
@@ -618,10 +341,8 @@ const handleDrop = async (event) => {
 						<FileUpload {searchType} {userId} {userDetails} />
 					</div>
 				{/if}
-				<p style="color: grey; font-size: small">Drop your files to add in this Data Lake</p>
-				
+				<br />
 			</div>
-			
 			<!-- {#if docs2} -->
 			<!-- {#if showDocuments} -->
 			<!-- {/if} -->
@@ -647,16 +368,6 @@ const handleDrop = async (event) => {
 			{/if}
 		{/if}
 		{/if}
-		<div 
-			on:dragover={handleDragOver} 
-			on:dragleave={handleDragLeave} 
-			on:drop={handleDrop} 
-			class:dragging={isDragging}
-			>
-			{#if isDragging}
-			<span class="drop-text">Drop here</span>
-		  {/if}
-		</div>
 
 		<!-- </li> -->
 		<!-- {/if} -->
@@ -670,35 +381,9 @@ const handleDrop = async (event) => {
 			<li />
 		</div>
 	</ul>
-	
 </nav>
 
-
 <style lang="scss">
-
-	progress.complete {
-        background-color: green;
-    }
-
-	.dragging {
-		background-color: #f0f0f093;
-		border: 1px dashed #303030;;
-		border-radius: 5px;
-		color: #303030;
-		outline: 1px dashed #303030;
-		width: 100%; /* adjust as needed */
-		height: max-content; /* adjust as needed */
-		margin: auto;
-		padding: 1em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.drop-text {
-		font-size: medium;
-		
-	}
 
 
 	.dtlk {

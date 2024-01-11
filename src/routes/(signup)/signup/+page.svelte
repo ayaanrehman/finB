@@ -1,6 +1,7 @@
 <script>
-	import { adminAuthClient } from '$lib/supabase.js';
+	import { adminAuthClient, supabase } from '$lib/supabase.js';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	let emailuser = '';
 	let passworduser = '';
@@ -8,7 +9,16 @@
 	let phoneuser = '';
 	let successMessage = '';
 	let confirmPassword = '';
+	let bucketid = '';
     let errors = [];
+	let socket;
+
+	onMount(async () => {
+		// socket = io.connect('http://192.168.200.29:8080/module5');
+		socket = io.connect('https://icsfinblade.com:444/module5');
+		// socket = io.connect('http://192.168.100.113:8080/module5');
+	
+	});
 
 	async function signUp() {
 		if (emailuser === '' || passworduser === '' || nameuser === '') {
@@ -38,8 +48,31 @@
                 email_confirm: true,
                 phone_confirm: true
 			});
-			successMessage = 'User Created Successfully. Redirecting to Login Page';
+	
+			if (data) {
+				const { user } = data; // get the user object
+				const { id } = user; // get the user id
+				bucketid = id;
+				// console.log('ID:' , id);
+
+				const { data: bucketData, error: bucketError } = await supabase.storage.createBucket(id, {
+					public: true,
+					// allowedMimeTypes: [ 'image/png' ],
+					// fileSizeLimit: 1024
+				});
+
+				if (bucketError) {
+					console.error('Error creating bucket:', bucketError);
+				} else {
+					console.log('Bucket created successfully:', bucketData);
+				}
+  			}
+			successMessage = 'User Created Successfully. Redirecting to Login Page...';
             // console.log("Data: ", data, "Error: ", error);
+			socket.emit('createupload', {
+					username: nameuser,
+					userid: bucketid
+				});
 			setTimeout(() => {
 				successMessage = '';
 			}, 3000);
@@ -107,9 +140,11 @@
                 signUp();
             }}>Submit</button>
 		</form>
-		<p style="color: white;">
-			{#if successMessage}{successMessage}{/if}
+		{#if successMessage}
+		<p class="successmsg">
+			{successMessage}
 		</p>
+		{/if}
 		<p>
 			<!-- {#if form?.error}Invalid Username or Password{/if} -->
 		</p>
@@ -120,6 +155,36 @@
 </main>
 
 <style>
+		.successmsg {
+		border: none;
+		border-radius: 20px;
+		background-color: rgb(74, 165, 74);
+		padding: 10px;
+		padding-right: 50px;
+		position: relative;
+		display: inline-block;
+		color: white;
+		width: max-content;
+	}
+	.successmsg::before {
+		content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" fill="white"><path d="M7.687 14.4l-5.087-5.099 1.518-1.518 3.568 3.58 7.069-7.069 1.518 1.518z"/></svg>');
+		position: absolute;
+		right: -10px;
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 1;
+	}
+
+	.successmsg::after {
+		content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="green"><path d="M7.687 14.4l-5.087-5.099 1.518-1.518 3.568 3.58 7.069-7.069 1.518 1.518z"/></svg>');
+		position: absolute;
+		background-color: green;
+		height: 100%;
+		right: 0px;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
 	form {
 		display: flex;
 		flex-direction: column;

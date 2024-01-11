@@ -22,20 +22,20 @@
 
 export function rate(inputRating) {
     socket.emit('rate', { inputRating });
-    console.log(inputRating)
-    console.log('Rating Submitted')
+    // console.log(inputRating)
+    // console.log('Rating Submitted')
 }
 
 export function temp(creative) {
     socket.emit('temp', { creative });
-    console.log(creative)
-    console.log('Temperature Set!')
+    // console.log(creative)
+    // console.log('Temperature Set!')
 }
 
 
 //For Admin Page
 export function em() {
     socket.emit('em', { emselect });
-    console.log('Execute Method Selected')
+    // console.log('Execute Method Selected')
 }
 

@@ -16,9 +16,7 @@ let imgg;
 let loading = false;
 let successMessage = false;
 
-$: if (loading) {
-    successMessage = false;
-  }
+
 
 $: {
   if ($embs === 'Started') {
@@ -66,8 +64,9 @@ function updateTitle(){
 }
 
 onMount(async () => {
-    socket = io.connect('https://icsfinblade.com:444');
+    // socket = io.connect('https://icsfinblade.com:8080:444');
     // socket = io.connect('http://192.168.200.29:8080');
+    socket = io.connect('https://icsfinblade.com:444');
     // socket = io.connect('http://192.168.100.113:8080');
     socket.on('connect', function() {
       console.log('Connected!');
@@ -162,15 +161,15 @@ onMount(async () => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5em;
+  gap: 0;
   color: white;
   position: absolute;
-  right: 20em;
+  right: 25em;
   top: 1.8em;
   height: 1em;
 }
 
-/* .tick {
+.tick {
   position: relative;
   width: 0;
   top: 0.1em;
@@ -196,7 +195,7 @@ onMount(async () => {
   background: #0f0;
   bottom: 25px;
   left: 30px;
-} */
+}
 
   .loading-ring {
     display: inline-block;
@@ -212,19 +211,6 @@ onMount(async () => {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-
-  .tick {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    border: 8px solid #008000; /* Green */
-    border-radius: 50%;
-  }
-
-  /* @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  } */
 
   .status {
     display: flex;

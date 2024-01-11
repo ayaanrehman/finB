@@ -15,8 +15,11 @@
 		userName = userDetails?.user_metadata?.name;
 		userEmail = userDetails?.email;
 	}
+
+	
+
 	let successMessage = '';
-	console.log('User Details: ', userDetails);
+	// console.log('User Details: ', userDetails);
 
 	async function changePassword() {
 		if (newPassword !== confirmPassword) {

@@ -23,15 +23,15 @@ export const handle = async ({ event, resolve }) => {
         let {
             data: { session }
         } = await event.locals.supabase.auth.getSession();
-        console.log("data from hooks:", session)
+        // console.log("data from hooks:", session)
         // console.log(session);
 
         return session;
     }
 
     const session = await event.locals.getSession();
-    console.log('hello session', session);
-    console.log("urls pathname:", event.url.pathname)
+    // console.log('hello session', session);
+    // console.log("urls pathname:", event.url.pathname)
 
     if(!session){
         if(!event.url.pathname == '/login'){

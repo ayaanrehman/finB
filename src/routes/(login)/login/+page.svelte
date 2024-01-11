@@ -1,4 +1,13 @@
 <script>
+	import { onMount } from 'svelte';
+
+	let emailInput;
+	let tagline = false;
+
+	onMount(() => {
+		emailInput.focus();
+	});
+
 	let email = '';
 	let password = '';
 
@@ -14,7 +23,7 @@
 		if (text == 'logged in') {
 			successmsg = true;
 			failuremsg = false;
-			window.location.href = "/homepage/";
+			window.location.href = '/homepage/';
 			console.log('login success');
 		} else {
 			successmsg = false;
@@ -24,14 +33,32 @@
 			password = '';
 		}
 	}
+
+	onMount(() => {
+		setTimeout(() => {
+			tagline = true;
+		}, 1720);
+	});
 </script>
 
+<div class="overlay" class:fade-out={successmsg} />
 <main>
 	<div class="form-container">
-		<img class="logologin" src="/images/finblade1.png" alt="finblade" />
+		<!-- <img class="logologin" src="/images/FinBlade Logo-02 2.png" alt="finblade" /> -->
+		<div>
+			<p style="color: black;">Log in to</p>
+			<img class="logologin" src="/images/finblade-Recovered.png" alt="finblade" />
+		</div>
 
 		<form on:submit|preventDefault={handleSubmit}>
-			<input type="email" name="email" bind:value={email} placeholder="Enter your email" />
+			<input
+				type="email"
+				name="email"
+				autocomplete="off"
+				bind:value={email}
+				bind:this={emailInput}
+				placeholder="Enter your email"
+			/>
 			<input
 				type="password"
 				name="password"
@@ -52,16 +79,137 @@
 		</div>
 	</div>
 	<div class="vid-container">
-		<!-- <video src="/1.mp4" autoplay muted playsinline loop /> -->
-		<img class="bgimg" src="/images/bg-3.jpg" alt="" />
+		<div class="wallp">
+			<div class="dot" />
+
+			<div class="logo-animation">
+				<img src="/images/finblade.png" width="200px" height="auto" alt="Company Logo" />
+
+				{#if tagline}
+					<div style="position: relative;">
+						<p>Elevate your workforce with Gen-AI.</p>
+						<div id="movingBox" />
+					</div>
+				{:else}
+					<p style="color: black;">"Placeholder"</p>
+				{/if}
+			</div>
+		</div>
 	</div>
 </main>
 
 <style>
+	@keyframes moveRight {
+		0% {
+			left: 0;
+		}
+		100% {
+			left: 100%;
+		}
+	}
+
+	#movingBox {
+		position: absolute;
+		top: 0;
+		width: 1000px;
+		background-color: black;
+		color: white;
+		padding: 20px;
+		animation: moveRight 3s forwards;
+	}
+
+	.overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgb(0, 0, 0);
+		opacity: 1;
+		display: block;
+		z-index: 10;
+		animation: ofadein 2s forwards;
+	}
+
+	.fade-out {
+		animation: ofadeout 2s forwards;
+	}
+
+	@keyframes ofadein {
+		0% {
+			opacity: 1;
+			display: block;
+		}
+		100% {
+			opacity: 0;
+			display: none;
+		}
+	}
+
+	@keyframes ofadeout {
+		0% {
+			opacity: 0;
+			display: none;
+		}
+		100% {
+			opacity: 1;
+			display: block;
+		}
+	}
+
+	.dot {
+		position: absolute;
+		width: 50px;
+		height: 50px;
+		background: white;
+		border-radius: 50%;
+		animation: grow 3s, fadeOut 2s forwards;
+	}
+
+	/* .dot::before {
+		content: '';
+		position: absolute;
+		top: -30px;
+		left: -30px;
+		width: 110px;
+		height: 110px;
+		border: 20px solid white;
+		border-radius: 50%;
+		box-sizing: border-box;
+		opacity: 0.5;
+		animation: rotate 3s linear;
+	} */
+
+	@keyframes grow {
+		0% {
+			transform: scale(0.1);
+		}
+		100% {
+			transform: scale(20);
+		}
+	}
+
+	/* @keyframes rotate {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	} */
+
+	@keyframes fadeOut {
+		0% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
 	.successmsg {
 		border: none;
 		border-radius: 20px;
-		background-color: rgb(74, 165, 74);
+		background-color: rgb(32, 155, 32);
 		padding: 10px;
 		position: relative;
 		display: inline-block;
@@ -153,8 +301,38 @@
 	.bgimg {
 		width: 100%;
 		height: 100vh;
-		filter: brightness(1);
-		opacity: 75%;
+		/* filter: grayscale(100%);
+		opacity: 100%; */
+	}
+
+	.wallp {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+
+		width: 100%;
+		height: 100vh;
+		background-color: black;
+	}
+
+	.logo-animation {
+		display: flex;
+		justify-content: center;
+
+		flex-direction: column;
+		align-items: center;
+		animation: fadeIn 1s 1s forwards;
+		opacity: 0;
+	}
+
+	@keyframes fadeIn {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
 	}
 
 	.vid-container {
@@ -182,6 +360,10 @@
 		background-color: rgba(240, 248, 255, 0);
 		border: none;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.692);
+	}
+
+	form input:focus {
+		outline: none;
 	}
 
 	a {

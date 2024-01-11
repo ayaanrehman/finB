@@ -101,8 +101,9 @@
 			// socket = io.connect('http://icsfinblade.com:8080/module1');
 			// socket = io.connect('http://54.146.82.200:8080/module1');
 			// socket = io.connect('http://172.31.55.58:8080/module1');
-			socket = io.connect('https://icsfinblade.com:444/module1');
+			// socket = io.connect('https://icsfinblades.com:444/module1');
 			// socket = io.connect('http://192.168.200.29:8080/module1');
+			socket = io.connect('https://icsfinblade.com:444/module1');
 			// socket = io.connect('http://192.168.100.113:8080/module1');
 			
 		} else if (srchtp == 'semantic-search') {
@@ -110,8 +111,9 @@
 			// socket = io.connect('http://icsfinblade.com:8080/module4');
 			// socket = io.connect('http://54.146.82.200:8080/module4');
 			// socket = io.connect('http://172.31.55.58:8080/module4');
-			socket = io.connect('https://icsfinblade.com:444/module4');
+			// socket = io.connect('https://icsfinblades.com:444/module4');
 			// socket = io.connect('http://192.168.200.29:8080/module4');
+			socket = io.connect('https://icsfinblade.com:444/module4');
 			// socket = io.connect('http://192.168.100.113:8080/module4');
 		}
 
@@ -124,7 +126,7 @@
 				base64img = `data:image/png;base64,${data.base64d}`;
 			}
 
-			// console.log('This is Plotted Image: ', base64img);
+			console.log('This is Plotted Image: ', base64img);
 			showLoadingContainer = false;
 			generatingResponse = false;
 			response = data.response;

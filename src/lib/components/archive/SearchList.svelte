@@ -132,8 +132,6 @@
         }
 	}
 
-
-
     // console.log('search type is', searchType);
     // 
 </script>
@@ -371,9 +369,6 @@
 		outline: none;
 	}
 
-	.docsearch::placeholder {
-		color: rgb(184, 184, 184)	}
-
 	.docsearch2 {
 		background-color: rgba(83, 82, 82, 0);
 		border: none;
@@ -395,13 +390,11 @@
 		white-space: nowrap;
 		
 		
-		
 	}
 
 	.listTitle:hover {
 		white-space: normal; /* Display full text on hover */
 		width: auto;
-		word-wrap: break-word;
 	}
 
 	.titledoc {
@@ -410,7 +403,6 @@
 		font-weight: normal;
 		display: flex;
 		gap: 1em;
-		word-break: break-all;
 	}
 
 	.titledoc:hover,

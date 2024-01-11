@@ -8,6 +8,10 @@ html {
     box-sizing: border-box;
  }
 
+ h1, h1, h3, h4, h5, h6, p, a {
+    color: #ffffff;
+ }
+
  .overlay-video {
     position: absolute;
     top: 0;
@@ -351,10 +355,12 @@ border: 0.15em solid transparent;
 
 color: rgb(255, 255, 255);
 font-family: 'leelawadee-ui-semilight-normal', sans-serif;
-font-size: larger;
+font-size: smaller;
 font-weight: normal;
 overflow-wrap: normal;
 padding-right: 2em;
+/* height: auto; */
+white-space: pre-wrap;
 }
 
 
@@ -398,14 +404,14 @@ align-self: center;
 width: 2em;
 height: 2em;
 z-index: 10;
-background-image: url("../images/send2.png");
+background-image: url("../images/FinBlade_Icon.gif");
 background-size: cover; 
 background-repeat: no-repeat; 
 background-position: center; 
 background-color: #33333300;
 position: absolute;
 right: 0.5em;
-top: 1em;
+top: 0.8em;
 }
 
 
