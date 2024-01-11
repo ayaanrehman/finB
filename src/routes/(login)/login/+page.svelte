@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	let time = 3;
 	let showLogo = false;
@@ -50,7 +51,9 @@
 		if (text == 'logged in') {
 			successmsg = true;
 			failuremsg = false;
-			window.location.href = '/homepage/';
+			// window.location.href = '/homepage/';
+			// goto('/homepage/');
+			goto('/documents/semantic-search/');
 			console.log('login success');
 		} else {
 			successmsg = false;

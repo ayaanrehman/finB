@@ -5,7 +5,7 @@
 	export let userDetails;
 
 	beforeUpdate(() => {
-		$preSidebarEnabled = false;
+		$preSidebarEnabled = true;
 	});
 
 	onDestroy(() => {
