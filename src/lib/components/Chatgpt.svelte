@@ -12,6 +12,8 @@
 	let stylevar = 'None';
 	let inputBox;
 
+	let loadURL = "/images/FinBlade_Icon.png";
+
 	onMount(() => {
     inputBox.focus();
   });
@@ -27,7 +29,8 @@
 			response = data.answer;
 			// console.log('This is Response: ', response);
 			messages = [...messages, { text: response, sender: 'server', timestamp: new Date() }];
-			loadanim = false;
+			// loadanim = false;
+			loadURL = "/images/FinBlade_Icon.png";
 			setTimeout(() => {
 				scrollToBottom();
 			}, 100);
@@ -55,7 +58,8 @@
 		if (chatquestion.trim() !== '') {
 			messages = [...messages, { text: chatquestion, sender: 'client', timestamp: new Date() }];
 			socket.emit('chatgpt_question', { question: chatquestion, stylevar: stylevar });
-			loadanim = true;
+			// loadanim = true;
+			loadURL = "/images/FinBlade_Icon.gif";
 			setTimeout(() => {
 				scrollToBottom();
 				chatquestion = '';
@@ -114,7 +118,8 @@
 							placeholder="Enter your question to ChatGPT Plus"
 						/>
 						<button
-							class="submit2 {loadanim ? 'transparent' : ''}"
+							class="submit2"
+							style="background-image: url({loadURL});"
 							on:click|preventDefault={() => {
 								stylevar='None', 
 								submitQuestion()
@@ -122,11 +127,11 @@
 							}}
 							type="submit"
 						>
-							{#if loadanim}
+							<!-- {#if loadanim}
 								<div id="loading-container2">
 									<div class="dot-flashing2" />
 								</div>
-							{/if}
+							{/if} -->
 						</button>
 					</div>
 
@@ -301,7 +306,7 @@
 	}
 	.chat1 .chat-history1 .message.placeholder {
 		color: #fff;
-		font-style: italic;
+		
 	}
 	.chat1 .chat-history1 .message.placeholder p {
 		margin: 0;
@@ -323,7 +328,7 @@
 		border-top: 1em solid rgb(26, 26, 26);
 		border-left: 1em solid transparent;
 	}
-	.chat1 .chat-history1 .message.placeholder::after {
+	/*.chat1 .chat-history1 .message.placeholder::after {
 		content: '';
 		position: absolute;
 		bottom: 0;
@@ -332,7 +337,7 @@
 		height: 0;
 		border-bottom: 1em solid rgb(26, 26, 26);
 		border-right: 1em solid transparent;
-	}
+	}*/
 
 	.input-box1 {
 		width: 100%;
@@ -355,7 +360,6 @@
 		width: 2em;
 		height: 2em;
 		z-index: 10;
-		background-image: url('/images/send2.png');
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;
@@ -379,7 +383,7 @@
 	}
 
 	/* CSS for the loading animation container */
-	#loading-container2 {
+	/*#loading-container2 {
 		height: auto;
 		background-color: rgba(255, 255, 255, 0);
 		z-index: 9999;
@@ -433,5 +437,5 @@
 		100% {
 			background-color: rgba(152, 128, 255, 0.2);
 		}
-	}
+	}*/
 </style>

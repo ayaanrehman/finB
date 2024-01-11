@@ -99,11 +99,11 @@ onMount(async () => {
     <div class="vline"></div>
 	<a href="/homepage/">
 		<img
-			src="/images/finblade.png"
+			src="/images/finblade-new.png"
 			alt="Company Logo"
 			class="logo"
 			width="auto"
-			height="60em"
+			height="30em"
 		/>
 	</a>
   <img class="headerimg" src={imgg} alt="{title}">
