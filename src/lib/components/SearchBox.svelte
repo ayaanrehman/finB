@@ -760,7 +760,7 @@ on:click={() => {
 		border-color: rgba(255, 255, 255, 0.363);
 		border-width: 1px;
 		border-style: solid;
-		background: radial-gradient(circle at 50% 50%, rgb(70, 70, 70), rgb(36, 36, 36), black);
+		background: radial-gradient(circle at 50% 50%, rgb(105, 105, 105), rgb(68, 68, 68), rgb(63, 63, 63));
 		/* background-color: #555555; */
 		display: flex;
 		align-items: center;
@@ -795,9 +795,9 @@ on:click={() => {
 		height: 1px;
 		background: linear-gradient(
 			to right,
-			rgba(3, 3, 44, 0.712),
+			rgb(83, 83, 83),
 			rgba(255, 255, 255, 0.438),
-			rgba(24, 0, 0, 0.63)
+			rgb(83, 83, 83)
 		);
 		/* background-color: white; */
 		opacity: 0;

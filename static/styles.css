@@ -29,8 +29,8 @@ body {
     background: linear-gradient(
     to bottom,
     rgb(0, 0, 0),
-    #6d6d6d,
-    rgb(155, 155, 155)
+    #444444,
+    rgb(90, 90, 90)
     );
    
     /* background-color: #6d6d6d; */
