@@ -208,7 +208,7 @@ let refsrc = [];
 				generatingResponse = true;
 			}, 1000);
 		}
-		searchMode = 'standard';
+		// searchMode = 'standard';
 		loadURL = "/images/FinBlade_Icon.gif";
 	}
 
