@@ -53,8 +53,9 @@
 			icon: '/images/sidebar/finance-ai.png',
 			link: '/documents/finance-ai/'
 		},
+		{ name: 'Secure-GPT', icon: '/images/sidebar/chatgpt-plus.png', link: '/secure-gpt/' },
 		{ name: 'Web Search', icon: '/images/sidebar/web-search.png', link: '/websearch/' },
-		{ name: 'Secure-GPT', icon: '/images/sidebar/chatgpt-plus.png', link: '/chatgpt-plus/' },
+		
 		{ name: 'Zapier Integration', icon: '/images/sidebar/zapier.png', link: '/zapier/' },
 		{ name: 'API Access', icon: '/images/sidebar/apiaccess.png', link: '/api-access/' },
 		{ name: 'Settings', icon: '/images/sidebar/settings.png', link: '/settings/' }
@@ -244,9 +245,11 @@
 		text-decoration: none;
 		
 	}
-	.button.active a {
-		filter: sepia(100%) hue-rotate(180deg) saturate(500%);
+	.button.active a, .button:hover {
+		/* filter: sepia(100%) hue-rotate(180deg) saturate(500%); */
+	    filter: sepia(100%) hue-rotate(180deg) saturate(500%) ;
 	}
+
 	.button a .tag {
 		position: absolute;
 	}
