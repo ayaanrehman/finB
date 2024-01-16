@@ -47,7 +47,7 @@ function updateTitle(){
   } else if(pathName.includes('/documents/finance-ai/')){
     title = 'Database Search';
     imgg = '/images/sidebar/finance-ai.png';
-  } else if(pathName === '/chatgpt-plus/'){
+  } else if(pathName === '/secure-gpt/'){
     title = 'Secure-GPT';
     imgg = '/images/sidebar/chatgpt-plus.png';
   } else if(pathName === '/zapier/'){

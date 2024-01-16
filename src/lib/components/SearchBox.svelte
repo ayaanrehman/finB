@@ -384,12 +384,15 @@ on:click={() => {
 				<div class="box" id="box3">3</div>
 				<p bind:this={steps[2]}>Start talking to your document</p>
 			</div>
-			<!-- <div class="line" id="line3"></div>
-		
+
+			{#if searchType === 'finance-ai'}
+			<div class="line" id="line3"></div>
+			
 			<div class="box-container">
-				<div class="box" id="box4">4</div>
-				<p bind:this={steps[3]}>Enjoy!</p>
-			</div> -->
+				<div class="box" id="box4" style="color:lightblue; border-color:lightblue"><strong>4</strong></div>
+				<p bind:this={steps[3]} style="color:lightblue;"><strong>Plot a Graph or a Pie Chart</strong></p>
+			</div>
+			{/if}
 		</div>
 	</div>
 

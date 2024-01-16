@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import io from 'socket.io-client';
 
+
 	let question = '';
 	let messages = [];
 	let socket;
@@ -82,6 +83,39 @@
 		
 	});
 
+	let steps = [];
+
+	onMount(() => {
+		setTimeout(() => {
+			steps.forEach((step, index) => {
+				setTimeout(() => {
+					step.style.opacity = 1;
+				}, (index + 1) * 1000); // delay increases for each step
+			});
+		}, 1000);
+	});
+
+	onMount(() => {
+		setTimeout(() => {
+			let boxes = document.querySelectorAll('.box');
+			let lines = document.querySelectorAll('.line');
+
+			let index = 0;
+
+			let interval = setInterval(() => {
+				if (index < boxes.length) {
+					boxes[index].style.opacity = 1;
+					if (index < lines.length) {
+						lines[index].style.opacity = 1;
+					}
+					index++;
+				} else {
+					clearInterval(interval);
+				}
+			}, 1000);
+		}, 500);
+	});
+
 </script>
 
 <div class="chat1">
@@ -89,13 +123,37 @@
 	<div class="chat-gpt-container">
 		<div id="chat-history1" class="chat-history1"  readonly="readyonly">
 			<div class="message placeholder" bind:this={chatHistory}>
+		
+
+			
 				{#if messages.length === 0}
 					<div class="chatting">
-						<b>Welcome! Start writing a question...</b>
+						<!-- <b>Welcome! Start writing a question...</b> -->
 						<!-- <p>Ask questions like:</p>
 						<i>"Brainstorm incentives for a customer loyalty program in a small bookstore"</i>
 						<i>"Suggest some codenames for a project introducing flexible work arrangements"</i>
 						<i>"Help me pick a birthday gift for my sister who likes gardening"</i> -->
+						<div id="container">
+							<div class="box-container">
+								<div class="box" id="box1">1</div>
+						
+									<p bind:this={steps[0]}>Ask anything in the Input Box</p>
+							
+							</div>
+							<div class="line" id="line1" />
+				
+							<div class="box-container">
+								<div class="box" id="box2">2</div>
+								<p bind:this={steps[1]}>Let Secure-GPT reply to your query in Secure Way</p>
+							</div>
+							<div class="line" id="line2" />
+				
+							<div class="box-container">
+								<div class="box" id="box3">3</div>
+								<p bind:this={steps[2]}>Use helpers on the right for formatting your letters</p>
+							</div>
+						</div>
+
 					</div>
 				{:else}
 					{#each messages as message (message.text)}
@@ -129,7 +187,7 @@
 							type="text"
 							bind:value={chatquestion}
 							bind:this={inputBox}
-							placeholder="Enter your question to ChatGPT Plus"
+							placeholder="Enter your question to Secure-GPT"
 						/>
 						<button
 							class="submit2"
@@ -160,13 +218,13 @@
 					submitQuestion()
 					
 				}}
-				>Rephrase this statement in ICS Format</button>
+				>Rephrase this statement in Corporate Format</button>
 			</div>
 			<div>
-				<!-- <button>Translate this sentence</button> -->
+				<button>Translate this sentence</button>
 			</div>
 			<div>
-				<!-- <button>Suggest synonyms for this phrase</button> -->
+				<button>Suggest synonyms for this phrase</button>
 			</div>
 		</div>
 	</div>
@@ -179,6 +237,7 @@
 /> -->
 
 <style lang="scss">
+	
 	@import url('https://fonts.cdnfonts.com/css/leelawadee');
 
 	.transparent {
@@ -186,11 +245,93 @@
 		cursor: default;
 	}
 
+	#container {
+		display: flex;
+		position: absolute;
+		align-items: center;
+		justify-content: center;
+		align-items: center;
+		/* background-color: #0000006b; */
+		
+		width: 100%;
+		height: 100%;
+		z-index: 999;
+	}
+
+	.box {
+		width: 50px;
+		height: 50px;
+		border-radius: 20%;
+		border-color: rgba(255, 255, 255, 0.363);
+		border-width: 1px;
+		border-style: solid;
+		background: radial-gradient(circle at 50% 50%, rgb(105, 105, 105), rgb(68, 68, 68), rgb(63, 63, 63));
+		/* background-color: #555555; */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		transition: opacity 1s;
+	}
+
+	.box-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin: 0;
+		padding: 0;
+		position: relative;
+	}
+
+	.box-container p {
+		// position: absolute;
+		top: 50px;
+		
+		margin: 20px;
+		margin-top: 10px !important;
+		width: 150px;
+		text-align: center;
+		opacity: 0;
+		font-size: smaller;
+		color: gainsboro;
+		transition: opacity 1s;
+	}
+
+	.line {
+		position: relative;
+		width: 150px;
+		height: 1px;
+		top: -20px;
+		
+		background: linear-gradient(
+			to right,
+			rgb(17, 17, 17),
+			rgba(255, 255, 255, 0.438),
+			rgb(17, 17, 17)
+		);
+		/* background-color: white; */
+		opacity: 0;
+		transition: opacity 1s;
+		animation: stepAnimation 2s forwards;
+	}
+
+	@keyframes stepAnimation {
+		0% {
+			width: 0;
+		}
+		50% {
+			width: 10px;
+		}
+		100% {
+			width: 150px;
+		}
+	}
+
 	.typing-indicator {
-    display: inline-block;
-    position: relative;
-    width: 40px;
-    height: 20px;
+		display: inline-block;
+		position: relative;
+		width: 40px;
+		height: 20px;
 	}
 
 	.typing-indicator span {
@@ -244,7 +385,7 @@
 	.chat-helpers {
 		display: flex;
 		flex-direction: column;
-		gap: 12px;
+		gap: 75px;
 		padding: 1em;
 		margin-top: 12px;
 	}
