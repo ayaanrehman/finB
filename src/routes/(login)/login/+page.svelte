@@ -73,7 +73,7 @@
 	});
 </script>
 
-<div class="overlay" class:fade-out={successmsg}></div>
+<!-- <div class="overlay" class:fade-out={successmsg}></div> -->
 	<main>
 		<div class="form-container">
 			<!-- <img class="logologin" src="/images/FinBlade Logo-02 2.png" alt="finblade" /> -->

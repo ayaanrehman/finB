@@ -187,8 +187,14 @@ let refsrc = [];
 
 	function submitQuestion() {
 		// whichsrch = false;
+		let filextnsn = '';
+		if (searchType === 'semantic-search') {
+			filextnsn = '.pdf';
+		} else {
+			filextnsn = '.xlsx';
+		}
 
-		socket.emit('submit_question', { question, docfilename, username, userid, searchMode });
+		socket.emit('submit_question', { question, docfilename, username, userid, searchMode, filextnsn });
 		searchHistory.push({ sender: 'You', message: question, timestamp: new Date() });
 
 		if (inputContainer) {
@@ -207,7 +213,7 @@ let refsrc = [];
 				generatingResponse = true;
 			}, 1000);
 		}
-		searchMode = 'standard';
+		// searchMode = 'standard';
 		loadURL = "/images/FinBlade_Icon.gif";
 	}
 
@@ -524,6 +530,13 @@ on:click={() => {
 						height="auto"
 						style="margin-top: 1em; margin-left: 1em"
 					/>
+					<br>
+					<button
+						class="stopsearch"
+						on:click={() => {
+							clearsubmitQuestion();
+							question = '';
+						}}>Clear Search</button>
 					<!-- {/if} -->
 				</div>
 
@@ -1216,9 +1229,6 @@ on:click={() => {
 		/* bottom: 0; */
 	}
 
-	.base64imgf {
-	}
-
 	.cntinr {
 		display: flex;
 		justify-content: space-between;
@@ -1245,10 +1255,11 @@ on:click={() => {
 	}
 
 	.visualsfull {
-		background: #00000091;
+		background-color: white;
 		top: 0;
 		left: 0;
-		width: 200%;
+		width: 100%;
+		height: 100vh;
 		position: fixed;
 		z-index: 999999;
 		/* justify-content: center; */
@@ -1257,8 +1268,8 @@ on:click={() => {
 
 	.base64imgf {
 		margin: auto;
-		width: 50%;
-		height: 99vh;
+		width: auto;
+		height: auto;
 	}
 
 	.loader-container {

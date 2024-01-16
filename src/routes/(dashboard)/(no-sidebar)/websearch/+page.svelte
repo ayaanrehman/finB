@@ -1,4 +1,6 @@
-<!-- <h4 style="margin-left: 3em;">Coming Soon</h4> -->
+<h4 style="margin-left: 3em;">Coming Soon</h4>
+
+<!-- <h4 style="margin-left: 3em;">Coming Soon</h4>
 
 <script>
 	import { onMount } from 'svelte';
@@ -131,4 +133,4 @@
 	#lever span:nth-child(8)::before {
 		transform: rotate(315deg) translate(0, -50px);
 	}
-</style>
+</style> -->
