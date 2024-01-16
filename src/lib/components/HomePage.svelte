@@ -20,7 +20,7 @@
 		{ name: 'Semantic Search', url: '/documents/semantic-search/', backgroundImage: '/images/homepage/semantic.jpeg' },
 		{ name: 'Database Search', url: '/documents/finance-ai/', backgroundImage: '/images/homepage/pandas.jpeg' },
 		{ name: 'Web Seach', url: '/websearch/', backgroundImage: '/images/homepage/websearch.jpeg' },
-		{ name: 'Secure-GPT', url: '/chatgpt-plus/', backgroundImage: '/images/homepage/sgpt.jpeg' },
+		{ name: 'Secure-GPT', url: '/secure-gpt/', backgroundImage: '/images/homepage/sgpt.jpeg' },
 		{ name: 'Zapier Integration', url: '/zapier/', backgroundImage: '/images/homepage/zapier.jpeg' },
 		{ name: 'API Access', url: '/api-access/', backgroundImage: '/images/homepage/api.jpeg' },
 		{ name: 'Settings', url: '/settings', backgroundImage: '/images/homepage/settings.jpeg' },
