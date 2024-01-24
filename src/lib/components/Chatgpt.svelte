@@ -25,9 +25,9 @@
 		// socket = io.connect('https://54.146.82.200:8080/module3');
 		// socket = io.connect('http://172.31.55.58:8080/module3');
 		// socket = io.connect('https://icsfinblades.com:444/module3');
-		socket = io.connect('http://192.168.200.29:8080/module3');
-		// socket = io.connect('http://10.20.20.62:8080/module3');
+		// socket = io.connect('http://192.168.200.29:8080/module3');
 		// socket = io.connect('http://192.168.100.113:8080/module3');
+		socket = io.connect('https://icsfinblade.com:444/module3');
 		socket.on('chat_response', function (data) {
 			response = data.answer;
 			// console.log('This is Response: ', response);
@@ -137,21 +137,21 @@
 							<div class="box-container">
 								<div class="box" id="box1">1</div>
 						
-									<p bind:this={steps[0]}>Ask anything in the Input Box</p>
+									<p bind:this={steps[0]}>Enter your query in the search bar</p>
 							
 							</div>
 							<div class="line" id="line1" />
 				
 							<div class="box-container">
 								<div class="box" id="box2">2</div>
-								<p bind:this={steps[1]}>Let Secure-GPT reply to your query in Secure Way</p>
+								<p bind:this={steps[1]}>Let Secure-GPT reply per your corporate parameters</p>
 							</div>
-							<div class="line" id="line2" />
+							<!-- <div class="line" id="line2" />
 				
 							<div class="box-container">
 								<div class="box" id="box3">3</div>
 								<p bind:this={steps[2]}>Use helpers on the right for formatting your letters</p>
-							</div>
+							</div> -->
 						</div>
 
 					</div>
@@ -284,7 +284,6 @@
 	}
 
 	.box-container p {
-		// position: absolute;
 		top: 50px;
 		
 		margin: 20px;
@@ -392,7 +391,7 @@
 	.chat-helpers button {
 		width: 100%;
 		height: 60px;
-		background-color: #666;
+		background-color: #196e93;
 		border-radius: 10px;
 		border: none;
 		color: #fff;

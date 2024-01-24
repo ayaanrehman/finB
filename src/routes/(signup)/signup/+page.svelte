@@ -14,13 +14,11 @@
 	let socket;
 
 	onMount(async () => {
-		socket = io.connect('http://192.168.200.29:8080/module5');
-		// socket = io.connect('http://10.20.20.62:8080/module5');
-		// socket = io.connect('https://icsfinblade.com:444/module5');
+		// socket = io.connect('http://192.168.200.29:8080/module5');
+		socket = io.connect('https://icsfinblade.com:444/module5');
 		// socket = io.connect('http://192.168.100.113:8080/module5');
 	
 	});
-
 
 	async function signUp() {
 		if (emailuser === '' || passworduser === '' || nameuser === '') {

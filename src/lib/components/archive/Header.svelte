@@ -4,7 +4,7 @@
 import { page } from '$app/stores';
 import { onMount } from 'svelte';
 import io from 'socket.io-client';
-// import { embs } from '$lib/stores/global.js';
+import { embs } from '$lib/stores/global.js';
 
 let isConnected = false;
 let socket;
@@ -13,25 +13,23 @@ let socket;
 let title;
 let imgg;
 
-// let loading = false;
-// let successMessage = false;
+let loading = false;
+let successMessage = false;
 
-// $: if (loading) {
-//     successMessage = false;
-//   }
 
-// $: {
-//   if ($embs === 'Started') {
-//     loading = true;
-//   } else if ($embs === 'Completed') {
-//     loading = false;
-//     successMessage = true;
-//     setTimeout(() => {
-//       successMessage = false;
-//       $embs = '';
-//     }, 3000);
-//   }
-// }
+
+$: {
+  if ($embs === 'Started') {
+    loading = true;
+  } else if ($embs === 'Completed') {
+    loading = false;
+    successMessage = true;
+    setTimeout(() => {
+      successMessage = false;
+      $embs = '';
+    }, 3000);
+  }
+}
 
 $: pathName = $page?.url?.pathname;
 
@@ -47,7 +45,7 @@ function updateTitle(){
   } else if(pathName.includes('/documents/finance-ai/')){
     title = 'Database Search';
     imgg = '/images/sidebar/finance-ai.png';
-  } else if(pathName === '/secure-gpt/'){
+  } else if(pathName === '/chatgpt-plus/'){
     title = 'Secure-GPT';
     imgg = '/images/sidebar/chatgpt-plus.png';
   } else if(pathName === '/zapier/'){
@@ -66,9 +64,9 @@ function updateTitle(){
 }
 
 onMount(async () => {
-    socket = io.connect('https://icsfinblade.com:444');
+    // socket = io.connect('https://icsfinblade.com:8080:444');
     // socket = io.connect('http://192.168.200.29:8080');
-    // socket = io.connect('http://10.20.20.62:8080');
+    socket = io.connect('https://icsfinblade.com:444');
     // socket = io.connect('http://192.168.100.113:8080');
     socket.on('connect', function() {
       console.log('Connected!');
@@ -97,13 +95,13 @@ onMount(async () => {
 	<div class="overlay-header">
   <div class="header-container">
     <div class="vline"></div>
-	<a href="/homepage/">
+	<a href="/">
 		<img
-			src="/images/finblade-new.png"
+			src="/images/finblade.png"
 			alt="Company Logo"
 			class="logo"
 			width="auto"
-			height="30em"
+			height="60em"
 		/>
 	</a>
   <img class="headerimg" src={imgg} alt="{title}">
@@ -127,9 +125,9 @@ onMount(async () => {
   </div>
 
 
-<!-- {#if loading}
+{#if loading}
   <div class="loadingbox">
-    <h5>Creating Embeddings: {$embs}</h5>
+    <h5>Creating Embeddings:</h5>
   <div class="loading-ring"></div>
 </div>
 {/if}
@@ -139,7 +137,7 @@ onMount(async () => {
 <div class="tick"></div>
 </div>
   
-{/if} -->
+{/if}
  
  
 	<hr class="header-line" />
@@ -147,7 +145,7 @@ onMount(async () => {
 
 <style>
 
-/* .loadingbox {
+.loadingbox {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -163,15 +161,15 @@ onMount(async () => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5em;
+  gap: 0;
   color: white;
   position: absolute;
-  right: 20em;
+  right: 25em;
   top: 1.8em;
   height: 1em;
-} */
+}
 
-/* .tick {
+.tick {
   position: relative;
   width: 0;
   top: 0.1em;
@@ -197,14 +195,14 @@ onMount(async () => {
   background: #0f0;
   bottom: 25px;
   left: 30px;
-} */
+}
 
-  /* .loading-ring {
+  .loading-ring {
     display: inline-block;
     width: 40px;
     height: 40px;
-    border: 8px solid #f3f3f3; 
-    border-top: 8px solid #3498db; 
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
     border-radius: 50%;
     animation: spin 2s linear infinite;
   }
@@ -213,19 +211,6 @@ onMount(async () => {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-
-  .tick {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    border: 8px solid #008000; 
-    border-radius: 50%;
-  } */
-
-  /* @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  } */
 
   .status {
     display: flex;
@@ -278,7 +263,6 @@ onMount(async () => {
     align-items: center;
     padding: 0.5em;
     max-height: 4.5em;
-    /* background: linear-gradient(to left, rgb(255, 255, 255), rgb(0, 0, 0)); */
   }
 
   .vline {
