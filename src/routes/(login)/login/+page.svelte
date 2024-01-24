@@ -150,7 +150,8 @@
 
 	@keyframes moveRight {
 	0% { left: 0; }
-	100% { left: 100%; }
+	100% { left: 100%;
+			width: 0; }
 	}
 
 	#movingBox {
