@@ -10,7 +10,7 @@
     }
     img{
         width: auto;
-        height: 100vh;
+        height: auto;
         
     }
 </style>

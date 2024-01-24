@@ -21,6 +21,8 @@
 
 	let loadURL = "/images/FinBlade_Icon.png";
 
+	let questionInput;
+
 
 	let showresponse = false;
 	let showContainerarrow = false;
@@ -132,6 +134,7 @@ let refsrc = [];
 			}
 
 			// console.log('This is Plotted Image: ', base64img);
+			questionInput.disabled = false;
 			showLoadingContainer = false;
 			generatingResponse = false;
 			response = data.response;
@@ -188,6 +191,7 @@ let refsrc = [];
 	function submitQuestion() {
 		// whichsrch = false;
 		let filextnsn = '';
+		questionInput.disabled = true;
 		if (searchType === 'semantic-search') {
 			filextnsn = '.pdf';
 		} else {
@@ -228,6 +232,7 @@ let refsrc = [];
 		whichsrch = true;
 		// searchMode = 'standard';
 		loadURL = "/images/FinBlade_Icon.png";
+		questionInput.disabled = false;
 
 		// base64img = null;
 
@@ -367,24 +372,25 @@ on:click={() => {
 			<div class="box-container">
 				<div class="box" id="box1">1</div>
 				{#if searchType === 'semantic-search'}
-					<p bind:this={steps[0]}>Choose a PDF file from your Desktop</p>
+					<p bind:this={steps[0]}>Drag and drop any PDF file here</p>
 				{:else}
-					<p bind:this={steps[0]}>Choose an XLSX file from your Desktop</p>
+					<p bind:this={steps[0]}>Drag and drop any XLSX file here</p>
 				{/if}
 			</div>
 			<div class="line" id="line1" />
 
 			<div class="box-container">
 				<div class="box" id="box2">2</div>
-				<p bind:this={steps[1]}>Drag and drop here</p>
+				<p bind:this={steps[1]}>Talk to and query your data</p>
 			</div>
+			{#if searchType === 'finance-ai'}
 			<div class="line" id="line2" />
-
 			<div class="box-container">
-				<div class="box" id="box3">3</div>
-				<p bind:this={steps[2]}>Start talking to your document</p>
+				<div class="box" id="box3" style="color:lightblue; border-color:lightblue">3</div>
+				<p bind:this={steps[2]} style="color:lightblue;">Request FinBlade AI to graph your data</p>
 			</div>
-
+			{/if}
+<!-- 
 			{#if searchType === 'finance-ai'}
 			<div class="line" id="line3"></div>
 			
@@ -392,7 +398,7 @@ on:click={() => {
 				<div class="box" id="box4" style="color:lightblue; border-color:lightblue"><strong>4</strong></div>
 				<p bind:this={steps[3]} style="color:lightblue;"><strong>Plot a Graph or a Pie Chart</strong></p>
 			</div>
-			{/if}
+			{/if} -->
 		</div>
 	</div>
 
@@ -476,6 +482,7 @@ on:click={() => {
 			<div class="qtn">
 				<input
 					id="question"
+					bind:this={questionInput}
 					bind:value={question}
 					on:input={clearsubmitQuestion}
 					autocomplete="off"
@@ -483,7 +490,7 @@ on:click={() => {
 					type="text"
 					placeholder="Talk to your documents..."
 				/>
-				{#if question.length > 50 && !showLoadingContainer}
+				{#if question.length > 80 && !showLoadingContainer}
 					<div id="display" class="texta" placeholder="Search with a question..." readonly>
 						{question}
 					</div>
@@ -903,7 +910,7 @@ on:click={() => {
 		font-size: 14px;
 		font-weight: normal;
 		overflow-wrap: normal;
-		padding-right: 2em;
+		padding-right: 3em;
 		white-space: pre-wrap;
 		/* margin: 0 auto; */
 		margin: 7px 0;

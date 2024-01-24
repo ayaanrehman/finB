@@ -68,7 +68,7 @@
 		setTimeout(() => {
 			// typeText()
 			tagline = true;
-		}, 1720);
+		}, 1820);
 		
 	});
 </script>
@@ -122,7 +122,7 @@
 					<div class="logo-animation">
 						<div>
 						<img src="/images/FinBlade_Icon.gif" width="40px" height="auto" alt="Company Logo" style="margin-right: 5px;" />
-						<img src="/images/finblade-text.png" width="200px" height="auto" alt="Company Logo" />
+						<img src="/images/finblade-text-black.png" width="200px" height="auto" alt="Company Logo" />
 						</div>
 						<!-- <p>
 							"Unlocking financial insights with the power of AI where semantic search meets data
@@ -132,11 +132,11 @@
 						<!-- <p>{currentText}</p> -->
 						{#if tagline}
 						<div style="position: relative;">
-						<p>Elevate your workforce with Gen-AI.</p>
+						<p style="color: #196e93; margin-left: 15px;">Elevate your workforce with Gen-AI.</p>
 						<div id="movingBox"></div>
 						</div>
 						{:else}
-						<p style="color: black;">"Placeholder"</p>
+						<p id="pholder">"FinBlade"</p>
 						{/if}
 
 					</div>
@@ -157,7 +157,7 @@
 	position: absolute;
 	top: 0;
 	width: 1000px;
-	background-color: black;
+	background-color: rgb(255, 255, 255);
 	color: white;
 	padding: 20px;
 	animation: moveRight 3s forwards;
@@ -336,7 +336,7 @@
 		justify-content: center;
 		align-items: center;
 		width: 100%;
-		background: linear-gradient(to bottom, rgb(255, 255, 255), rgb(131, 131, 131));
+		background: linear-gradient(to bottom, rgb(255, 255, 255), rgb(167, 167, 167));
 		height: auto;
 	}
 	/* video {
@@ -366,19 +366,38 @@
 	.logo-animation {
 		display: flex;
 		justify-content: center;
+		background-color: rgb(0, 0, 0);
+		width: 100%;
 
 		flex-direction: column;
 		align-items: center;
 		animation: fadeIn 1s 1s forwards;
 		opacity: 0;
+		padding: 15px 10px 0;
 	}
 
 	@keyframes fadeIn {
 		0% {
 			opacity: 0;
+			background-color: rgb(0, 0, 0)
 		}
 		100% {
 			opacity: 1;
+			background-color: white
+		}
+	}
+
+	#pholder {
+		color: rgb(0, 0, 0);
+		animation: pchg 1s 1s forwards;
+	}
+
+	@keyframes pchg {
+		0% {
+			color: rgb(0, 0, 0);
+		}
+		100% {
+			color: rgb(255, 255, 255);
 		}
 	}
 

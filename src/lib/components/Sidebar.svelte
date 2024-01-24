@@ -598,13 +598,13 @@ const handleDrop = async (event) => {
 					<h4	class="dtlk" >
 						<span>Data Lake</span>
 					</h4>
-					<button
+					<!-- <button
 						on:click={() => {
 							// uploading(), toggleShowDocuments();
 							upload= !upload; docopen= !docopen;
 						}}
 						class="addbtn"><img src="/images/add_files.png" alt="Add Files" /></button
-					>
+					> -->
 				</div>
 				
 				{#if upload}
